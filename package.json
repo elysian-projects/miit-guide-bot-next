@@ -1,0 +1,29 @@
+{
+  "name": "miit-guide-bot-next",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node ./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miit-projects/miit-guide-bot-next.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miit-projects/miit-guide-bot-next/issues"
+  },
+  "homepage": "https://github.com/miit-projects/miit-guide-bot-next#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.11",
+    "@typescript-eslint/eslint-plugin": "^5.45.1",
+    "@typescript-eslint/parser": "^5.45.1",
+    "editorconfig": "^1.0.1",
+    "eslint": "^8.29.0",
+    "typescript": "^4.9.3"
+  }
+}
