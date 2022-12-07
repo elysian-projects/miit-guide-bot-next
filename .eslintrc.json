@@ -18,5 +18,9 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "semi": "warn",
+        "camelcase": "warn",
+        "comma-spacing": "warn",
+        "quotes": "warn"
     }
 }
