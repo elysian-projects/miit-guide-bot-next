@@ -1,7 +1,7 @@
 import { locationLabels, locationValues } from "@/constants/locations";
-import { Location, LocationLabel, LocationValue } from "@/types/data";
+import { LocationLabel, LocationType, LocationValue } from "@/types/data";
 
-export const createLocation = (value: LocationValue, label: LocationLabel): Location => {
+export const createLocation = (value: LocationValue, label: LocationLabel): LocationType => {
   return {value, label};
 };
 
