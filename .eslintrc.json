@@ -19,7 +19,6 @@
     ],
     "rules": {
         "semi": "warn",
-        "camelcase": "warn",
         "comma-spacing": "warn",
         "quotes": "warn"
     }
