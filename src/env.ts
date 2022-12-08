@@ -1,9 +1,18 @@
 import { createLocation } from "@/utils/data";
+import { LocationType } from "./types/data";
 
 /**
- * Здесь можно добавить локацию в приложение
+ * Init locations type
+ * @private
  */
-export const locations = {
+type LocationsInitList = {
+  [key: string]: LocationType
+}
+
+/**
+ * Init locations
+ */
+export const locations: LocationsInitList = {
   street: createLocation("street", "Улица"),
   building1: createLocation("building1", "Корпус 1")
 };
