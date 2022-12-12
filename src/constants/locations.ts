@@ -6,10 +6,14 @@ import { LocationType } from "@/types/data";
  * @private
  */
 const getLocationProp = (locationsList: LocationType[], prop: keyof LocationType): string[] => {
-  console.log(locationsList);
-
   return Object.values(locationsList).map(location => location[prop]);
 };
 
-export const locationValues: string[] = getLocationProp(Object.values(locations), "value");
-export const locationLabels: string[] = getLocationProp(Object.values(locations), "label");
+/**
+ * Represents `locations` list as an array of `LocationType`
+ * @private
+ */
+const locationsAsArray = Object.values(locations);
+
+export const locationValues: string[] = getLocationProp(locationsAsArray, "value");
+export const locationLabels: string[] = getLocationProp(locationsAsArray, "label");

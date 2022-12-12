@@ -1,4 +1,4 @@
-import { locations } from "../env";
+import { locations } from "@/env";
 
 export type LocationValue = string;
 export type LocationLabel = string;

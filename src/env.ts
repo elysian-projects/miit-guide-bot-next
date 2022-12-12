@@ -1,5 +1,4 @@
-import { createLocation } from "@/utils/data";
-import { LocationType } from "./types/data";
+import { LocationType } from "@/types/data";
 
 /**
  * Init locations type
@@ -13,6 +12,6 @@ type LocationsInitList = {
  * Init locations
  */
 export const locations: LocationsInitList = {
-  street: createLocation("street", "Улица"),
-  building1: createLocation("building1", "Корпус 1")
+  street: {value: "street", label: "Улица"},
+  building1: {value: "building1", label: "Корпус 1"},
 };
