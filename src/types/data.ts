@@ -1,14 +1,14 @@
 import { locations } from "@/env";
 
-export type LocationValue = string;
-export type LocationLabel = string;
+export type LocationValueProp = string;
+export type LocationLabelProp = string;
 
 export type LocationType = {
-  value: LocationValue,
-  label: LocationLabel,
+  value: LocationValueProp,
+  label: LocationLabelProp,
 }
 
-export type Locations = {
+export type LocationList = {
   [key in keyof typeof locations]: LocationType;
 };
 
@@ -21,9 +21,13 @@ export type LocationData = {
 
 export type UserId = string;
 
-export type User = {
+export type UserState = {
   id: UserId,
-  currentLocation: keyof Locations | "unknown",
+  currentLocation: keyof LocationList | "unknown",
   currentStep: number,
-  data: LocationData | null
+  locationData: LocationData | null
+}
+
+export type StorageState = {
+  [key: UserId]: UserState
 }

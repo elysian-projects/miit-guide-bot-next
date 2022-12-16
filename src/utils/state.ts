@@ -1,12 +1,19 @@
 import StateDefaults from "@/constants/state";
-import { User, UserId } from "@/types/data";
+import { StorageState, UserId, UserState } from "@/types/data";
 
-export const createUserState = (userId: UserId): User => ({
+export const getInitialUserState = (userId: UserId): UserState => ({
   id: userId,
   currentLocation: StateDefaults.DEFAULT_LOCATION,
-  currentStep: StateDefaults.DEFAULT_CURRENT_STEP
+  currentStep: StateDefaults.DEFAULT_CURRENT_STEP,
+  locationData: StateDefaults.DEFAULT_LOCATION_DATA
 });
 
-export const userExists = (userList: User[], userId: UserId): boolean => {
-  return userList.some(user => user.id === userId);
+export const userExists = (userList: StorageState, userId: UserId): boolean => {
+  for(const key in userList) {
+    if(key !== userId) {
+      return true;
+    }
+  }
+
+  return false;
 };
