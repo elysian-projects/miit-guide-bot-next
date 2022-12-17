@@ -12,7 +12,7 @@ export type LocationList = {
   [key in keyof typeof locations]: LocationType;
 };
 
-export type LocationData = {
+export type LocationPoint = {
   name: string,
   description: string,
   picture: string
@@ -22,10 +22,11 @@ export type LocationData = {
 export type UserId = string;
 
 export type UserState = {
-  id: UserId,
-  currentLocation: keyof LocationList | "unknown",
+  readonly id: UserId,
+  currentLocation: LocationType | null,
   currentStep: number,
-  locationData: LocationData | null
+  locationPoints: LocationPoint[],
+  isEnd: boolean,
 }
 
 export type StorageState = {

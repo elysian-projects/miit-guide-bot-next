@@ -1,12 +1,8 @@
-import { LocationData, LocationList } from "@/types/data";
+import { LocationType, StorageState } from "@/types/data";
+
+export const initialState: StorageState = {};
 
 export default {
-  DEFAULT_LOCATION: "unknown" as keyof LocationList,
+  DEFAULT_LOCATION: {value: "unknown", label: "unknown"} satisfies LocationType,
   DEFAULT_CURRENT_STEP: 0,
-  DEFAULT_LOCATION_DATA: {
-    name: "unknown",
-    description: "unknown",
-    picture: "",
-    links: []
-  } as LocationData
 };
