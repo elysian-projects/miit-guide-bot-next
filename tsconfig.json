@@ -31,6 +31,7 @@
     "paths": {
       "@/*": ["./*"],
       "@/constants/*": ["constants/*"],
+      "@/controller/*": ["controller/*"],
       "@/entities/*": ["entities/*"],
       "@/scripts/*": ["scripts/*"],
       "@/types/*": ["types/*"],
