@@ -1,8 +1,10 @@
-import { LocationType, StorageState } from "@/types/data";
+import { LocationType, UserState } from "@/types/data";
 
-export const initialState: StorageState = {};
+export const defaultLocation: LocationType = {value: "unknown", label: "unknown"};
 
-export default {
-  DEFAULT_LOCATION: {value: "unknown", label: "unknown"} satisfies LocationType,
-  DEFAULT_CURRENT_STEP: 0,
-};
+export const defaultState = {
+  location: defaultLocation,
+  step: 0,
+  locationPoints: [],
+  isEnd: false,
+} as Omit<UserState, "id">;

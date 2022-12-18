@@ -1,3 +1,4 @@
+import { User } from "@/entities/user";
 import { locations } from "@/env";
 
 export type LocationValueProp = string;
@@ -23,12 +24,12 @@ export type UserId = string;
 
 export type UserState = {
   readonly id: UserId,
-  currentLocation: LocationType | null,
-  currentStep: number,
+  location: LocationType,
+  step: number,
   locationPoints: LocationPoint[],
   isEnd: boolean,
 }
 
 export type StorageState = {
-  [key: UserId]: UserState
+  [key: UserId]: User
 }
