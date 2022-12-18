@@ -20,6 +20,8 @@ interface IStoreController {
   resetUserState: (userId: UserId) => void
 }
 
+// FIXME: merge this controller with the `state controller` as they are just a copy of each other
+
 export class StoreController implements IStoreController {
   private store: StorageState;
 
