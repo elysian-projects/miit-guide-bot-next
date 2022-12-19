@@ -1,9 +1,9 @@
-import { User } from "@/entities/user";
+import { User } from "@/controllers/userController";
 import { UpdatePropValue } from "@/types/common";
 import { StorageState, UserId, UserState } from "@/types/data";
 import { removeUserFromList } from "@/utils/data";
 import { userExists } from "@/utils/state";
-
+import { eventController } from "./eventController";
 
 const throwErrorIfNoUserFound = (state: StorageState, userId: UserId): void => {
   if(!userExists(state, userId)) {
@@ -16,11 +16,8 @@ interface IStoreController {
   addUser: (userId: UserId) => void,
   removeUser: (userId: UserId) => void,
   updatePropValue: UpdatePropValue,
-  userNextStep: (userId: UserId) => void,
   resetUserState: (userId: UserId) => void
 }
-
-// FIXME: merge this controller with the `state controller` as they are just a copy of each other
 
 export class StoreController implements IStoreController {
   private store: StorageState;
@@ -39,6 +36,9 @@ export class StoreController implements IStoreController {
       throw new Error(`User with id ${userId} already exists!`);
     }
     this.store[userId] = new User(userId);
+
+    eventController.on(userId, "nextStep", () => this.onNextStep(userId));
+    eventController.on(userId, "end", () => this.removeUser(userId));
   };
 
   public removeUser = (userId: UserId): void => {
@@ -48,17 +48,17 @@ export class StoreController implements IStoreController {
 
   public updatePropValue: UpdatePropValue = (userId, propName, propValue): void => {
     throwErrorIfNoUserFound(this.store, userId);
-    this.store[userId].updatePropValue(userId, propName, propValue);
-  };
-
-  public userNextStep = (userId: UserId): void => {
-    throwErrorIfNoUserFound(this.store, userId);
-    this.store[userId].nextStep();
+    this.store[userId].updatePropValue(propName, propValue);
   };
 
   public resetUserState = (userId: UserId): void => {
     if(userExists(this.store, userId)) {
       this.store[userId].resetState();
     }
+  };
+
+  private onNextStep = (userId: UserId): void => {
+    throwErrorIfNoUserFound(this.store, userId);
+    this.store[userId].nextStep();
   };
 }

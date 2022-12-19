@@ -1,5 +1,6 @@
 import { defaultLocation } from "@/constants/state";
 import { LocationPoint, LocationType, UserId, UserState } from "@/types/data";
+import { eventController } from "./eventController";
 import { StoreController } from "./storeController";
 
 /**
@@ -28,7 +29,7 @@ export class StateController {
   };
 
   public nextStep = (userId: UserId): void => {
-    storeController.userNextStep(userId);
+    eventController.emit(userId, "nextStep");
   };
 
   public getUserState = (userId: UserId): UserState => {
