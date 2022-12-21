@@ -1,4 +1,4 @@
-import { User } from "@/entities/user";
+import { User } from "@/controllers/userController";
 import { locations } from "@/env";
 
 export type LocationValueProp = string;
