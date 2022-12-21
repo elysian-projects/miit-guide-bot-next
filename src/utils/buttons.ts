@@ -1,17 +1,11 @@
-import { MAX_BUTTON_COLUMN_SIZE, RESIZE_BUTTONS } from "@/constants/buttons";
-import { ButtonCreatorOptions, HideableKBtn, InlineButtonImage } from "@/types/lib";
+import { menuButtonKeyboardDefaultOptions } from "@/constants/buttons";
+import { InlineButtonImage, MenuButtonOptions } from "@/types/lib";
 import { Markup } from "telegraf";
 import { InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove } from "telegraf/typings/core/types/typegram";
 
 /**
- * Creates and returns a menu button
- */
-const createMenuButton = (text: string): HideableKBtn => {
-  return {text};
-};
-
-/**
  * Creates and returns an inline button
+ * @private
  */
 const createInlineButton = (image: InlineButtonImage): InlineKeyboardButton => {
   return {
@@ -21,20 +15,36 @@ const createInlineButton = (image: InlineButtonImage): InlineKeyboardButton => {
 };
 
 /**
+ * Calculates and returns the column size for buttons
+ * @private
+ */
+const calculateButtonColumnSize = (column?: number) => {
+  return Math.max(column ?? -1, menuButtonKeyboardDefaultOptions.columns);
+};
+
+/**
  * Creates a menu keyboard markup, adds given buttons there and returns it
  *
  * @param {string[]} buttons: array of strings to be shown as buttons
  * @param {ButtonCreatorOptions} options: optional settings to change the way buttons outlook
  * @returns {ReplyKeyboardMarkup}
  */
-export const createMenuKeyboardMarkup = (buttons: string[], options: ButtonCreatorOptions = {}): ReplyKeyboardMarkup => {
-  const markup = Markup.keyboard(
-    buttons.map(button => createMenuButton(button)),
-    {columns: options.columns ?? MAX_BUTTON_COLUMN_SIZE}
-  );
+export const createMenuKeyboardMarkup = (buttons: string[], options: MenuButtonOptions = {}): ReplyKeyboardMarkup => {
+  if(buttons.length === 0) {
+    throw new Error("No buttons for menu keyboard given!");
+  }
 
-  markup.resize(options.resize ?? RESIZE_BUTTONS);
-  markup.selective(true);
+  const keyboardOptions = {
+    ...menuButtonKeyboardDefaultOptions,
+    ...options,
+    columns: calculateButtonColumnSize(options.columns)
+  };
+
+  const markup = Markup.keyboard(buttons, {columns: keyboardOptions.columns});
+
+  markup.resize(options.resize);
+  markup.selective(options.selective);
+  markup.oneTime(options.oneTime);
 
   return markup.reply_markup;
 };

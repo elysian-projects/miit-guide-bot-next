@@ -1,13 +1,13 @@
+import { eventController } from "@/controllers/eventController";
 import { User } from "@/controllers/userController";
 import { UpdatePropValue } from "@/types/common";
 import { StorageState, UserId, UserState } from "@/types/data";
 import { removeUserFromList } from "@/utils/data";
-import { userExists } from "@/utils/state";
-import { eventController } from "./eventController";
+import { userExists } from "@/utils/store";
 
 const throwErrorIfNoUserFound = (state: StorageState, userId: UserId): void => {
   if(!userExists(state, userId)) {
-    throw new Error(`No user with id ${userId} found!`);
+    throw new Error(`User with id ${userId} not found!`);
   }
 };
 
@@ -44,6 +44,16 @@ export class StoreController implements IStoreController {
   public removeUser = (userId: UserId): void => {
     throwErrorIfNoUserFound(this.store, userId);
     this.store = removeUserFromList(this.store, userId);
+  };
+
+  /**
+   * Emits `nextStep` event for user with the given id
+   * @emits `nextStep`
+   * @param {UserId} userId
+   */
+  public nextStep = (userId: UserId): void => {
+    throwErrorIfNoUserFound(this.store, userId);
+    eventController.emit(userId, "nextStep");
   };
 
   public updatePropValue: UpdatePropValue = (userId, propName, propValue): void => {
