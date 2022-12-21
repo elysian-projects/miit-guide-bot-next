@@ -3,14 +3,12 @@ import { ButtonCreatorOptions, HideableKBtn, InlineButtonImage } from "@/types/l
 import { Markup } from "telegraf";
 import { InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove } from "telegraf/typings/core/types/typegram";
 
-
 /**
  * Creates and returns a menu button
  */
 const createMenuButton = (text: string): HideableKBtn => {
   return {text};
 };
-
 
 /**
  * Creates and returns an inline button
@@ -21,7 +19,6 @@ const createInlineButton = (image: InlineButtonImage): InlineKeyboardButton => {
     callback_data: image.value,
   };
 };
-
 
 /**
  * Creates a menu keyboard markup, adds given buttons there and returns it
@@ -42,7 +39,6 @@ export const createMenuKeyboardMarkup = (buttons: string[], options: ButtonCreat
   return markup.reply_markup;
 };
 
-
 /**
  * Creates an inline keyboard markup, adds given buttons there and returns it
  *
@@ -56,7 +52,6 @@ export const createInlineKeyboardMarkup = (buttons: InlineButtonImage[]): Inline
 
   return markup.reply_markup;
 };
-
 
 /**
  * Creates and returns a (menu) keyboard remove markup
