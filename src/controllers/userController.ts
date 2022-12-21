@@ -1,6 +1,5 @@
 import { defaultState } from "@/constants/state";
 import { eventController } from "@/controllers/eventController";
-import { UpdatePropValue } from "@/types/common";
 import { UserId, UserState } from "@/types/data";
 
 type UpdatePropValueLocal = {
