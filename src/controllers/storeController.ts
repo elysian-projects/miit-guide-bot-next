@@ -1,6 +1,6 @@
 import { eventController } from "@/controllers/eventController";
 import { User } from "@/controllers/userController";
-import { UpdatePropValue } from "@/types/common";
+import { IStoreController, UpdatePropValue } from "@/types/common";
 import { StorageState, UserId, UserState } from "@/types/data";
 import { removeUserFromList } from "@/utils/data";
 import { userExists } from "@/utils/store";
@@ -10,14 +10,6 @@ const throwErrorIfNoUserFound = (state: StorageState, userId: UserId): void => {
     throw new Error(`User with id ${userId} not found!`);
   }
 };
-
-interface IStoreController {
-  getUserState: (userId: UserId) => UserState,
-  addUser: (userId: UserId) => void,
-  removeUser: (userId: UserId) => void,
-  updatePropValue: UpdatePropValue,
-  resetUserState: (userId: UserId) => void
-}
 
 export class StoreController implements IStoreController {
   private store: StorageState;
