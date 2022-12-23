@@ -20,14 +20,16 @@ export type LocationPoint = {
   links: string[]
 }
 
-export type UserId = string;
+export type UserId = number;
 
-export type UserState = {
-  readonly id: UserId,
+export interface SettableUserProps{
   location: LocationType,
-  step: number,
   locationPoints: LocationPoint[],
-  isEnd: boolean,
+}
+
+export interface UserState extends SettableUserProps {
+  readonly id: UserId,
+  step: number,
 }
 
 export type StorageState = {

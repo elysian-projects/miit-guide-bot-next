@@ -1,6 +1,6 @@
-import { eventController } from "@/controllers/eventController";
 import { User } from "@/controllers/userController";
-import { IStoreController, UpdatePropValue } from "@/types/common";
+import { eventController } from "@/env";
+import { DataTypeWithId, IStoreController, UpdatePropValue } from "@/types/common";
 import { StorageState, UserId, UserState } from "@/types/data";
 import { removeUserFromList } from "@/utils/data";
 import { userExists } from "@/utils/store";
@@ -18,7 +18,7 @@ export class StoreController implements IStoreController {
     this.store = {};
   }
 
-  public getUserState = (userId: string): UserState => {
+  public getUserState = (userId: UserId): UserState => {
     throwErrorIfNoUserFound(this.store, userId);
     return this.store[userId].getState();
   };
@@ -44,13 +44,13 @@ export class StoreController implements IStoreController {
    * @param {UserId} userId
    */
   public nextStep = (userId: UserId): void => {
-    throwErrorIfNoUserFound(this.store, userId);
     eventController.emit(userId, "nextStep");
   };
 
-  public updatePropValue: UpdatePropValue = (userId, propName, propValue): void => {
+  public updatePropValue: UpdatePropValue<DataTypeWithId> = ({userId, propName, propValue}): void => {
     throwErrorIfNoUserFound(this.store, userId);
-    this.store[userId].updatePropValue(propName, propValue);
+
+    this.store[userId].updatePropValue({propName, propValue});
   };
 
   public resetUserState = (userId: UserId): void => {

@@ -1,3 +1,7 @@
+import { EventController } from "@/controllers/eventController";
+
+export const eventController = new EventController();
+
 /**
  * Init locations
  */
