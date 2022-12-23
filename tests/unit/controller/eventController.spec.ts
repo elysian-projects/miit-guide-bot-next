@@ -1,8 +1,8 @@
-import { eventController } from "@/controllers/eventController";
+import { eventController } from "@/env";
 import { UserId } from "@/types/data";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 
-const userId: UserId = "0";
+const userId: UserId = 0;
 
 beforeEach(() => {
   eventController.reset();
@@ -30,5 +30,23 @@ describe("event controller flow", () => {
 
     expect(spyHandler1).toHaveBeenCalledTimes(1);
     expect(spyHandler2).toHaveBeenCalledTimes(1);
+  });
+
+  test("should unsubscribe the handlers from an event", () => {
+    const handlers = {
+      handler: () => 0,
+    };
+
+    const spyHandler = jest.spyOn(handlers, "handler");
+
+    eventController.on(userId, "end", handlers.handler);
+    eventController.emit(userId, "end");
+
+    expect(spyHandler).toHaveBeenCalledTimes(1);
+
+    eventController.unsubscribe(userId, "end", handlers.handler);
+    eventController.emit(userId, "end");
+
+    expect(spyHandler).toHaveBeenCalledTimes(1);
   });
 });

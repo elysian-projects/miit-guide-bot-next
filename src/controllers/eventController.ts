@@ -1,7 +1,7 @@
 import { UserId } from "@/types/data";
 import { Events } from "@/types/event";
 
-class EventController {
+export class EventController {
   private events: Record<UserId, Record<keyof typeof Events, Array<() => void>>>;
 
   public constructor() {
@@ -16,8 +16,8 @@ class EventController {
     this.events[userId][event].push(callback);
   };
 
-  public unsubscribe = (userId: UserId, event: keyof typeof Events, callback: () => void) => {
-    this.events[userId][event].filter(handler => handler !== callback);
+  public unsubscribe = (userId: UserId, event: keyof typeof Events, callback: () => void): void => {
+    this.events[userId][event] = this.events[userId][event].filter(handler => handler !== callback);
   };
 
   public emit = (userId: UserId, event: keyof typeof Events): void => {
@@ -46,5 +46,3 @@ class EventController {
     };
   };
 }
-
-export const eventController = new EventController();

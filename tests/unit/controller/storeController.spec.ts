@@ -1,12 +1,17 @@
 import { defaultState } from "@/constants/state";
 import { StoreController } from "@/controllers/storeController";
-import { UserId } from "@/types/data";
+import { locations } from "@/env";
+import { LocationPoint, LocationType, UserId } from "@/types/data";
 import { beforeEach, describe, expect, test } from "@jest/globals";
 
-// This must be `let` because we need to recreate it before each test case
-let storeController = new StoreController();
+let storeController: StoreController;
 
-const userId: UserId = "1";
+const userId: UserId = 1;
+const newLocation: LocationType = {...locations.street};
+const newPointsList: LocationPoint[] = [
+  {name: "Location1", description: "Description for location1", picture: "some picture", links: ["link1", "link2", "link3"]},
+  {name: "Location2", description: "Description for location2", picture: "other picture", links: ["link1", "link2", "link3"]}
+];
 
 beforeEach(() => {
   storeController = new StoreController();
@@ -41,7 +46,72 @@ describe("add/remove user", () => {
 
     // Add symbol to an id to make sure it doesn't exist on the list
     expect(() => {
-      storeController.removeUser(userId + "2");
+      storeController.removeUser(userId + 2);
     }).toThrowError();
+  });
+});
+
+describe("get/set state", () => {
+  test("should return valid user state", () => {
+    storeController.addUser(userId);
+    expect(storeController.getUserState(userId)).toStrictEqual({id: userId, ...defaultState});
+
+    const newUserId = userId + 2;
+
+    storeController.addUser(newUserId);
+    expect(storeController.getUserState(newUserId)).toStrictEqual({id: newUserId, ...defaultState});
+  });
+
+  test("should throw an error when trying to get state of nonexistent user", () => {
+    expect(() => {
+      storeController.getUserState(userId);
+    }).toThrowError();
+
+    storeController.addUser(userId);
+    storeController.removeUser(userId);
+
+    expect(() => {
+      storeController.getUserState(userId);
+    }).toThrowError();
+  });
+
+  test("should update location for given id", () => {
+    storeController.addUser(userId);
+
+    storeController.updatePropValue({userId, propName: "location", propValue: newLocation});
+
+    expect(storeController.getUserState(userId).location).toStrictEqual({...newLocation});
+    expect(storeController.getUserState(userId)).toStrictEqual({id: userId, ...defaultState, location: newLocation});
+  });
+
+  test("should update points list for given id", () => {
+    storeController.addUser(userId);
+
+    storeController.updatePropValue({userId, propName: "locationPoints", propValue: newPointsList});
+
+    expect(storeController.getUserState(userId).locationPoints).toStrictEqual([...newPointsList]);
+    expect(storeController.getUserState(userId)).toStrictEqual({id: userId, ...defaultState, locationPoints: newPointsList});
+  });
+
+  test("should throw error when passing invalid location object", () => {
+    storeController.addUser(userId);
+
+    expect(() => {
+      storeController.updatePropValue({userId, propName: "location", propValue: {value: "invalid", label: "invalid"}});
+    }).toThrowError();
+  });
+
+  test("should increase `step` by one", () => {
+    storeController.addUser(userId);
+    storeController.updatePropValue({userId, propName: "locationPoints", propValue: newPointsList});
+
+    expect(storeController.getUserState(userId).step == 0);
+
+    storeController.nextStep(userId);
+    expect(storeController.getUserState(userId).step == 1);
+
+    storeController.nextStep(userId);
+    storeController.nextStep(userId);
+    expect(storeController.getUserState(userId).step == 3);
   });
 });
