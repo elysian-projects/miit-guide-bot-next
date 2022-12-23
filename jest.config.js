@@ -9,7 +9,7 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   errorOnDeprecated: true,
-  // collectCoverage: true,
-  // coverageDirectory: "coverage",
-  // coverageProvider: "v8",
+  collectCoverage: true,
+  coverageDirectory: "coverage",
+  coverageProvider: "v8",
 };
