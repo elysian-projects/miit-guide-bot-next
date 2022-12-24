@@ -29,6 +29,7 @@ describe("menu keyboard", () => {
     expect(testMarkup.one_time_keyboard).toEqual(libMarkup.reply_markup.one_time_keyboard);
   });
 
+  // FIXME: something is wrong here
   test("should create a valid menu keyboard markup with `resize` prop", () => {
     const testMarkupResize = createMenuKeyboardMarkup(buttons, {resize: true});
     const libMarkupResize = Markup.keyboard(buttons);
@@ -49,6 +50,7 @@ describe("menu keyboard", () => {
     expect(testMarkupNoResize.one_time_keyboard).toEqual(libMarkupNoResize.reply_markup.one_time_keyboard);
   });
 
+  // FIXME: something is wrong here
   test("should create a valid menu keyboard markup with `oneTime` prop", () => {
     const testMarkupResize = createMenuKeyboardMarkup(buttons, {resize: true});
     const libMarkupResize = Markup.keyboard(buttons);

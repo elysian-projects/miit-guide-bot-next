@@ -17,15 +17,18 @@ export class EventController {
   };
 
   public unsubscribe = (userId: UserId, event: keyof typeof Events, callback: () => void): void => {
+    this.checkIfUserExists(userId);
     this.events[userId][event] = this.events[userId][event].filter(handler => handler !== callback);
   };
 
   public emit = (userId: UserId, event: keyof typeof Events): void => {
+    this.checkIfUserExists(userId);
     this.events[userId][event].forEach(callback => callback());
   };
 
   /**
    * Resets all events and deletes all users, DON'T use in production!
+   * @deprecated
    */
   public reset = (): void => {
     this.events = {};
@@ -44,5 +47,11 @@ export class EventController {
       end: [],
       nextStep: []
     };
+  };
+
+  private checkIfUserExists = (userId: UserId): void => {
+    if(!this.userExists(userId)) {
+      throw new Error(`User ${userId} does not exist here!`);
+    }
   };
 }

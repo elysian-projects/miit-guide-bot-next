@@ -49,4 +49,20 @@ describe("event controller flow", () => {
 
     expect(spyHandler).toHaveBeenCalledTimes(1);
   });
+
+  test("should throw error when emitting an event for nonexistent user", () => {
+    expect(() => {
+      eventController.emit(userId, "end");
+    }).toThrowError();
+  });
+
+  test("should throw error when unsubscribing from an event for nonexistent user", () => {
+    const handlers = {
+      handler: () => 0,
+    };
+
+    expect(() => {
+      eventController.unsubscribe(userId, "nextStep", handlers.handler);
+    }).toThrowError();
+  });
 });

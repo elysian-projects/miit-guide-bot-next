@@ -78,7 +78,7 @@ describe("get/set state", () => {
   test("should update location for given id", () => {
     storeController.addUser(userId);
 
-    storeController.updatePropValue({userId, propName: "location", propValue: newLocation});
+    storeController.updateLocation(userId, newLocation);
 
     expect(storeController.getUserState(userId).location).toStrictEqual({...newLocation});
     expect(storeController.getUserState(userId)).toStrictEqual({id: userId, ...defaultState, location: newLocation});
@@ -87,7 +87,7 @@ describe("get/set state", () => {
   test("should update points list for given id", () => {
     storeController.addUser(userId);
 
-    storeController.updatePropValue({userId, propName: "locationPoints", propValue: newPointsList});
+    storeController.updatePointsList(userId, newPointsList);
 
     expect(storeController.getUserState(userId).locationPoints).toStrictEqual([...newPointsList]);
     expect(storeController.getUserState(userId)).toStrictEqual({id: userId, ...defaultState, locationPoints: newPointsList});
@@ -97,21 +97,30 @@ describe("get/set state", () => {
     storeController.addUser(userId);
 
     expect(() => {
-      storeController.updatePropValue({userId, propName: "location", propValue: {value: "invalid", label: "invalid"}});
+      storeController.updateLocation(userId, {value: "invalid", label: "invalid"});
     }).toThrowError();
   });
 
   test("should increase `step` by one", () => {
     storeController.addUser(userId);
-    storeController.updatePropValue({userId, propName: "locationPoints", propValue: newPointsList});
+    storeController.updatePointsList(userId, newPointsList);
 
-    expect(storeController.getUserState(userId).step == 0);
-
-    storeController.nextStep(userId);
-    expect(storeController.getUserState(userId).step == 1);
+    expect(storeController.getUserState(userId).step).toBe(0);
 
     storeController.nextStep(userId);
+    expect(storeController.getUserState(userId).step).toBe(1);
+
     storeController.nextStep(userId);
-    expect(storeController.getUserState(userId).step == 3);
+    storeController.nextStep(userId);
+    expect(storeController.getUserState(userId).step).toBe(3);
+  });
+
+  test("should reset user state to default", () => {
+    storeController.addUser(userId);
+    storeController.updateLocation(userId, newLocation);
+    expect(storeController.getUserState(userId)).toStrictEqual({id: userId, ...defaultState, location: newLocation});
+
+    storeController.resetUserState(userId);
+    expect(storeController.getUserState(userId)).toStrictEqual({id: userId, ...defaultState});
   });
 });
