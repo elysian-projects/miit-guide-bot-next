@@ -1,5 +1,5 @@
 import { defaultLocation } from "@/constants/state";
-import { LocationPoint, LocationType, SettableUserProps, StorageState, UserId } from "@/types/data";
+import { LocationPoint, LocationType, StorageState, UserId, UserProps } from "@/types/data";
 import { isLocationValid, isPointsListValid } from "@/validations/state";
 
 export const userExists = (userList: StorageState, userId: UserId): boolean => {
@@ -10,8 +10,8 @@ export const isLocationChosen = (location: LocationType): boolean => {
   return (location.value !== defaultLocation.value) && (location.label !== defaultLocation.label);
 };
 
-export const isUserPropValueValid = <T extends keyof SettableUserProps, K extends SettableUserProps[T]>(prop: T, data: K) => {
-  const validations: {[key in keyof SettableUserProps]: (data: K) => boolean} = {
+export const isUserPropValueValid = <T extends keyof UserProps, K extends UserProps[T]>(prop: T, data: K) => {
+  const validations: {[key in keyof UserProps]: (data: K) => boolean} = {
     location: (value: K) => isLocationValid(value as LocationType),
     locationPoints: (value: K) => isPointsListValid(value as LocationPoint[])
   };

@@ -1,8 +1,8 @@
 import { User } from "@/controllers/userController";
 import { locations } from "@/env";
 
-export type LocationValueProp = string;
-export type LocationLabelProp = string;
+type LocationValueProp = string;
+type LocationLabelProp = string;
 
 export type LocationType = {
   value: LocationValueProp,
@@ -22,12 +22,12 @@ export type LocationPoint = {
 
 export type UserId = number;
 
-export interface SettableUserProps{
+export interface UserProps {
   location: LocationType,
   locationPoints: LocationPoint[],
 }
 
-export interface UserState extends SettableUserProps {
+export interface UserState extends UserProps {
   readonly id: UserId,
   step: number,
 }

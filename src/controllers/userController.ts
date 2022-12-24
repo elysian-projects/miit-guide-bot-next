@@ -1,12 +1,12 @@
 import { defaultState } from "@/constants/state";
 import { eventController } from "@/env";
-import { DataType, UpdatePropValue } from "@/types/common";
-import { UserId, UserState } from "@/types/data";
-import { isUserPropValueValid } from "@/utils/store";
+import { LocationPoint, LocationType, UserId, UserState } from "@/types/data";
+import { isLocationValid, isPointsListValid } from "@/validations/state";
 
 interface IUserController {
   getState: () => UserState
-  updatePropValue: UpdatePropValue<DataType>,
+  setLocation: (location: LocationType) => void,
+  setPointsList: (pointsList: LocationPoint[]) => void
   nextStep: () => void
   resetState: () => void
 }
@@ -34,12 +34,20 @@ export class User implements IUserController {
     }
   };
 
-  public updatePropValue: UpdatePropValue<DataType> = ({propName, propValue}): void => {
-    if(!isUserPropValueValid(propName, propValue)) {
-      throw new Error(`Value ${propValue} cannot be assigned to property ${propName}!`);
+  public setLocation = (updatedLocation: LocationType): void => {
+    if(!isLocationValid(updatedLocation)) {
+      throw new Error("Location is not valid!");
     }
 
-    this.state[propName] = propValue;
+    this.state.location = updatedLocation;
+  };
+
+  public setPointsList = (updatedPointsList: LocationPoint[]): void => {
+    if(!isPointsListValid(updatedPointsList)) {
+      throw new Error("Location is not valid!");
+    }
+
+    this.state.locationPoints = updatedPointsList;
   };
 
   public resetState = (): void => {
@@ -54,6 +62,6 @@ export class User implements IUserController {
   };
 
   private isPointsListSet = (): boolean => {
-    return this.state.locationPoints.length > 0;
+    return JSON.stringify(this.state.locationPoints) !== JSON.stringify([]);
   };
 }
