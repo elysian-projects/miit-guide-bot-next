@@ -38,5 +38,6 @@
       "@/utils/*": ["utils/*"],
       "@/env": ["env"],
     }
-  }
+  },
+  "exclude": ["tests"]
 }
