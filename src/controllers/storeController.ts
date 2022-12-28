@@ -24,7 +24,6 @@ export class StoreController implements IStoreController {
     this.store[userId] = new User(userId);
 
     eventController.on(userId, "nextStep", () => this.onNextStep(userId));
-    eventController.on(userId, "end", () => this.removeUser(userId));
   };
 
   public removeUser = (userId: UserId): void => {
