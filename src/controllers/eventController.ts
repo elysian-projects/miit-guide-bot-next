@@ -51,7 +51,7 @@ export class EventController {
 
   private checkIfUserExists = (userId: UserId): void => {
     if(!this.userExists(userId)) {
-      throw new Error(`User ${userId} does not exist here!`);
+      throw new Error(`User ${userId} does not exist!`);
     }
   };
 }

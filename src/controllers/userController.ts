@@ -27,7 +27,7 @@ export class User implements IUserController {
       throw new Error("Location points list was not provided!");
     }
 
-    this.state.step = (this.state.step + 1) % this.state.locationPoints.length;
+    this.state.step += 1;
 
     if(this.isLastStep()) {
       eventController.emit(this.state.id, "end");
@@ -62,6 +62,6 @@ export class User implements IUserController {
   };
 
   private isPointsListSet = (): boolean => {
-    return JSON.stringify(this.state.locationPoints) !== JSON.stringify([]);
+    return this.state.locationPoints.length !== 0;
   };
 }
