@@ -4,12 +4,18 @@ import { createBot } from "@/utils/lib";
 
 const bot = createBot(config.get("TOKEN"));
 
-bot.start(ctx =>  handlers.start(ctx, []));
-bot.help(ctx => handlers.help(ctx));
+bot.command("start", ctx => handlers.start(ctx));
+bot.command("help", ctx => handlers.help(ctx));
 
 bot.on("message", ctx => handlers.messageHandler(ctx));
 
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+// TODO: find out the context type, move it to @/types/lib
+bot.on("callback_query:data", ctx => {
+  console.log(ctx.callbackQuery.data);
+  ctx.reply("Message!");
+});
 
-bot.launch();
+process.once("SIGINT", () => bot.stop());
+process.once("SIGTERM", () => bot.stop());
+
+bot.start();

@@ -41,6 +41,6 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
-    "telegraf": "^4.11.2"
+    "grammy": "^1.12.5"
   }
 }
