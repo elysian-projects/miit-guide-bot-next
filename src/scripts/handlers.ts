@@ -1,27 +1,31 @@
 import * as replies from "@/constants/replies";
-import { locations } from "@/env";
-import { MessageHandler } from "@/types/handlers";
+import { tabs } from "@/env";
+import { InlineButtonClickHandler, MessageHandler } from "@/types/lib";
 import { createInlineKeyboardMarkup } from "@/utils/buttons";
+import { createButtonsFromTabs } from "@/utils/tabs";
 
-const start: MessageHandler = (ctx) => {
-  const locationImages = Object.values(locations);
+const start: MessageHandler = async (ctx) => {
+  const markup = createInlineKeyboardMarkup(createButtonsFromTabs(tabs));
 
-  const markup = createInlineKeyboardMarkup(locationImages);
-
-  ctx.sendPhoto("https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159");
-  ctx.sendMessage(replies.GREETINGS, {reply_markup: markup});
+  ctx.replyWithPhoto("https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159", {caption: replies.GREETINGS, reply_markup: markup});
 };
 
 const help: MessageHandler = (ctx) => {
-  ctx.sendMessage("Help message received!");
+  ctx.reply("Help message received!");
 };
 
 const messageHandler: MessageHandler = (ctx) => {
-  ctx.sendMessage(`Message "${ctx.message}" received!`);
+  ctx.reply(`Message "${ctx.message}" received!`);
+};
+
+const inlineButtonClickHandler: InlineButtonClickHandler = (ctx) => {
+  console.log(ctx.callbackQuery?.data);
+  ctx.reply(`Inline button clicked: ${ctx}`);
 };
 
 export {
   start,
   help,
-  messageHandler
+  messageHandler,
+  inlineButtonClickHandler
 };

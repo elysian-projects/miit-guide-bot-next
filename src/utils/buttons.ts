@@ -1,5 +1,5 @@
 import { menuButtonKeyboardDefaultOptions } from "@/constants/buttons";
-import { InlineButtonImage, MenuButtonOptions } from "@/types/lib";
+import { ButtonImage, MenuButtonOptions } from "@/types/lib";
 import { Markup } from "telegraf";
 import { InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove } from "telegraf/typings/core/types/typegram";
 
@@ -7,7 +7,7 @@ import { InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyK
  * Creates and returns an inline button
  * @private
  */
-const createInlineButton = (image: InlineButtonImage): InlineKeyboardButton => {
+const createInlineButton = (image: ButtonImage): InlineKeyboardButton => {
   return {
     text: image.label,
     callback_data: image.value,
@@ -29,7 +29,7 @@ const calculateButtonColumnSize = (column?: number) => {
  * @param {ButtonCreatorOptions} options: optional settings to change the way buttons outlook
  * @returns {ReplyKeyboardMarkup}
  */
-export const createMenuKeyboardMarkup = (buttons: string[], options: MenuButtonOptions = {}): ReplyKeyboardMarkup => {
+export const createMenuKeyboardMarkup = (buttons: ButtonImage[], options: MenuButtonOptions = {}): ReplyKeyboardMarkup => {
   if(buttons.length === 0) {
     throw new Error("No buttons for menu keyboard given!");
   }
@@ -40,7 +40,7 @@ export const createMenuKeyboardMarkup = (buttons: string[], options: MenuButtonO
     columns: calculateButtonColumnSize(options.columns)
   };
 
-  const markup = Markup.keyboard(buttons, {columns: keyboardOptions.columns});
+  const markup = Markup.keyboard(buttons.map(button => button.label), {columns: keyboardOptions.columns});
 
   markup.resize(options.resize);
   markup.selective(options.selective);
@@ -52,10 +52,10 @@ export const createMenuKeyboardMarkup = (buttons: string[], options: MenuButtonO
 /**
  * Creates an inline keyboard markup, adds given buttons there and returns it
  *
- * @param {InlineButtonImage} buttons: array of buttons images (object with specific fields) to be shown as inline buttons
+ * @param {ButtonImage} buttons: array of buttons images (object with specific fields) to be shown as inline buttons
  * @returns {InlineKeyboardMarkup}
  */
-export const createInlineKeyboardMarkup = (buttons: InlineButtonImage[]): InlineKeyboardMarkup => {
+export const createInlineKeyboardMarkup = (buttons: ButtonImage[]): InlineKeyboardMarkup => {
   const markup = Markup.inlineKeyboard(
     buttons.map(button => createInlineButton(button))
   );

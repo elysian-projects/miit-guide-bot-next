@@ -1,5 +1,5 @@
-import { Telegraf } from "telegraf";
+import { Bot } from "grammy";
 
-export const createBot = (token: string): Telegraf => {
-  return new Telegraf(token);
+export const createBot = (token: string): Bot => {
+  return new Bot(token);
 };
