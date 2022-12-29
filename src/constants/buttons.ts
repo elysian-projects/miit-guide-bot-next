@@ -1,8 +1,8 @@
-import { MenuButtonOptions } from "@/types/lib";
+import { InlineKeyboardOptions, MenuKeyboardOptions } from "@/types/lib";
 
-export const menuButtonKeyboardDefaultOptions: Required<MenuButtonOptions> = {
+export const keyboardDefaultOptions: Required<InlineKeyboardOptions & MenuKeyboardOptions> = {
   columns: 3,
-  resize: true,
   selective: true,
-  oneTime: false
+  oneTime: false,
+  resize: true,
 };

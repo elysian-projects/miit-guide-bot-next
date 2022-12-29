@@ -1,0 +1,62 @@
+import { keyboardDefaultOptions } from "@/constants/buttons";
+import { ButtonImage, InlineKeyboardOptions, KeyboardType, MenuKeyboardOptions } from "@/types/lib";
+import { InlineKeyboard, Keyboard } from "grammy";
+
+/**
+ * Calculates and returns the column size for buttons
+ * @private
+ */
+const calculateButtonColumnSize = (column?: number) => {
+  return Math.max(column ?? -1, keyboardDefaultOptions.columns);
+};
+
+/**
+ * Creates a keyboard markup, adds given buttons there and returns it
+ *
+ * @param {KeyboardType} type: type of the keyboard
+ * @param {ButtonImage[]} buttons: array of button images to be shown as buttons
+ * @param {MenuKeyboardOptions | InlineKeyboardOptions} options: optional settings to change the way buttons look
+ * @returns {Keyboard | InlineKeyboard}
+ */
+export function createKeyboard(type: "menu", buttons: ButtonImage[], options?: MenuKeyboardOptions): Keyboard;
+export function createKeyboard(type: "inline", buttons: ButtonImage[], options?: InlineKeyboardOptions): InlineKeyboard;
+export function createKeyboard(type: KeyboardType, buttons: ButtonImage[], options?: MenuKeyboardOptions | InlineKeyboardOptions): unknown {
+  if(buttons.length === 0) {
+    throw new Error("No buttons for menu keyboard given!");
+  }
+
+  const keyboardOptions = {
+    ...keyboardDefaultOptions,
+    ...options as object,
+    columns: calculateButtonColumnSize(options?.columns)
+  };
+
+  let markup: Keyboard | InlineKeyboard;
+
+  if(type === "menu") {
+    markup = new Keyboard();
+
+    if(keyboardOptions.resize) {
+      markup.resized();
+    }
+  } else {
+    markup = new InlineKeyboard();
+  }
+
+  buttons.forEach((button, index) => {
+    markup.text(button.label, button.value);
+    if(index !== 0 && index % keyboardOptions.columns === 0) {
+      markup.row();
+    }
+  });
+
+  return markup;
+}
+
+/**
+ * Creates and returns a (menu) keyboard remove markup
+ * @todo find a way to remove keyboard
+ */
+export const createRemoveKeyboardMarkup = (): void => {
+  console.log();
+};

@@ -1,12 +1,17 @@
-import { InlineKeyboardMarkup, ReplyKeyboardMarkup } from "telegraf/typings/core/types/typegram";
+import { Context, InlineKeyboard, Keyboard } from "grammy";
+
+export type TabNames =
+  | "excursion"
+  | "ww2"
 
 export type Tab = {
   icon?: string,
   label: string,
   description: string,
-  buttons: InlineKeyboardMarkup | ReplyKeyboardMarkup,
+  buttons: InlineKeyboard | Keyboard,
+  handler: (ctx: Context) => void
 }
 
 export type Tabs = {
-  [key: string]: Tab
+  [key in TabNames]: Tab
 }

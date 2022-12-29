@@ -1,10 +1,16 @@
 import { Context } from "grammy";
 
-export type MenuButtonOptions = {
-  resize?: boolean,
+export type KeyboardType = "menu" | "inline";
+
+export interface KeyboardOptions {
   columns?: number,
   selective?: boolean,
   oneTime?: boolean
+}
+
+export type InlineKeyboardOptions = KeyboardOptions
+export interface MenuKeyboardOptions extends KeyboardOptions {
+  resize?: boolean,
 }
 
 export type ButtonImage = {
@@ -17,12 +23,6 @@ export type MessageHandler<T extends object = object> = {
 }
 
 export type InlineCallbackCtx = Context;
-
-/**
- * @note
- * /node_modules/telegram/update.d.ts :71
- * The type is NOT implemented properly, as the object sent by Telegram is different from the library type definition
- */
 export type InlineButtonClickHandler = {
   (ctx: InlineCallbackCtx): void
 }
