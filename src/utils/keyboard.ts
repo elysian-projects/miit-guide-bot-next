@@ -39,6 +39,10 @@ export function createKeyboard(type: KeyboardType, buttons: ButtonImage[], optio
     if(keyboardOptions.resize) {
       markup.resized();
     }
+
+    if(keyboardOptions.placeholder) {
+      markup.placeholder(keyboardOptions.placeholder);
+    }
   } else {
     markup = new InlineKeyboard();
   }
@@ -54,9 +58,8 @@ export function createKeyboard(type: KeyboardType, buttons: ButtonImage[], optio
 }
 
 /**
- * Creates and returns a (menu) keyboard remove markup
- * @todo find a way to remove keyboard
+ * Creates and returns a (menu) keyboard remove object
  */
-export const createRemoveKeyboardMarkup = (): void => {
-  console.log();
+export const createRemoveKeyboardMarkup = () => {
+  return {remove_keyboard: true};
 };

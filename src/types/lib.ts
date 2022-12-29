@@ -5,7 +5,8 @@ export type KeyboardType = "menu" | "inline";
 export interface KeyboardOptions {
   columns?: number,
   selective?: boolean,
-  oneTime?: boolean
+  oneTime?: boolean,
+  placeholder?: string
 }
 
 export type InlineKeyboardOptions = KeyboardOptions

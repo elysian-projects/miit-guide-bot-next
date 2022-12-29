@@ -5,4 +5,5 @@ export const keyboardDefaultOptions: Required<InlineKeyboardOptions & MenuKeyboa
   selective: true,
   oneTime: false,
   resize: true,
+  placeholder: ""
 };
