@@ -40,6 +40,14 @@ export function createKeyboard(type: KeyboardType, buttons: ButtonImage[], optio
       markup.resized();
     }
 
+    if(keyboardOptions.oneTime) {
+      markup.oneTime();
+    }
+
+    if(keyboardOptions.selective) {
+      markup.selected(true);
+    }
+
     if(keyboardOptions.placeholder) {
       markup.placeholder(keyboardOptions.placeholder);
     }

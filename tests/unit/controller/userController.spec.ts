@@ -1,7 +1,7 @@
 import { defaultState } from "@/constants/state";
 import { User } from "@/controllers/userController";
 import { locations } from "@/env";
-import { LocationPoint } from "@/types/data";
+import { LocationPoint } from "@/types/location";
 import { describe, expect, test } from "@jest/globals";
 
 const userId = 0;
@@ -71,11 +71,36 @@ describe("get/set user state", () => {
     expect(userController.getState().step).toStrictEqual(1);
   });
 
-  test("should throw an error if no points list is provided", () => {
+  test("should decrement `step`", () => {
+    const userController = new User(userId);
+
+    userController.setPointsList(newPointsList);
+    expect(userController.getState().step).toStrictEqual(0);
+
+    userController.nextStep();
+    expect(userController.getState().step).toStrictEqual(1);
+
+    userController.prevStep();
+    expect(userController.getState().step).toStrictEqual(0);
+
+    // Nothing changed if the step value is 0
+    userController.prevStep();
+    expect(userController.getState().step).toStrictEqual(0);
+  });
+
+  test("should throw an error on `nextStep` if no points list is provided", () => {
     const userController = new User(userId);
 
     expect(() => {
       userController.nextStep();
+    }).toThrowError();
+  });
+
+  test("should throw an error on `prevStep` if no points list is provided", () => {
+    const userController = new User(userId);
+
+    expect(() => {
+      userController.prevStep();
     }).toThrowError();
   });
 });

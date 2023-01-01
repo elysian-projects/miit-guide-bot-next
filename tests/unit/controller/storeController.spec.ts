@@ -1,7 +1,8 @@
 import { defaultState } from "@/constants/state";
 import { StoreController } from "@/controllers/storeController";
 import { eventController, locations } from "@/env";
-import { LocationPoint, LocationType, UserId } from "@/types/data";
+import { LocationPoint, LocationType } from "@/types/location";
+import { UserId } from "@/types/user";
 import { describe, expect, jest, test } from "@jest/globals";
 
 const userId: UserId = 1;
@@ -39,7 +40,28 @@ describe("emits event", () => {
 
     eventController.unsubscribe(userId, "end", handlers.onEnd);
   });
+
+  test("should decrease `step` by one", () => {
+    const storeController = new StoreController();
+
+    storeController.addUser(userId);
+    storeController.updatePointsList(userId, newPointsList);
+
+    expect(storeController.getUserState(userId).step).toBe(0);
+
+    storeController.nextStep(userId);
+    expect(storeController.getUserState(userId).step).toBe(1);
+
+    storeController.prevStep(userId);
+    expect(storeController.getUserState(userId).step).toBe(0);
+
+    // Nothing changed
+    storeController.prevStep(userId);
+    expect(storeController.getUserState(userId).step).toBe(0);
+  });
 });
+
+
 
 describe("add/remove user", () => {
   test("should add user to the list", () => {
@@ -94,6 +116,18 @@ describe("get/set state", () => {
 
     storeController.addUser(newUserId);
     expect(storeController.getUserState(newUserId)).toStrictEqual({id: newUserId, ...defaultState});
+  });
+
+  test("should return `true` if user is on the list", () => {
+    const storeController = new StoreController();
+
+    expect(storeController.userExists(userId)).toBe(false);
+
+    storeController.addUser(userId);
+    expect(storeController.userExists(userId)).toBe(true);
+
+    storeController.removeUser(userId);
+    expect(storeController.userExists(userId)).toBe(false);
   });
 
   test("should throw an error when trying to get state of nonexistent user", () => {
