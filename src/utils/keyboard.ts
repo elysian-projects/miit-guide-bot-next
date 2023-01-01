@@ -7,7 +7,7 @@ import { InlineKeyboard, Keyboard } from "grammy";
  * @private
  */
 const calculateButtonColumnSize = (column?: number) => {
-  return Math.max(column ?? -1, keyboardDefaultOptions.columns);
+  return column ?? keyboardDefaultOptions.columns;
 };
 
 /**
@@ -27,7 +27,7 @@ export function createKeyboard(type: KeyboardType, buttons: ButtonImage[], optio
 
   const keyboardOptions = {
     ...keyboardDefaultOptions,
-    ...options as object,
+    ...options,
     columns: calculateButtonColumnSize(options?.columns)
   };
 
@@ -49,7 +49,7 @@ export function createKeyboard(type: KeyboardType, buttons: ButtonImage[], optio
 
   buttons.forEach((button, index) => {
     markup.text(button.label, button.value);
-    if(index !== 0 && index % keyboardOptions.columns === 0) {
+    if((index + 1) % keyboardOptions.columns === 0) {
       markup.row();
     }
   });
