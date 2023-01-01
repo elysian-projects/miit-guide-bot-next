@@ -1,4 +1,5 @@
-import { LocationType, UserState } from "@/types/data";
+import { LocationType } from "@/types/location";
+import { UserState } from "@/types/user";
 
 export const defaultLocation: LocationType = {value: "unknown", label: "unknown"};
 

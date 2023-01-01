@@ -1,5 +1,5 @@
 import { locations } from "@/env";
-import { LocationType } from "@/types/data";
+import { LocationType } from "@/types/location";
 
 /**
  * Extracts value with `prop` from the list of locations and returns an array of its values

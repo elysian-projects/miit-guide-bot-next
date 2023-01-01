@@ -9,6 +9,12 @@ export interface KeyboardOptions {
   placeholder?: string
 }
 
+export enum ControlButtons {
+  NEXT = "NEXT",
+  PREV = "PREV",
+  HUB = "HUB"
+}
+
 export type InlineKeyboardOptions = KeyboardOptions
 export interface MenuKeyboardOptions extends KeyboardOptions {
   resize?: boolean,
