@@ -1,17 +1,15 @@
 import { Context, InlineKeyboard, Keyboard } from "grammy";
 
-export type TabNames =
-  | "excursion"
-  | "ww2"
+export type TabName = "excursion" | "ww2";
 
 export type Tab = {
   icon?: string,
   label: string,
-  description: string,
+  reply: string,
   buttons: InlineKeyboard | Keyboard,
-  handler: (ctx: Context) => void
+  onClick: (ctx: Context) => void
 }
 
 export type Tabs = {
-  [key in TabNames]: Tab
+  [key in TabName]: Tab
 }

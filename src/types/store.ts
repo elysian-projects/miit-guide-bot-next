@@ -1,4 +1,8 @@
-import { LocationPoint, LocationType, UserId, UserState } from "./data";
+import { User } from "@/controllers/userController";
+import { LocationPoint, LocationType } from "./location";
+import { UserId, UserState } from "./user";
+
+export type StorageState = Record<UserId, User>;
 
 export interface IStoreController {
   getUserState: (userId: UserId) => UserState,

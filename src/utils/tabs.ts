@@ -1,6 +1,5 @@
 import { ButtonImage } from "@/types/lib";
-import { Tabs } from "@/types/tabs";
 
-export const createButtonsFromTabs = (tabs: Tabs): ButtonImage[] => {
-  return Object.keys(tabs).map(key => ({label: tabs[key].label, value: key}));
+export const createButtonImages = <T extends {label: string}>(source: Record<string, T>): ButtonImage[] => {
+  return Object.keys(source).map(key => ({label: source[key].label, value: key}));
 };

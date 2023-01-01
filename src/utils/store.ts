@@ -1,5 +1,7 @@
 import { defaultLocation } from "@/constants/state";
-import { LocationPoint, LocationType, StorageState, UserId, UserProps } from "@/types/data";
+import { LocationPoint, LocationType } from "@/types/location";
+import { StorageState } from "@/types/store";
+import { UserId, UserProps } from "@/types/user";
 import { isLocationValid, isPointsListValid } from "@/validations/state";
 
 export const userExists = (userList: StorageState, userId: UserId): boolean => {

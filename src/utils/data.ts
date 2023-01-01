@@ -1,4 +1,5 @@
-import { StorageState, UserId } from "@/types/data";
+import { StorageState } from "@/types/store";
+import { UserId } from "@/types/user";
 
 export const removeUserFromList = (userList: StorageState, userId: UserId): StorageState => {
   const updatedUserList: StorageState = {};

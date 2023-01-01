@@ -1,15 +1,8 @@
 import { defaultState } from "@/constants/state";
 import { eventController } from "@/env";
-import { LocationPoint, LocationType, UserId, UserState } from "@/types/data";
+import { LocationPoint, LocationType } from "@/types/location";
+import { IUserController, UserId, UserState } from "@/types/user";
 import { isLocationValid, isPointsListValid } from "@/validations/state";
-
-interface IUserController {
-  getState: () => UserState
-  setLocation: (location: LocationType) => void,
-  setPointsList: (pointsList: LocationPoint[]) => void
-  nextStep: () => void
-  resetState: () => void
-}
 
 export class User implements IUserController {
   private state: UserState;
@@ -31,6 +24,16 @@ export class User implements IUserController {
 
     if(this.isLastStep()) {
       eventController.emit(this.state.id, "end");
+    }
+  };
+
+  public prevStep = (): void => {
+    if(!this.isPointsListSet()) {
+      throw new Error("Location points list was not provided!");
+    }
+
+    if(this.state.step !== 0) {
+      this.state.step -= 1;
     }
   };
 

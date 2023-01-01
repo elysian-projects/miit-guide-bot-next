@@ -1,5 +1,5 @@
-import { UserId } from "@/types/data";
 import { Events } from "@/types/event";
+import { UserId } from "@/types/user";
 
 export class EventController {
   private events: Record<UserId, Record<keyof typeof Events, Array<() => void>>>;
@@ -45,7 +45,8 @@ export class EventController {
 
     this.events[userId] = {
       end: [],
-      nextStep: []
+      nextStep: [],
+      prevStep: []
     };
   };
 

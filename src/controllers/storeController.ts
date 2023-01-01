@@ -1,7 +1,8 @@
 import { User } from "@/controllers/userController";
 import { eventController } from "@/env";
-import { IStoreController } from "@/types/common";
-import { LocationPoint, LocationType, StorageState, UserId, UserState } from "@/types/data";
+import { LocationPoint, LocationType } from "@/types/location";
+import { IStoreController, StorageState } from "@/types/store";
+import { UserId, UserState } from "@/types/user";
 import { removeUserFromList } from "@/utils/data";
 import { userExists } from "@/utils/store";
 
@@ -24,6 +25,11 @@ export class StoreController implements IStoreController {
     this.store[userId] = new User(userId);
 
     eventController.on(userId, "nextStep", () => this.onNextStep(userId));
+    eventController.on(userId, "prevStep", () => this.onPrevStep(userId));
+  };
+
+  public userExists = (userId: UserId): boolean => {
+    return userExists(this.store, userId);
   };
 
   public removeUser = (userId: UserId): void => {
@@ -34,6 +40,11 @@ export class StoreController implements IStoreController {
   public nextStep = (userId: UserId): void => {
     this.checkIfUserExists(userId);
     eventController.emit(userId, "nextStep");
+  };
+
+  public prevStep = (userId: UserId): void => {
+    this.checkIfUserExists(userId);
+    eventController.emit(userId, "prevStep");
   };
 
   public updateLocation = (userId: UserId, location: LocationType): void => {
@@ -54,6 +65,11 @@ export class StoreController implements IStoreController {
   private onNextStep = (userId: UserId): void => {
     this.checkIfUserExists(userId);
     this.store[userId].nextStep();
+  };
+
+  private onPrevStep = (userId: UserId): void => {
+    this.checkIfUserExists(userId);
+    this.store[userId].prevStep();
   };
 
   /**
