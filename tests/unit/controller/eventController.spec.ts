@@ -1,5 +1,5 @@
 import { eventController } from "@/env";
-import { UserId } from "@/types/data";
+import { UserId } from "@/types/user";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 
 const userId: UserId = 0;

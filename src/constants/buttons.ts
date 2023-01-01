@@ -2,7 +2,7 @@ import { ButtonImage, InlineKeyboardOptions, MenuKeyboardOptions } from "@/types
 
 export const keyboardDefaultOptions: Required<InlineKeyboardOptions & MenuKeyboardOptions> = {
   columns: 3,
-  selective: true,
+  selective: false,
   oneTime: false,
   resize: true,
   placeholder: ""

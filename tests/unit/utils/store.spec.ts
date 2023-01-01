@@ -1,7 +1,9 @@
 import { defaultLocation } from "@/constants/state";
 import { User } from "@/controllers/userController";
 import { locations } from "@/env";
-import { LocationPoint, LocationType, StorageState, UserId } from "@/types/data";
+import { LocationPoint, LocationType } from "@/types/location";
+import { StorageState } from "@/types/store";
+import { UserId } from "@/types/user";
 import { isLocationChosen, isUserPropValueValid, userExists } from "@/utils/store";
 import { describe, expect, test } from "@jest/globals";
 
