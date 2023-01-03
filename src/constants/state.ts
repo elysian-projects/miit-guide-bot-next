@@ -1,10 +1,15 @@
 import { LocationType } from "@/types/location";
-import { UserState } from "@/types/user";
+import { UserData, UserState, UserStatus } from "@/types/user";
 
 export const defaultLocation: LocationType = {value: "unknown", label: "unknown"};
 
-export const defaultState: Omit<UserState, "id"> = {
-  location: defaultLocation,
-  step: 0,
-  locationPoints: []
+export const defaultUserData: UserData = {
+  title: "",
+  content: [],
+  step: 0
+};
+
+export const defaultUserState: Omit<UserState, "id"> = {
+  status: UserStatus.MAIN_HUB,
+  data: defaultUserData
 };

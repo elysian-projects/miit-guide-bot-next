@@ -1,7 +1,7 @@
-import { ButtonImage, InlineKeyboardOptions, MenuKeyboardOptions } from "@/types/lib";
+import { ButtonImage, ControlButtons, InlineKeyboardOptions, MenuKeyboardOptions } from "@/types/lib";
 
 export const keyboardDefaultOptions: Required<InlineKeyboardOptions & MenuKeyboardOptions> = {
-  columns: 3,
+  columns: 2,
   selective: false,
   oneTime: false,
   resize: true,
@@ -9,7 +9,8 @@ export const keyboardDefaultOptions: Required<InlineKeyboardOptions & MenuKeyboa
 };
 
 // Key of the object must match the `value` prop of the button
-export const Keyboard: {[key: string]: ButtonImage} = {
+export const KeyboardButtons: Record<ControlButtons, ButtonImage> = {
   NEXT: {value: "NEXT", label: "Далее"},
+  PREV: {value: "PREV", label: "Назад"},
   HUB: {value: "HUB", label: "В меню"},
 };

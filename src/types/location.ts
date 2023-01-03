@@ -7,10 +7,3 @@ export interface LocationType extends Imaginable {
 }
 
 export type LocationList = Record<keyof typeof locations, LocationType>;
-
-export type LocationPoint = {
-  name: string,
-  description: string,
-  picture: string
-  links: string[]
-}

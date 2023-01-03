@@ -1,4 +1,4 @@
-import { EventController } from "@/controllers/eventController";
+import { StoreController } from "./controllers/storeController";
 import { excursionHandler } from "./scripts/tabs/excursion";
 import { miitWar } from "./scripts/tabs/ww2";
 import { ButtonImage } from "./types/lib";
@@ -6,7 +6,7 @@ import { Tabs } from "./types/tabs";
 import { createKeyboard } from "./utils/keyboard";
 import { createButtonImages } from "./utils/tabs";
 
-export const eventController = new EventController();
+export const storeController = new StoreController();
 
 /**
  * Init locations

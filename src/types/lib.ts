@@ -1,4 +1,5 @@
-import { Context } from "grammy";
+import { Context, InlineKeyboard, Keyboard } from "grammy";
+import { ParseMode } from "grammy/out/types.node";
 
 export type KeyboardType = "menu" | "inline";
 
@@ -13,6 +14,11 @@ export enum ControlButtons {
   NEXT = "NEXT",
   PREV = "PREV",
   HUB = "HUB"
+}
+
+export interface MessageProps {
+  reply_markup?: Keyboard | InlineKeyboard,
+  parse_mode?: ParseMode
 }
 
 export type InlineKeyboardOptions = KeyboardOptions
