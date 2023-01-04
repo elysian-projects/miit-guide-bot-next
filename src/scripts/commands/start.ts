@@ -9,7 +9,7 @@ export const start: MessageHandler = async (ctx) => {
     throw new Error("Cannot identify chat id!");
   }
 
-  // Remove user from the list
+  // Remove user from the list to avoid unexpected bugs
   if(storeController.userExists(ctx.chat.id)) {
     storeController.removeUser(ctx.chat.id);
   }

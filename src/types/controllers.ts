@@ -1,7 +1,12 @@
 import { EventController } from "@/controllers/eventController";
+import { Context } from "grammy";
 import { Content } from "./content";
 import { EventHandler, EventNames } from "./event";
 import { UserData, UserId, UserStatus } from "./user";
+
+export interface IMessageController {
+  sendData: (ctx: Context, userId: UserId) => void,
+}
 
 export interface IUser {
   event: EventController,
@@ -27,7 +32,10 @@ export interface IStoreController {
   removeUser: (userId: UserId) => void,
   nextStep: (userId: UserId) => void,
   prevStep: (userId: UserId) => void,
-  isLastStep: (userId: UserId) => boolean
+  isLastStep: (userId: UserId) => boolean,
+  on: (userId: UserId, event: EventNames, handler: EventHandler) => void,
+  unsubscribe: (userId: UserId, event: EventNames, handler: EventHandler) => void,
+  emit: (userId: UserId, event: EventNames) => void
 }
 
 export interface IEventController {

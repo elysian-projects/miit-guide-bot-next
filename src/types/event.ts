@@ -7,6 +7,7 @@ export type EventHandler = {
 export enum Events {
   nextStep,
   prevStep,
+  changeStep,
   end
 }
 

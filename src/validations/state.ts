@@ -7,7 +7,7 @@ export const isLocationValid = (candidate: LocationType): boolean => {
   return (locationLabels.includes(candidate.label)) && (locationValues.includes(candidate.value));
 };
 
-export const isPointsListValid = (candidate: Content[]): boolean => {
+export const isContentListValid = (candidate: Content[]): boolean => {
   return (candidate.length > 0);
 };
 

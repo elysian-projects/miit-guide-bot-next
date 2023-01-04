@@ -1,11 +1,11 @@
-import { KeyboardButtons } from "@/constants/buttons";
 import { storeController, tabs } from "@/env";
-import { ButtonImage, MessageProps } from "@/types/lib";
 import { LocationList } from "@/types/location";
 import { UserData, UserId, UserStatus } from "@/types/user";
-import { formatCountLabel, formatMessage } from "@/utils/formatters";
-import { createKeyboard } from "@/utils/keyboard";
+import { Pagination } from "@/utils/pagination";
+// import { Separator } from "@/utils/separator";
 import { Context } from "grammy";
+
+// FIXME: refactor this
 
 export const excursionHandler = (ctx: Context) => {
   if(!ctx.chat || !ctx.chat.id) {
@@ -32,8 +32,8 @@ export const initUserForExcursion = (ctx: Context, options: {userId: UserId, loc
     title: "Some title",
     content: [
       {title: "Title 1", information: "Some info to title 1", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
-      {title: "Title 2", information: "Some info to title 2", links: ["link1", "link2"]},
-      {title: "Title 3", information: "Some info to title 3"},
+      {title: "Title 2", information: "Some info to title 2", links: ["link1", "link2"], picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
+      {title: "Title 3", information: "Some info to title 3", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
     ],
     step: 0
   };
@@ -41,36 +41,9 @@ export const initUserForExcursion = (ctx: Context, options: {userId: UserId, loc
   storeController.setUserStatus(userId, UserStatus.IN_PROCESS);
   storeController.setUserData(userId, userData);
 
-  // FIXME: maybe make these calls with the event system?
-  sendDataNode(ctx, userId);
-};
+  const controlFlow = new Pagination();
 
-export const sendDataNode = (ctx: Context, userId: UserId) => {
-  if(!storeController.userExists(userId)) {
-    throw new Error(`User with id ${userId} not found!`);
-  }
+  storeController.on(userId, "changeStep", () => controlFlow.sendData(ctx, userId));
 
-  const currentContent = storeController.getCurrentContent(userId);
-
-  const message = formatMessage(currentContent);
-
-  const controls: ButtonImage[] = [
-    KeyboardButtons.PREV,
-    {value: "count", label: formatCountLabel(storeController.getUserData(userId))},
-  ];
-
-  controls.push(storeController.isLastStep(userId)
-                  ? KeyboardButtons.HUB
-                  : KeyboardButtons.NEXT);
-
-  const keyboard = createKeyboard("inline", controls, {oneTime: true, columns: 3});
-
-  const props: MessageProps = {
-    reply_markup: keyboard,
-    parse_mode: "MarkdownV2"
-  };
-
-  currentContent.picture
-          ? ctx.replyWithPhoto(currentContent.picture, {caption: message, ...props})
-          : ctx.reply(message, {...props});
+  controlFlow.sendData(ctx, userId);
 };

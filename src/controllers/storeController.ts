@@ -1,6 +1,7 @@
 import { User } from "@/controllers/userController";
 import { Content } from "@/types/content";
 import { IStoreController } from "@/types/controllers";
+import { EventHandler, EventNames } from "@/types/event";
 import { StorageState } from "@/types/store";
 import { UserData, UserId, UserStatus } from "@/types/user";
 import { removeUserFromList } from "@/utils/data";
@@ -67,6 +68,21 @@ export class StoreController implements IStoreController {
   public isLastStep = (userId: number): boolean => {
     this.checkIfUserExists(userId);
     return this.store[userId].isLastStep();
+  };
+
+  public on = (userId: UserId, event: EventNames, handler: EventHandler): void => {
+    this.checkIfUserExists(userId);
+    this.store[userId].event.on(event, handler);
+  };
+
+  public unsubscribe = (userId: UserId, event: EventNames, handler: EventHandler): void => {
+    this.checkIfUserExists(userId);
+    this.store[userId].event.unsubscribe(event, handler);
+  };
+
+  public emit = (userId: UserId, event: EventNames): void => {
+    this.checkIfUserExists(userId);
+    this.store[userId].event.emit(event);
   };
 
   /** @throws Error with message */

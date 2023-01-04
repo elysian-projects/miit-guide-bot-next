@@ -52,10 +52,9 @@ export class User implements IUser {
       throw new Error("Location points list was not provided!");
     }
 
-    this.state.data.step += 1;
-
-    if(this.isLastStep()) {
-      this.event.emit("end");
+    if(this.state.data.step !== this.state.data.content.length - 1) {
+      this.state.data.step += 1;
+      this.event.emit("changeStep");
     }
   };
 
@@ -66,6 +65,7 @@ export class User implements IUser {
 
     if(this.state.data.step !== 0) {
       this.state.data.step -= 1;
+      this.event.emit("changeStep");
     }
   };
 

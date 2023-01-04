@@ -9,6 +9,7 @@ export const keyboardDefaultOptions: Required<InlineKeyboardOptions & MenuKeyboa
 };
 
 // Key of the object must match the `value` prop of the button
+// TODO: get rid of the unused `value` property
 export const KeyboardButtons: Record<ControlButtons, ButtonImage> = {
   NEXT: {value: "NEXT", label: "Далее"},
   PREV: {value: "PREV", label: "Назад"},

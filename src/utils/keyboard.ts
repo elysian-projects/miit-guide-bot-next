@@ -1,6 +1,6 @@
 import { keyboardDefaultOptions } from "@/constants/buttons";
 import { ButtonImage, InlineKeyboardOptions, KeyboardType, MenuKeyboardOptions } from "@/types/lib";
-import { InlineKeyboard, Keyboard } from "grammy";
+import { Context, InlineKeyboard, Keyboard } from "grammy";
 
 /**
  * Calculates and returns the column size for buttons
@@ -65,9 +65,6 @@ export function createKeyboard(type: KeyboardType, buttons: ButtonImage[], optio
   return markup;
 }
 
-/**
- * Creates and returns a (menu) keyboard remove object
- */
-export const createRemoveKeyboardMarkup = () => {
-  return {remove_keyboard: true};
+export const removeInlineKeyboard = (ctx: Context): void => {
+  ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()});
 };
