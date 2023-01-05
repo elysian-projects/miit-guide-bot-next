@@ -1,4 +1,4 @@
-import { locations, tabs } from "@/env";
+import { locationsList, tabsList } from "@/env";
 import { help, messageHandler, start } from "@/scripts/commands";
 import { controlButtonClickHandler, locationButtonClickHandler, tabsButtonClickHandler } from "@/scripts/handlers/";
 import { ControlButtons } from "@/types/lib";
@@ -13,8 +13,8 @@ bot.command("help", ctx => help(ctx));
 
 // Inline buttons handlers
 bot.callbackQuery(Object.keys(ControlButtons), ctx => controlButtonClickHandler(ctx));
-bot.callbackQuery(Object.keys(locations), ctx => locationButtonClickHandler(ctx));
-bot.callbackQuery(Object.keys(tabs), ctx => tabsButtonClickHandler(ctx));
+bot.callbackQuery(locationsList, ctx => locationButtonClickHandler(ctx));
+bot.callbackQuery(tabsList, ctx => tabsButtonClickHandler(ctx));
 
 // The rest uncaught events
 bot.on("message", ctx => messageHandler(ctx));

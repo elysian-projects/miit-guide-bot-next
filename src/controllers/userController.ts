@@ -1,5 +1,5 @@
 import { defaultUserState } from "@/constants/state";
-import { Content } from "@/types/content";
+import { ContentNode, WithPicture } from "@/types/content";
 import { IUser } from "@/types/controllers";
 import { UserData, UserId, UserState, UserStatus } from "@/types/user";
 import { EventController } from "./eventController";
@@ -37,7 +37,7 @@ export class User implements IUser {
     this.state.data = data;
   };
 
-  public getCurrentContent = (): Content => {
+  public getCurrentContent = (): ContentNode & Partial<WithPicture> => {
     const currentStep = this.state.data.step;
 
     if(currentStep >= this.state.data.content.length) {

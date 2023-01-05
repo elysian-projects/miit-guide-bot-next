@@ -1,6 +1,12 @@
 import { Context, InlineKeyboard, Keyboard } from "grammy";
 import { ParseMode } from "grammy/out/types.node";
+import { Image } from "./common";
 
+/**
+ * Type of a keyboard to be shown when the message is sent:
+ * - `menu` is a keyboard by the input field
+ * - `inline` is an inline keyboard that is attached to the sent message
+ */
 export type KeyboardType = "menu" | "inline";
 
 export interface KeyboardOptions {
@@ -26,16 +32,8 @@ export interface MenuKeyboardOptions extends KeyboardOptions {
   resize?: boolean,
 }
 
-export type ButtonImage = {
-  label: string,
-  value: string
-}
+export type ButtonImage = Image;
 
 export type MessageHandler<T extends object = object> = {
   (ctx: Context, payload?: T): void
-}
-
-export type InlineCallbackCtx = Context;
-export type InlineButtonClickHandler = {
-  (ctx: InlineCallbackCtx): void
 }

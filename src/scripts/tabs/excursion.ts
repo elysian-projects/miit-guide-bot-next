@@ -1,8 +1,8 @@
-import { storeController, tabs } from "@/env";
-import { LocationList } from "@/types/location";
+import { storeController } from "@/env";
+import { LocationsList } from "@/types/location";
 import { UserData, UserId, UserStatus } from "@/types/user";
-import { Pagination } from "@/utils/pagination";
-// import { Separator } from "@/utils/separator";
+import { getTabData } from "@/utils/data";
+import { Separator } from "@/utils/separator";
 import { Context } from "grammy";
 
 // FIXME: refactor this
@@ -14,26 +14,29 @@ export const excursionHandler = (ctx: Context) => {
 
   const userId = ctx.chat.id;
 
+  // TODO: extract to external function
   if(storeController.userExists(userId)) {
     throw new Error(`User with id ${userId} already exists and can't be signed up for excursion!`);
   }
 
-  ctx.reply(tabs.excursion.reply, {reply_markup: tabs.excursion.buttons});
+  const tabData = getTabData("excursion");
+
+  ctx.reply(tabData.content, {reply_markup: tabData.replyMarkup});
 
   storeController.addUser(userId);
   storeController.setUserStatus(userId, UserStatus.EXCURSION_HUB);
 };
 
-export const initUserForExcursion = (ctx: Context, options: {userId: UserId, location: keyof LocationList}) => {
+export const initUserForExcursion = (ctx: Context, options: {userId: UserId, location: keyof LocationsList}) => {
   const {userId} = options;
 
   // TODO: get data from server here
   const userData: UserData = {
     title: "Some title",
     content: [
-      {title: "Title 1", information: "Some info to title 1", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
-      {title: "Title 2", information: "Some info to title 2", links: ["link1", "link2"], picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
-      {title: "Title 3", information: "Some info to title 3", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
+      {label: "Title 1", content: "Some info to title 1", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
+      {label: "Title 2", content: "Some info to title 2", links: ["link1", "link2"], picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
+      {label: "Title 3", content: "Some info to title 3", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
     ],
     step: 0
   };
@@ -41,7 +44,7 @@ export const initUserForExcursion = (ctx: Context, options: {userId: UserId, loc
   storeController.setUserStatus(userId, UserStatus.IN_PROCESS);
   storeController.setUserData(userId, userData);
 
-  const controlFlow = new Pagination();
+  const controlFlow = new Separator();
 
   storeController.on(userId, "changeStep", () => controlFlow.sendData(ctx, userId));
 

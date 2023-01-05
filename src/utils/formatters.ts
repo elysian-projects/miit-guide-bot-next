@@ -1,5 +1,5 @@
 import { EXTRA_LINKS } from "@/constants/replies";
-import { Content } from "@/types/content";
+import { ContentNode, WithLinks } from "@/types/content";
 import { UserData } from "@/types/user";
 
 /**
@@ -17,11 +17,11 @@ export const formatCountLabel = (userData: UserData): string => {
  * Takes content node and returns string with well-formatted message to be sent to the user.
  * The message will contain bold title, main content info, and extra links part, if links are provided.
  */
-export const formatMessage = (content: Content): string => {
+export const formatMessage = (content: ContentNode & Partial<WithLinks>): string => {
   let message = `
-*${content.title}*
+*${content.label}*
 
-${content.information}
+${content.content}
   `;
 
   if(content.links) {

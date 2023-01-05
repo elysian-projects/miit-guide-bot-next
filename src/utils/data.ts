@@ -1,4 +1,6 @@
+import { tabsData } from "@/env";
 import { StorageState } from "@/types/store";
+import { Tab, TabsList } from "@/types/tabs";
 import { UserId } from "@/types/user";
 
 export const removeUserFromList = (userList: StorageState, userId: UserId): StorageState => {
@@ -11,4 +13,8 @@ export const removeUserFromList = (userList: StorageState, userId: UserId): Stor
   }
 
   return updatedUserList;
+};
+
+export const getTabData = (tabValue: TabsList): Tab => {
+  return tabsData[tabValue];
 };

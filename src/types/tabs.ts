@@ -1,15 +1,14 @@
-import { Context, InlineKeyboard, Keyboard } from "grammy";
+import { Context } from "grammy";
+import { Image, Representable } from "./common";
+import { ContentNode, WithReplyMarkup } from "./content";
 
-export type TabName = "excursion" | "ww2";
+export type TabsList = "excursion" | "ww2";
 
-export type Tab = {
+export interface Tab extends ContentNode, WithReplyMarkup {
   icon?: string,
-  label: string,
-  reply: string,
-  buttons: InlineKeyboard | Keyboard,
   onClick: (ctx: Context) => void
 }
 
-export type Tabs = {
-  [key in TabName]: Tab
-}
+export type Tabs = Representable<TabsList, Tab>;
+
+export type TabImage = Image<TabsList>;

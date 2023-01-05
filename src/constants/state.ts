@@ -1,7 +1,7 @@
-import { LocationType } from "@/types/location";
+import { Image } from "@/types/common";
 import { UserData, UserState, UserStatus } from "@/types/user";
 
-export const defaultLocation: LocationType = {value: "unknown", label: "unknown"};
+export const defaultLocation: Image = {value: "unknown", label: "unknown"};
 
 export const defaultUserData: UserData = {
   title: "",

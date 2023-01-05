@@ -1,5 +1,5 @@
 import { User } from "@/controllers/userController";
-import { Content } from "@/types/content";
+import { ContentNode, WithPicture } from "@/types/content";
 import { IStoreController } from "@/types/controllers";
 import { EventHandler, EventNames } from "@/types/event";
 import { StorageState } from "@/types/store";
@@ -45,7 +45,7 @@ export class StoreController implements IStoreController {
     this.store[userId].setData(data);
   };
 
-  public getCurrentContent = (userId: UserId): Content => {
+  public getCurrentContent = (userId: UserId): ContentNode & Partial<WithPicture> => {
     this.checkIfUserExists(userId);
     return this.store[userId].getCurrentContent();
   };

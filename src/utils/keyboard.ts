@@ -1,5 +1,6 @@
 import { keyboardDefaultOptions } from "@/constants/buttons";
-import { ButtonImage, InlineKeyboardOptions, KeyboardType, MenuKeyboardOptions } from "@/types/lib";
+import { Image } from "@/types/common";
+import { InlineKeyboardOptions, KeyboardType, MenuKeyboardOptions } from "@/types/lib";
 import { Context, InlineKeyboard, Keyboard } from "grammy";
 
 /**
@@ -18,9 +19,9 @@ const calculateButtonColumnSize = (column?: number) => {
  * @param {MenuKeyboardOptions | InlineKeyboardOptions} options: optional settings to change the way buttons look
  * @returns {Keyboard | InlineKeyboard}
  */
-export function createKeyboard(type: "menu", buttons: ButtonImage[], options?: MenuKeyboardOptions): Keyboard;
-export function createKeyboard(type: "inline", buttons: ButtonImage[], options?: InlineKeyboardOptions): InlineKeyboard;
-export function createKeyboard(type: KeyboardType, buttons: ButtonImage[], options?: MenuKeyboardOptions | InlineKeyboardOptions): unknown {
+export function createKeyboard(type: "menu", buttons: Image[], options?: MenuKeyboardOptions): Keyboard;
+export function createKeyboard(type: "inline", buttons: Image[], options?: InlineKeyboardOptions): InlineKeyboard;
+export function createKeyboard(type: KeyboardType, buttons: Image[], options?: MenuKeyboardOptions | InlineKeyboardOptions): unknown {
   if(buttons.length === 0) {
     throw new Error("No buttons for menu keyboard given!");
   }
@@ -36,30 +37,17 @@ export function createKeyboard(type: KeyboardType, buttons: ButtonImage[], optio
   if(type === "menu") {
     markup = new Keyboard();
 
-    if(keyboardOptions.resize) {
-      markup.resized();
-    }
-
-    if(keyboardOptions.oneTime) {
-      markup.oneTime();
-    }
-
-    if(keyboardOptions.selective) {
-      markup.selected(true);
-    }
-
-    if(keyboardOptions.placeholder) {
-      markup.placeholder(keyboardOptions.placeholder);
-    }
+    keyboardOptions.resize ?? markup.resized();
+    keyboardOptions.oneTime ?? markup.oneTime();
+    keyboardOptions.selective ?? markup.selected(true);
+    keyboardOptions.placeholder ?? markup.placeholder(keyboardOptions.placeholder);
   } else {
     markup = new InlineKeyboard();
   }
 
   buttons.forEach((button, index) => {
     markup.text(button.label, button.value);
-    if((index + 1) % keyboardOptions.columns === 0) {
-      markup.row();
-    }
+    ((index + 1) % keyboardOptions.columns === 0) ?? markup.row();
   });
 
   return markup;

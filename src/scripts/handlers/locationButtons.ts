@@ -1,6 +1,6 @@
 import { storeController } from "@/env";
 import { MessageHandler } from "@/types/lib";
-import { LocationList } from "@/types/location";
+import { LocationsList } from "@/types/location";
 import { UserStatus } from "@/types/user";
 import { removeInlineKeyboard } from "@/utils/keyboard";
 import { initUserForExcursion } from "../tabs/excursion";
@@ -17,7 +17,7 @@ export const locationButtonClickHandler: MessageHandler = async (ctx) => {
   }
 
   if(storeController.getUserStatus(chatId) === UserStatus.EXCURSION_HUB) {
-    initUserForExcursion(ctx, {userId: chatId, location: buttonData as keyof LocationList});
+    initUserForExcursion(ctx, {userId: chatId, location: buttonData as keyof LocationsList});
     removeInlineKeyboard(ctx);
   }
 };

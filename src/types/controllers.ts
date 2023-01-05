@@ -1,6 +1,6 @@
 import { EventController } from "@/controllers/eventController";
 import { Context } from "grammy";
-import { Content } from "./content";
+import { ContentNode } from "./content";
 import { EventHandler, EventNames } from "./event";
 import { UserData, UserId, UserStatus } from "./user";
 
@@ -15,7 +15,7 @@ export interface IUser {
   setStatus: (status: UserStatus) => void,
   getData: () => UserData,
   setData: (data: UserData) => void,
-  getCurrentContent: () => Content,
+  getCurrentContent: () => ContentNode,
   nextStep: () => void,
   prevStep: () => void,
   isLastStep: () => boolean,
@@ -28,7 +28,7 @@ export interface IStoreController {
   setUserData: (userId: UserId, data: UserData) => void,
   getUserStatus: (userId: UserId) => UserStatus,
   setUserStatus: (userId: UserId, status: UserStatus) => void,
-  getCurrentContent: (userId: UserId) => Content,
+  getCurrentContent: (userId: UserId) => ContentNode,
   removeUser: (userId: UserId) => void,
   nextStep: (userId: UserId) => void,
   prevStep: (userId: UserId) => void,
