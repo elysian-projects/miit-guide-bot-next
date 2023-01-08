@@ -1,6 +1,6 @@
 import { keyboardDefaultOptions } from "@/constants/buttons";
 import { Image } from "@/types/common";
-import { InlineKeyboardOptions, KeyboardType, MenuKeyboardOptions } from "@/types/lib";
+import { ButtonImage, InlineKeyboardOptions, KeyboardType, MenuKeyboardOptions } from "@/types/lib";
 import { Context, InlineKeyboard, Keyboard } from "grammy";
 
 /**
@@ -37,7 +37,8 @@ export function createKeyboard(type: KeyboardType, buttons: Image[], options?: M
   if(type === "menu") {
     markup = new Keyboard();
 
-    keyboardOptions.resize ?? markup.resized();
+    markup.resized(keyboardOptions.resize);
+
     keyboardOptions.oneTime ?? markup.oneTime();
     keyboardOptions.selective ?? markup.selected(true);
     keyboardOptions.placeholder ?? markup.placeholder(keyboardOptions.placeholder);
@@ -53,6 +54,18 @@ export function createKeyboard(type: KeyboardType, buttons: Image[], options?: M
   return markup;
 }
 
-export const removeInlineKeyboard = (ctx: Context): void => {
-  ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()});
+export const removeInlineKeyboard = (ctx: Context): boolean => {
+  if(ctx.message?.reply_markup?.inline_keyboard) {
+    ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()});
+    return true;
+  }
+
+  return false;
 };
+
+export const createButtonImage = (label: string, value: string): ButtonImage => {
+  return {
+      label,
+      value
+  }
+}

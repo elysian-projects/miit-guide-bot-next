@@ -22,11 +22,6 @@ export enum ControlButtons {
   HUB = "HUB"
 }
 
-export interface MessageProps {
-  reply_markup?: Keyboard | InlineKeyboard,
-  parse_mode?: ParseMode
-}
-
 export type InlineKeyboardOptions = KeyboardOptions
 export interface MenuKeyboardOptions extends KeyboardOptions {
   resize?: boolean,
@@ -36,4 +31,9 @@ export type ButtonImage = Image;
 
 export type MessageHandler<T extends object = object> = {
   (ctx: Context, payload?: T): void
+}
+
+export type MessageProps<K extends Keyboard | InlineKeyboard> = {
+  parse_mode: ParseMode,
+  reply_markup: K
 }

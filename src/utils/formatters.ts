@@ -1,32 +1,29 @@
 import { EXTRA_LINKS } from "@/constants/replies";
 import { ContentNode, WithLinks } from "@/types/content";
-import { UserData } from "@/types/user";
 
 /**
  * Represents user data steps like `1/5`, where `1` is the current step, `5` is the last possible step.
  * The steps are counted from `1` unlike actual steps in the given type.
  */
-export const formatCountLabel = (userData: UserData): string => {
-  const currentStep = userData.step + 1;
-  const maxSteps = userData.content.length;
-
-  return `${currentStep}/${maxSteps}`;
+export const formatCountLabel = (currentStep: number, maxSteps: number): string => {
+  return `${currentStep + 1}/${maxSteps + 1}`;
 };
 
 /**
  * Takes content node and returns string with well-formatted message to be sent to the user.
  * The message will contain bold title, main content info, and extra links part, if links are provided.
  */
-export const formatMessage = (content: ContentNode & Partial<WithLinks>): string => {
+export const formatMessage = (content: ContentNode & Partial<WithLinks>, options: {currentStep: number, maxSteps: number}): string => {
   let message = `
 *${content.label}*
 
-${content.content}
-  `;
+${content.content}`;
 
   if(content.links) {
     message += `\n${EXTRA_LINKS} ${content.links.join(", ")}`;
   }
+
+  message += `\n\n${options.currentStep + 1}/${options.maxSteps}`;
 
   return message;
 };

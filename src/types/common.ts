@@ -12,3 +12,8 @@ export interface Image<V extends string = string, L extends string = string> ext
 export type Representable<K extends string | number | symbol, V> = {
   [key in K]: V
 }
+
+export type StepInformation = {
+  currentStep: number,
+  maxSteps: number
+}

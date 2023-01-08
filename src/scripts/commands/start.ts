@@ -9,11 +9,11 @@ export const start: MessageHandler = async (ctx) => {
   }
 
   // Remove user from the list to avoid unexpected bugs
-  if(storeController.userExists(ctx.chat.id)) {
-    storeController.removeUser(ctx.chat.id);
-  }
+  storeController.removeUser(ctx.chat.id);
 
   const markup = createKeyboard("inline", tabsImage, {oneTime: true});
 
-  ctx.replyWithPhoto("https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159", {caption: replies.GREETINGS, reply_markup: markup});
+  // Separate caption and photo into different messages to be able to remove the menu keyboard
+  await ctx.replyWithPhoto("https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159", {reply_markup: {remove_keyboard: true}});
+  await ctx.reply(replies.GREETINGS, {reply_markup: markup});
 };

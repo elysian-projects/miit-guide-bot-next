@@ -1,18 +1,13 @@
-import { storeController } from "@/env";
 import { IMessageController } from "@/types/controllers";
 import { UserId } from "@/types/user";
 import { Context } from "grammy";
-import { checkIfUserExists, computeMessageProps } from "./common";
-import { formatMessage } from "./formatters";
+import { checkIfUserExists, useMessageController } from "./common";
 
 export class Separator implements IMessageController {
   public sendData = (ctx: Context, userId: UserId) => {
     checkIfUserExists(userId);
 
-    const currentContent = storeController.getCurrentContent(userId);
-    const message = formatMessage(currentContent);
-
-    const props = computeMessageProps(userId);
+    const {currentContent, props, message} = useMessageController("menu", userId);
 
     currentContent.picture
             ? ctx.replyWithPhoto(currentContent.picture, {caption: message, ...props})

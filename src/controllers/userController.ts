@@ -69,6 +69,10 @@ export class User implements IUser {
     }
   };
 
+  public isFirstStep = (): boolean => {
+    return this.state.data.step === 0;
+  }
+
   public isLastStep = (): boolean => {
     return this.state.data.step === this.state.data.content.length - 1;
   };

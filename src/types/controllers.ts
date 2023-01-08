@@ -1,6 +1,6 @@
 import { EventController } from "@/controllers/eventController";
 import { Context } from "grammy";
-import { ContentNode } from "./content";
+import { ContentNode, WithPicture } from "./content";
 import { EventHandler, EventNames } from "./event";
 import { UserData, UserId, UserStatus } from "./user";
 
@@ -15,27 +15,19 @@ export interface IUser {
   setStatus: (status: UserStatus) => void,
   getData: () => UserData,
   setData: (data: UserData) => void,
-  getCurrentContent: () => ContentNode,
+  getCurrentContent: () => ContentNode & Partial<WithPicture>,
   nextStep: () => void,
   prevStep: () => void,
+  isFirstStep: () => boolean,
   isLastStep: () => boolean,
 }
 
 export interface IStoreController {
-  addUser: (userId: UserId, data: UserData) => void,
+  addUser: (userId: UserId, data: UserData) => boolean,
   userExists: (userId: UserId) => boolean,
-  getUserData: (userId: UserId) => UserData,
-  setUserData: (userId: UserId, data: UserData) => void,
-  getUserStatus: (userId: UserId) => UserStatus,
-  setUserStatus: (userId: UserId, status: UserStatus) => void,
-  getCurrentContent: (userId: UserId) => ContentNode,
-  removeUser: (userId: UserId) => void,
-  nextStep: (userId: UserId) => void,
-  prevStep: (userId: UserId) => void,
-  isLastStep: (userId: UserId) => boolean,
-  on: (userId: UserId, event: EventNames, handler: EventHandler) => void,
-  unsubscribe: (userId: UserId, event: EventNames, handler: EventHandler) => void,
-  emit: (userId: UserId, event: EventNames) => void
+  /** Returns a MUTABLE user object */
+  getUser: (userId: UserId) => IUser,
+  removeUser: (userId: UserId) => boolean,
 }
 
 export interface IEventController {
