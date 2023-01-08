@@ -33,7 +33,7 @@ export const getObjectPropArray = <T extends object, K extends keyof T>(objectLi
  * Throws an error if user is not added
  */
 export const checkIfUserExists = (userId: UserId): void => {
-  if(!storeController.userExists(userId)) {
+  if (!storeController.userExists(userId)) {
     throw new Error(`User with id ${userId} not found!`);
   }
 };
@@ -50,25 +50,32 @@ export function computeControlsKeyboard(type: any, options: {currentStep: number
     : controls.push(KeyboardButtons.HUB);
 
   // Middle button: represents steps in a format of `1/3`, where `1` - current step, `3` - last available step
-  // controls.push(createButtonImage(formatCountLabel(currentStep, maxSteps), "_count"));
+  // type === "inline" ?? controls.push(createButtonImage(formatCountLabel(currentStep, maxSteps), "_count"));
 
-  // Last button:
-  (currentStep !== maxSteps - 1) ? controls.push(KeyboardButtons.NEXT) : null;
+  // Last button: `Next step`, if there is a next step, overwise - `Back to hub`
+  if(currentStep !== maxSteps - 1) {
+    controls.push(KeyboardButtons.NEXT);
+  } else if(type === "inline") {
+    controls.push(KeyboardButtons.HUB);
+  }
 
   return createKeyboard(type, controls, {oneTime: true, columns: 3});
-};
+}
 
-export const takeControlButtonAction = (ctx: Context, button: ControlButtons, userId: UserId, ) => {
-  switch(button) {
-    case ControlButtons.NEXT || KeyboardButtons.NEXT.label:
+export const takeControlButtonAction = (ctx: Context, button: ControlButtons, userId: UserId) => {
+  switch (button) {
+    case ControlButtons.NEXT:
+    case KeyboardButtons.NEXT.label:
       storeController.getUser(userId).nextStep();
       removeInlineKeyboard(ctx);
       break;
-    case ControlButtons.PREV || KeyboardButtons.PREV.label:
+    case ControlButtons.PREV:
+    case KeyboardButtons.PREV.label:
       storeController.getUser(userId).prevStep();
       removeInlineKeyboard(ctx);
       break;
-    case ControlButtons.HUB || KeyboardButtons.HUB.label:
+    case ControlButtons.HUB:
+    case KeyboardButtons.HUB.label:
       storeController.removeUser(userId);
       removeInlineKeyboard(ctx);
       start(ctx);
@@ -76,13 +83,13 @@ export const takeControlButtonAction = (ctx: Context, button: ControlButtons, us
   }
 };
 
-export function getMessageProps (type: "menu", options: StepInformation): MessageProps<Keyboard>;
-export function getMessageProps (type: "inline", options: StepInformation): MessageProps<InlineKeyboard>;
-export function getMessageProps (type: any, options: StepInformation): MessageProps<any> {
+export function getMessageProps(type: "menu", options: StepInformation): MessageProps<Keyboard>;
+export function getMessageProps(type: "inline", options: StepInformation): MessageProps<InlineKeyboard>;
+export function getMessageProps(type: any, options: StepInformation): MessageProps<any> {
   return {
     parse_mode: "Markdown",
     reply_markup: computeControlsKeyboard(type, options)
-  }
+  };
 }
 
 /**
@@ -93,15 +100,18 @@ type UseMessageControllerReturnType<K extends Keyboard | InlineKeyboard = any> =
   props: K extends any ? any : MessageProps<K>,
   isFirstStep: boolean,
   isLastStep: boolean,
-  currentContent: ContentNode & Partial<WithPicture> & Partial<WithLinks>
+  content: ContentNode & Partial<WithPicture> & Partial<WithLinks>
 }
-export function useMessageController (replyMarkupType: "menu", userId: UserId): UseMessageControllerReturnType<Keyboard>;
-export function useMessageController (replyMarkupType: "inline", userId: UserId): UseMessageControllerReturnType<InlineKeyboard>;
-export function useMessageController (replyMarkupType: any, userId: UserId): UseMessageControllerReturnType {
-  const user = storeController.getUser(userId)
+export function useMessageController(replyMarkupType: "menu", userId: UserId): UseMessageControllerReturnType<Keyboard>;
+export function useMessageController(replyMarkupType: "inline", userId: UserId): UseMessageControllerReturnType<InlineKeyboard>;
+export function useMessageController(replyMarkupType: any, userId: UserId): UseMessageControllerReturnType {
+  const user = storeController.getUser(userId);
   const currentContent = user.getCurrentContent();
 
-  const options = {currentStep: user.getData().step, maxSteps: user.getData().content.length};
+  const options = {
+    currentStep: user.getData().step,
+    maxSteps: user.getData().content.length
+  };
 
   const message = formatMessage(currentContent, options);
   const props = getMessageProps(replyMarkupType, options);
@@ -109,8 +119,8 @@ export function useMessageController (replyMarkupType: any, userId: UserId): Use
   return {
     message,
     props,
-    currentContent,
+    content: currentContent,
     isFirstStep: user.isFirstStep(),
     isLastStep: user.isLastStep(),
-  }
+  };
 }

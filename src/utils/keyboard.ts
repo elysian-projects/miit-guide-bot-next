@@ -54,8 +54,9 @@ export function createKeyboard(type: KeyboardType, buttons: Image[], options?: M
   return markup;
 }
 
+// FIXME: doesn't work
 export const removeInlineKeyboard = (ctx: Context): boolean => {
-  if(ctx.message?.reply_markup?.inline_keyboard) {
+  if(ctx.message?.reply_markup) {
     ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()});
     return true;
   }

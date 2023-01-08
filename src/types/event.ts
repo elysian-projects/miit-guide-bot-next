@@ -5,10 +5,8 @@ export type EventHandler = {
 }
 
 export enum Events {
-  nextStep,
-  prevStep,
-  changeStep,
-  end
+  nextStep = "nextStep",
+  prevStep = "prevStep",
+  changeStep = "changeStep",
+  end = "end"
 }
-
-export type EventNames = keyof typeof Events;

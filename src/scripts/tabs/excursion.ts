@@ -1,9 +1,9 @@
 import { storeController } from "@/env";
+import { Events } from "@/types/event";
 import { LocationsList } from "@/types/location";
 import { UserData, UserId, UserStatus } from "@/types/user";
 import { getTabData } from "@/utils/data";
 import { Pagination } from "@/utils/pagination";
-// import { Separator } from "@/utils/separator";
 import { Context } from "grammy";
 
 export const excursionHandler = (ctx: Context) => {
@@ -36,9 +36,10 @@ export const initUserForExcursion = (ctx: Context, options: {userId: UserId, loc
   const userData: UserData = {
     title: "Some title",
     content: [
-      {label: "Title 1", content: "Some info to title 1", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
-      {label: "Title 2", content: "Some info to title 2", links: ["link1", "link2"], picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
-      {label: "Title 3", content: "Some info to title 3", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
+      // picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"
+      {label: "Title 1", content: "Some info to title 1"},
+      {label: "Title 2", content: "Some info to title 2", links: ["link1", "link2"]},
+      {label: "Title 3", content: "Some info to title 3"},
     ],
     step: 0
   };
@@ -48,7 +49,7 @@ export const initUserForExcursion = (ctx: Context, options: {userId: UserId, loc
 
   const controlFlow = new Pagination();
 
-  storeController.getUser(userId).event.on("changeStep", () => controlFlow.sendData(ctx, userId));
+  storeController.getUser(userId).event.on(Events.changeStep, () => controlFlow.sendData(ctx, userId));
 
   controlFlow.sendData(ctx, userId);
 };

@@ -14,5 +14,6 @@ export const isValidContentList = (candidate: ContentNode[]): boolean => {
 };
 
 export const isValidControlButton = (candidate: string) => {
-  return Object.values(KeyboardButtons).map(button => button.label).includes(candidate);
+  return Object.values(KeyboardButtons).map(button => button.label).includes(candidate)
+      || Object.keys(KeyboardButtons).includes(candidate);
 };

@@ -1,7 +1,7 @@
 import { EventController } from "@/controllers/eventController";
 import { Context } from "grammy";
 import { ContentNode, WithPicture } from "./content";
-import { EventHandler, EventNames } from "./event";
+import { EventHandler, Events } from "./event";
 import { UserData, UserId, UserStatus } from "./user";
 
 export interface IMessageController {
@@ -31,7 +31,7 @@ export interface IStoreController {
 }
 
 export interface IEventController {
-  on: (event: EventNames, handler: EventHandler) => void,
-  unsubscribe: (event: EventNames, handler: EventHandler) => void,
-  emit: (event: EventNames) => void
+  on: (event: Events, handler: EventHandler) => void,
+  unsubscribe: (event: Events, handler: EventHandler) => void,
+  emit: (event: Events) => void
 }

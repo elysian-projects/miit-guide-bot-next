@@ -1,6 +1,6 @@
 import { DEFAULT_EVENT_STATE } from "@/constants/events";
 import { IEventController } from "@/types/controllers";
-import { EventHandler, EventNames, Events } from "@/types/event";
+import { EventHandler, Events } from "@/types/event";
 import { UserId } from "@/types/user";
 
 export class EventController implements IEventController {
@@ -12,15 +12,15 @@ export class EventController implements IEventController {
     this.events = DEFAULT_EVENT_STATE;
   }
 
-  public on = (event: EventNames, callback: EventHandler): void => {
+  public on = (event: Events, callback: EventHandler): void => {
     this.events[event].push(callback);
   };
 
-  public unsubscribe = (event: EventNames, callback: EventHandler): void => {
+  public unsubscribe = (event: Events, callback: EventHandler): void => {
     this.events[event] = this.events[event].filter(handler => handler !== callback);
   };
 
-  public emit = (event: EventNames): void => {
+  public emit = (event: Events): void => {
     this.events[event].forEach(callback => callback(this.userId));
   };
 }

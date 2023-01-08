@@ -7,10 +7,10 @@ export class Separator implements IMessageController {
   public sendData = (ctx: Context, userId: UserId) => {
     checkIfUserExists(userId);
 
-    const {currentContent, props, message} = useMessageController("menu", userId);
+    const { content, props, message } = useMessageController("menu", userId);
 
-    currentContent.picture
-            ? ctx.replyWithPhoto(currentContent.picture, {caption: message, ...props})
-            : ctx.reply(message, {...props});
+    content.picture
+      ? ctx.replyWithPhoto(content.picture, { caption: message, ...props })
+      : ctx.reply(message, { ...props });
   };
 }

@@ -8,20 +8,21 @@ export class Pagination implements IMessageController {
   public sendData = (ctx: Context, userId: UserId) => {
     checkIfUserExists(userId);
 
-    const {currentContent, message, props, isFirstStep} = useMessageController("inline", userId);
+    const { message, props } = useMessageController("inline", userId);
 
-    if(isFirstStep) {
-      currentContent.picture
-              ? ctx.replyWithPhoto(currentContent.picture, {caption: message, ...props})
-              : ctx.reply(message, {...props});
-      return;
-    }
+    // if(isFirstStep) {
+    //   ctx.reply(message, {...props});
+    //   return;
+    // currentContent.picture
+    //         ? ctx.replyWithPhoto(currentContent.picture, {caption: message, ...props})
+    // }
 
-    if(currentContent.picture) {
-      ctx.editMessageMedia({type: "photo", media: currentContent.picture, caption: message}, {reply_markup: props.reply_markup});
-      return;
-    }
 
-    ctx.editMessageText(message, {reply_markup: props.reply_markup});
+    // if(currentContent.picture) {
+    //   ctx.editMessageMedia({type: "photo", media: currentContent.picture, caption: message}, {reply_markup: props.reply_markup});
+    //   return;
+    // }
+
+    ctx.editMessageText(message, { ...props });
   };
 }

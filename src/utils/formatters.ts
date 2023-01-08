@@ -6,7 +6,7 @@ import { ContentNode, WithLinks } from "@/types/content";
  * The steps are counted from `1` unlike actual steps in the given type.
  */
 export const formatCountLabel = (currentStep: number, maxSteps: number): string => {
-  return `${currentStep + 1}/${maxSteps + 1}`;
+  return `${currentStep + 1}/${maxSteps}`;
 };
 
 /**
@@ -23,7 +23,7 @@ ${content.content}`;
     message += `\n${EXTRA_LINKS} ${content.links.join(", ")}`;
   }
 
-  message += `\n\n${options.currentStep + 1}/${options.maxSteps}`;
+  message += `\n\n*(${formatCountLabel(options.currentStep, options.maxSteps)})*`
 
   return message;
 };
