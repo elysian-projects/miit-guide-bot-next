@@ -1,9 +1,9 @@
 import { KeyboardButtons } from "@/constants/buttons";
 import { storeController } from "@/env";
 import { start } from "@/scripts/commands";
-import { StepInformation } from "@/types/common";
+import { InferReplyMarkupType, StepInformation } from "@/types/common";
 import { ContentNode, WithLinks, WithPicture } from "@/types/content";
-import { ButtonImage, ControlButtons, MessageProps } from "@/types/lib";
+import { ButtonImage, ControlButtons, KeyboardType, MessageProps } from "@/types/lib";
 import { UserId } from "@/types/user";
 import { Context, InlineKeyboard, Keyboard } from "grammy";
 import { formatMessage } from "./formatters";
@@ -38,9 +38,7 @@ export const checkIfUserExists = (userId: UserId): void => {
   }
 };
 
-export function computeControlsKeyboard(type: "menu", options: {currentStep: number, maxSteps: number}): Keyboard;
-export function computeControlsKeyboard(type: "inline", options: {currentStep: number, maxSteps: number}): InlineKeyboard;
-export function computeControlsKeyboard(type: any, options: {currentStep: number, maxSteps: number}): any {
+export function computeControlsKeyboard<T extends KeyboardType>(type: T, options: StepInformation): T extends "menu" ? Keyboard : InlineKeyboard {
   const {currentStep, maxSteps} = options;
   const controls: ButtonImage[] = [];
 
@@ -83,28 +81,21 @@ export const takeControlButtonAction = (ctx: Context, button: ControlButtons, us
   }
 };
 
-export function getMessageProps(type: "menu", options: StepInformation): MessageProps<Keyboard>;
-export function getMessageProps(type: "inline", options: StepInformation): MessageProps<InlineKeyboard>;
-export function getMessageProps(type: any, options: StepInformation): MessageProps<any> {
+
+export function getMessageProps<T extends KeyboardType>(type: T, options: StepInformation): MessageProps<InferReplyMarkupType<T>> {
   return {
     parse_mode: "Markdown",
     reply_markup: computeControlsKeyboard(type, options)
   };
 }
 
-/**
- * @internal
- */
-type UseMessageControllerReturnType<K extends Keyboard | InlineKeyboard = any> = {
+export function useMessageController<T extends KeyboardType>(replyMarkupType: T, userId: UserId): {
   message: string,
-  props: K extends any ? any : MessageProps<K>,
+  props: MessageProps<InferReplyMarkupType<T>>,
   isFirstStep: boolean,
   isLastStep: boolean,
   content: ContentNode & Partial<WithPicture> & Partial<WithLinks>
-}
-export function useMessageController(replyMarkupType: "menu", userId: UserId): UseMessageControllerReturnType<Keyboard>;
-export function useMessageController(replyMarkupType: "inline", userId: UserId): UseMessageControllerReturnType<InlineKeyboard>;
-export function useMessageController(replyMarkupType: any, userId: UserId): UseMessageControllerReturnType {
+} {
   const user = storeController.getUser(userId);
   const currentContent = user.getCurrentContent();
 

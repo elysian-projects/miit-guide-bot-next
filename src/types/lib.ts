@@ -27,7 +27,7 @@ export interface MenuKeyboardOptions extends KeyboardOptions {
   resize?: boolean,
 }
 
-export type ButtonImage = Image;
+export type ButtonImage = Image<keyof typeof ControlButtons>;
 
 export type MessageHandler<T extends object = object> = {
   (ctx: Context, payload?: T): void
