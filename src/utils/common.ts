@@ -81,7 +81,6 @@ export const takeControlButtonAction = (ctx: Context, button: ControlButtons, us
   }
 };
 
-
 export function getMessageProps<T extends KeyboardType>(type: T, options: StepInformation): MessageProps<InferReplyMarkupType<T>> {
   return {
     parse_mode: "Markdown",

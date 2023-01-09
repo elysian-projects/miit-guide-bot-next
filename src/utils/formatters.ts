@@ -23,7 +23,7 @@ ${content.content}`;
     message += `\n${EXTRA_LINKS} ${content.links.join(", ")}`;
   }
 
-  message += `\n\n*(${formatCountLabel(options.currentStep, options.maxSteps)})*`
+  message += `\n\n*(${formatCountLabel(options.currentStep, options.maxSteps)})*`;
 
   return message;
 };
