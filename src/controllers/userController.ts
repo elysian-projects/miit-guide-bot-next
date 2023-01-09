@@ -1,6 +1,7 @@
 import { defaultUserState } from "@/constants/state";
 import { ContentNode, WithPicture } from "@/types/content";
 import { IUser } from "@/types/controllers";
+import { Events } from "@/types/event";
 import { UserData, UserId, UserState, UserStatus } from "@/types/user";
 import { EventController } from "./eventController";
 
@@ -13,8 +14,8 @@ export class User implements IUser {
     this.state = {...defaultUserState, id};
     this.event = new EventController(id);
 
-    this.event.on("prevStep", () => this.prevStep());
-    this.event.on("nextStep", () => this.nextStep());
+    this.event.on(Events.prevStep, () => this.prevStep());
+    this.event.on(Events.nextStep, () => this.nextStep());
   }
 
   public id = (): UserId => {
@@ -54,7 +55,7 @@ export class User implements IUser {
 
     if(this.state.data.step !== this.state.data.content.length - 1) {
       this.state.data.step += 1;
-      this.event.emit("changeStep");
+      this.event.emit(Events.changeStep);
     }
   };
 
@@ -65,13 +66,13 @@ export class User implements IUser {
 
     if(this.state.data.step !== 0) {
       this.state.data.step -= 1;
-      this.event.emit("changeStep");
+      this.event.emit(Events.changeStep);
     }
   };
 
   public isFirstStep = (): boolean => {
     return this.state.data.step === 0;
-  }
+  };
 
   public isLastStep = (): boolean => {
     return this.state.data.step === this.state.data.content.length - 1;
