@@ -4,10 +4,13 @@ import { start } from "@/scripts/commands";
 import { InferReplyMarkupType, StepInformation } from "@/types/common";
 import { ContentNode, WithLinks, WithPicture } from "@/types/content";
 import { ButtonImage, ControlButtons, KeyboardType, MessageProps } from "@/types/lib";
+import { Tab, TabsList } from "@/types/tabs";
 import { UserId } from "@/types/user";
 import { Context, InlineKeyboard, Keyboard } from "grammy";
+import { getTabData } from "./data";
 import { formatMessage } from "./formatters";
 import { createKeyboard, removeInlineKeyboard } from "./keyboard";
+import { paginationStack } from "./pagination";
 
 /**
  * Returns array of values reached with the given key as prop
@@ -32,7 +35,7 @@ export const getObjectPropArray = <T extends object, K extends keyof T>(objectLi
 /**
  * Throws an error if user is not added
  */
-export const checkIfUserExists = (userId: UserId): void => {
+export const checkUserExists = (userId: UserId): void => {
   if (!storeController.userExists(userId)) {
     throw new Error(`User with id ${userId} not found!`);
   }
@@ -74,7 +77,9 @@ export const takeControlButtonAction = (ctx: Context, button: ControlButtons, us
       break;
     case ControlButtons.HUB:
     case KeyboardButtons.HUB.label:
-      storeController.removeUser(userId);
+      // TODO: find a closer place to pagination module to remove user from the stack
+      // Remove user from the stack
+      paginationStack.removeUser(userId);
       removeInlineKeyboard(ctx);
       start(ctx);
       break;
@@ -114,3 +119,24 @@ export function useMessageController<T extends KeyboardType>(replyMarkupType: T,
     isLastStep: user.isLastStep(),
   };
 }
+
+type TabProps = {
+  userId: UserId,
+  tabData: Tab
+}
+export const computeTabProps = (ctx: Context, tabName: TabsList): TabProps => {
+  // This definitely should NOT throw an exception but invalid context is the Telegram API
+  // issue, so if this exception is thrown, there is a problem with Telegram and there must
+  // be a better way to handle it rather than just throwing an exception
+  if(!ctx.chat || !ctx.chat.id) {
+    throw new Error("Invalid context!");
+  }
+
+  const userId = ctx.chat.id;
+  const tabData = getTabData(tabName);
+
+  return {
+    userId,
+    tabData
+  };
+};

@@ -5,6 +5,7 @@ import { ControlButtons } from "@/types/lib";
 import { config } from "@/utils/config";
 import { createBot } from "@/utils/lib";
 import { KeyboardButtons } from "./constants/buttons";
+import { buttonContextMixin } from "./utils/mixins";
 
 const bot = createBot(config.get("TOKEN"));
 
@@ -13,12 +14,14 @@ bot.command("start", start);
 bot.command("help", help);
 
 // Inline buttons handlers
-bot.callbackQuery(Object.keys(ControlButtons), controlButtonClickHandler);
-bot.callbackQuery(locationsList, locationButtonClickHandler);
-bot.callbackQuery(tabsList, tabsButtonClickHandler);
+// TODO: make something with the buttons!
+bot.callbackQuery(Object.keys(ControlButtons), ctx => buttonContextMixin(ctx, controlButtonClickHandler));
+bot.callbackQuery(locationsList, ctx => buttonContextMixin(ctx, locationButtonClickHandler));
+bot.callbackQuery(tabsList, ctx => buttonContextMixin(ctx, tabsButtonClickHandler));
 
 // Controls buttons caught as menu buttons
-bot.hears(Object.values(KeyboardButtons).map(button => button.label), controlButtonClickHandler);
+// TODO: make something with the buttons!
+bot.hears(Object.values(KeyboardButtons).map(button => button.label), ctx => buttonContextMixin(ctx, controlButtonClickHandler));
 
 // The rest uncaught events
 bot.on("message", messageHandler);
@@ -27,5 +30,5 @@ bot.on("message", messageHandler);
 process.once("SIGINT", () => bot.stop());
 process.once("SIGTERM", () => bot.stop());
 
-// Start main loop (this function is starting bot with pooling)
+// Start main loop (this function uses pooling)
 bot.start();

@@ -1,8 +1,8 @@
 import { User } from "@/controllers/userController";
 import { IStoreController, IUser } from "@/types/controllers";
+import { Events } from "@/types/event";
 import { StorageState } from "@/types/store";
 import { UserId } from "@/types/user";
-import { removeUserFromList } from "@/utils/data";
 
 export class StoreController implements IStoreController {
   private store: StorageState;
@@ -17,6 +17,9 @@ export class StoreController implements IStoreController {
     }
 
     this.store[userId] = new User(userId);
+
+    this.getUser(userId).event.on(Events.changeStep, () => console.log("Event changed"));
+
     return true;
   };
 
@@ -33,8 +36,19 @@ export class StoreController implements IStoreController {
       return false;
     }
 
-    this.store = removeUserFromList(this.store, userId);
-    return true;
+    const updatedList: StorageState = {};
+
+    for(const key of Object.keys(this.store)) {
+      const currentUserId = Number(key);
+
+      if(currentUserId !== userId) {
+        updatedList[currentUserId] = this.store[currentUserId];
+      }
+    }
+
+    this.store = updatedList;
+
+    return !this.userExists(userId);
   };
 
   public userExists = (userId: UserId): boolean => {
