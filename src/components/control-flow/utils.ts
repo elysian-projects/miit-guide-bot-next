@@ -5,7 +5,7 @@ import { MessageProps } from "@/types/lib";
 import { UserId } from "@/types/user";
 import { formatMessage } from "@/utils/formatters";
 import { InlineKeyboard, Keyboard } from "grammy";
-import { ButtonImage, createKeyboard, InferReplyMarkupType, KeyboardButtons, KeyboardType } from "../reply-markup";
+import { ButtonImage, createKeyboard, InferReplyMarkupType, KeyboardController, KeyboardType } from "../reply-markup";
 
 /**
  * Throws an error if user is not added
@@ -54,14 +54,14 @@ export function computeControlsKeyboard<T extends KeyboardType>(type: T, options
 
   // First button: menu keyboard cannot have a `Go back` button unlike inline keyboard
   type === "inline"
-    ? controls.push(KeyboardButtons.PREV)
-    : controls.push(KeyboardButtons.HUB);
+    ? controls.push(KeyboardController.getImageByValue("PREV"))
+    : controls.push(KeyboardController.getImageByValue("HUB"));
 
   // Last button: `Next step`, if there is a next step, overwise - `Back to hub`
   if(currentStep !== maxSteps - 1) {
-    controls.push(KeyboardButtons.NEXT);
+    controls.push(KeyboardController.getImageByValue("NEXT"));
   } else if(type === "inline") {
-    controls.push(KeyboardButtons.HUB);
+    controls.push(KeyboardController.getImageByValue("HUB"));
   }
 
   return createKeyboard(type, controls, {oneTime: true, columns: 3});

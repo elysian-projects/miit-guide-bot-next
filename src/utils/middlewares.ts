@@ -1,9 +1,11 @@
 import { ButtonClickHandler } from "@/types/mixins";
 import { Context } from "grammy";
 
-export const buttonContextMixin = async (ctx: Context, callback: ButtonClickHandler) => {
+export const buttonContextMiddleware = async (ctx: Context, callback: ButtonClickHandler) => {
   // This is required because the button load animation would last longer, even if the message is already sent
-  await ctx.answerCallbackQuery();
+  if(ctx.callbackQuery) {
+    await ctx.answerCallbackQuery();
+  }
 
   const userId = ctx.chat?.id;
   const clickData = ctx.callbackQuery?.data ?? ctx.message?.text;

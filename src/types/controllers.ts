@@ -30,3 +30,12 @@ export interface IEventController {
   unsubscribe: (event: Events, handler: EventHandler) => void,
   emit: (event: Events) => void
 }
+
+/** This should be implemented by static class */
+export interface IExternalEntityController<V, I> {
+  new(): unknown,
+  getLabels: () => string[],
+  getValues: () => V[],
+  getImages: () => I[],
+  getLabelByValue: (value: V) => string,
+}

@@ -1,6 +1,6 @@
 import { removeInlineKeyboard } from "@/components/reply-markup";
 import { storeController } from "@/env";
-import { LocationsList } from "@/types/location";
+import { LocationsList } from "@/external/locations";
 import { ButtonClickHandler } from "@/types/mixins";
 import { UserStatus } from "@/types/user";
 import { initUserForExcursion } from "../tabs/excursion";

@@ -1,11 +1,7 @@
 import { Image } from "@/types/common";
 import { InlineKeyboard, Keyboard } from "grammy";
 
-export enum ControlButtons {
-  NEXT = "NEXT",
-  PREV = "PREV",
-  HUB = "HUB"
-}
+export type ButtonsList = "NEXT" | "PREV" | "HUB";
 
 /**
  * Type of a keyboard to be shown when the message is sent:
@@ -26,6 +22,6 @@ export interface MenuKeyboardOptions extends KeyboardOptions {
   placeholder?: string
 }
 
-export type ButtonImage = Image<keyof typeof ControlButtons>;
+export type ButtonImage = Image<ButtonsList>;
 
 export type InferReplyMarkupType<T extends KeyboardType> = T extends "menu" ? Keyboard : InlineKeyboard;

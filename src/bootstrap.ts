@@ -1,10 +1,11 @@
-import { ControlButtons, KeyboardButtons } from "@/components/reply-markup";
-import { locationsList, tabsList } from "@/env";
+import { KeyboardController } from "@/components/reply-markup";
+import { TabsController } from "@/external/tabs";
 import { help, messageHandler, start } from "@/scripts/commands";
 import { controlButtonClickHandler, locationButtonClickHandler, tabsButtonClickHandler } from "@/scripts/handlers/";
 import { config } from "@/utils/config";
 import { createBot } from "@/utils/lib";
-import { buttonContextMixin } from "./utils/mixins";
+import { LocationsController } from "./external/locations";
+import { buttonContextMiddleware } from "./utils/middlewares";
 
 const bot = createBot(config.get("TOKEN"));
 
@@ -13,14 +14,12 @@ bot.command("start", start);
 bot.command("help", help);
 
 // Inline buttons handlers
-// TODO: make something with the buttons!
-bot.callbackQuery(Object.keys(ControlButtons), ctx => buttonContextMixin(ctx, controlButtonClickHandler));
-bot.callbackQuery(locationsList, ctx => buttonContextMixin(ctx, locationButtonClickHandler));
-bot.callbackQuery(tabsList, ctx => buttonContextMixin(ctx, tabsButtonClickHandler));
+bot.callbackQuery(KeyboardController.getValues(), ctx => buttonContextMiddleware(ctx, controlButtonClickHandler));
+bot.callbackQuery(LocationsController.getValues(), ctx => buttonContextMiddleware(ctx, locationButtonClickHandler));
+bot.callbackQuery(TabsController.getValues(), ctx => buttonContextMiddleware(ctx, tabsButtonClickHandler));
 
 // Controls buttons caught as menu buttons
-// TODO: make something with the buttons!
-bot.hears(Object.values(KeyboardButtons).map(button => button.label), ctx => buttonContextMixin(ctx, controlButtonClickHandler));
+bot.hears(KeyboardController.getLabels(), ctx => buttonContextMiddleware(ctx, controlButtonClickHandler));
 
 // The rest uncaught events
 bot.on("message", messageHandler);

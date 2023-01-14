@@ -1,46 +1,26 @@
 import { paginationStack } from "@/components/control-flow/pagination/pagination";
-import { ControlButtons, KeyboardButtons, removeInlineKeyboard } from "@/components/reply-markup";
+import { ButtonsList, KeyboardController, removeInlineKeyboard } from "@/components/reply-markup";
 import { storeController } from "@/env";
+import { Tab, TabsController, TabsList } from "@/external/tabs";
 import { start } from "@/scripts/commands";
-import { Tab, TabsList } from "@/types/tabs";
 import { UserId } from "@/types/user";
 import { Context } from "grammy";
-import { getTabData } from "./data";
 
-/**
- * Returns array of values reached with the given key as prop
- *
- * @example
- * ```typescript
- * const array = [
- *    {value1: "1", value2: "2"},
- *    {value1: "3", value2: "4"}
- * ];
- * const values = getObjectPropArray(array, "value1"); // ["1", "3"]
- * ```
- *
- * @param {T[]} objectList - array of objects
- * @param {K} prop - the key to extract values with
- * @returns {T[K][]} array of values
- */
-export const getObjectPropArray = <T extends object, K extends keyof T>(objectList: T[], prop: K): T[K][] => {
-  return Object.values(objectList).map(object => object[prop]) ?? [];
-};
-
-export const takeControlButtonAction = (ctx: Context, button: ControlButtons, userId: UserId) => {
+// TODO: move this somewhere
+export const takeControlButtonAction = (ctx: Context, button: ButtonsList, userId: UserId) => {
   switch (button) {
-    case ControlButtons.NEXT:
-    case KeyboardButtons.NEXT.label:
+    case "NEXT":
+    case KeyboardController.getLabelByValue("NEXT"):
       storeController.getUser(userId).nextStep();
       removeInlineKeyboard(ctx);
       break;
-    case ControlButtons.PREV:
-    case KeyboardButtons.PREV.label:
+    case "PREV":
+    case KeyboardController.getLabelByValue("PREV"):
       storeController.getUser(userId).prevStep();
       removeInlineKeyboard(ctx);
       break;
-    case ControlButtons.HUB:
-    case KeyboardButtons.HUB.label:
+    case "HUB":
+    case KeyboardController.getLabelByValue("HUB"):
       // TODO: find a closer place to pagination module to remove user from the stack
       // Remove user from the stack
       paginationStack.removeUser(userId);
@@ -63,7 +43,7 @@ export const computeTabProps = (ctx: Context, tabName: TabsList): TabProps => {
   }
 
   const userId = ctx.chat.id;
-  const tabData = getTabData(tabName);
+  const tabData = TabsController.getTabData(tabName);
 
   return {
     userId,

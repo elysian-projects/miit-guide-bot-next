@@ -1,8 +1,9 @@
-import { Pagination } from "@/components/control-flow/pagination";
+import { Separation } from "@/components/control-flow";
+// import { Pagination } from "@/components/control-flow/pagination";
 import { storeController } from "@/env";
+import { LocationsList } from "@/external/locations";
 import { IUser } from "@/types/controllers";
 import { Events } from "@/types/event";
-import { LocationsList } from "@/types/location";
 import { UserData, UserId, UserStatus } from "@/types/user";
 import { computeTabProps } from "@/utils/common";
 import { Context } from "grammy";
@@ -26,7 +27,7 @@ export const initUserForExcursion = (ctx: Context, options: {userId: UserId, loc
   const {userId, location} = options;
 
   const locationData = fetchDataFromServer(location);
-  const controlFlow = new Pagination();
+  const controlFlow = new Separation();
 
   setUserState(storeController.getUser(userId), locationData);
 

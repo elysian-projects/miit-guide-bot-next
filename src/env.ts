@@ -1,36 +1,20 @@
-import { createKeyboard } from "@/components/reply-markup";
+import { createKeyboard } from "./components/reply-markup";
 import { StoreController } from "./controllers/storeController";
+import { LocationsController } from "./external/locations";
+import { Tab, TabsList } from "./external/tabs/types";
 import { excursionHandler } from "./scripts/tabs/excursion";
 import { miitWar } from "./scripts/tabs/ww2";
-import { LocationImage, LocationsList } from "./types/location";
-import { TabImage, Tabs, TabsList } from "./types/tabs";
 
 export const storeController = new StoreController();
-
-export const tabsList: TabsList[] = ["excursion", "ww2"];
-export const locationsList: LocationsList[] = ["building1", "street"];
-
-/**
- * Init locations
- */
-export const locationsImage: LocationImage[] = [
-  {value: "street", label: "Улица"},
-  {value: "building1", label: "Корпус 1"},
-];
-
-export const tabsImage: TabImage[] = [
-  {value: "excursion", label: "Экскурсия"},
-  {value: "ww2", label: "МИИТ в годы ВОВ"},
-];
 
 /**
  * Init tabs
  */
-export const tabsData: Tabs = {
+export const tabsData: {[key in TabsList]: Tab} = {
   excursion: {
     label: "Экскурсия",
     content: "Экскурсия по памятникам МИИТ",
-    replyMarkup: createKeyboard("inline", locationsImage),
+    replyMarkup: createKeyboard("inline", LocationsController.getImages()),
     onClick: excursionHandler
   },
   ww2: {

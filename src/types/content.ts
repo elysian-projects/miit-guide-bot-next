@@ -1,13 +1,5 @@
 import { InlineKeyboard, Keyboard } from "grammy";
 
-/**
- * Modes of how the content is shown to the user: `SEPARATED` - in different messages, `PAGES` - with one message but shown as a book
- */
-export enum ShowMode {
-  SEPARATE,
-  PAGED
-}
-
 export interface WithPicture<T extends string = string> {
   /** Path to picture to be send with the node */
   picture?: T,

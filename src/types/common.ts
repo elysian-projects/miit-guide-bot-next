@@ -1,6 +1,3 @@
-export type LocationValueProp = string;
-export type LocationLabelProp = string;
-
 export interface Imaginable<L extends string = string> {
   label: L;
 }
@@ -9,11 +6,14 @@ export interface Image<V extends string = string, L extends string = string> ext
   value: V;
 }
 
-export type Representable<K extends string | number | symbol, V> = {
-  [key in K]: V
-}
-
 export type StepInformation = {
   currentStep: number,
   maxSteps: number
+}
+
+/**
+ * This function must be used as a decorator to be able to add interfaces to the static classes
+ */
+export function StaticImplements<T>() {
+  return <U extends T>(constructor: U) => {constructor;};
 }
