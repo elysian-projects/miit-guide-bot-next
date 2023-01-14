@@ -1,21 +1,7 @@
 import { keyboardDefaultOptions } from "@/constants/buttons";
 import { Image, InferReplyMarkupType } from "@/types/common";
-import { InlineKeyboardOptions, KeyboardType, MenuKeyboardOptions } from "@/types/lib";
+import { InlineKeyboardOptions, KeyboardOptions, KeyboardType, MenuKeyboardOptions } from "@/types/lib";
 import { Context, InlineKeyboard, Keyboard } from "grammy";
-
-/**
- * Returns second type if the first value is "menu", third otherwise
- * @internal
- */
-type ReplyMarkupType<T extends KeyboardType, M, I> = T extends "menu" ? M : I;
-
-/**
- * Calculates and returns the column size for buttons
- * @private
- */
-const calculateButtonColumnSize = (column?: number) => {
-  return column ?? keyboardDefaultOptions.columns;
-};
 
 /**
  * Creates a keyboard markup, adds given buttons there and returns it
@@ -27,44 +13,86 @@ const calculateButtonColumnSize = (column?: number) => {
  */
 export function createKeyboard<
   T extends KeyboardType,
-  O extends ReplyMarkupType<KeyboardType, MenuKeyboardOptions, InlineKeyboardOptions>
+  O extends (T extends "menu" ? MenuKeyboardOptions : InlineKeyboardOptions)
 >
-(
-  type: T,
-  buttons: Image[],
-  options?: O
-): InferReplyMarkupType<T> {
+(type: T, buttons: Image[], options?: O): InferReplyMarkupType<T> {
   if(buttons.length === 0) {
     throw new Error("No buttons for menu keyboard given!");
   }
 
-  const keyboardOptions = {
+  const keyboardOptions = computeButtonProps(options);
+  const markup = (type === "menu")
+    ? new Keyboard()
+    : new InlineKeyboard();
+
+    addButtons(markup, buttons, keyboardOptions.columns);
+    applyPropsToMarkup(markup, keyboardOptions);
+
+  return markup as InferReplyMarkupType<T>;
+}
+
+/**
+ * Returns `true` if the given index is on the edge of the column size, `false` otherwise
+ * @internal
+ * @param {number} index - index of the current button
+ * @param {number} columns - column size
+ * @returns {boolean}
+ */
+const shouldBreakColumn = (index: number, columnWidth: number) => {
+  return (index + 1) % columnWidth === 0;
+};
+
+/**
+ * Adds buttons from images to the `mutable` markup
+ * @internal
+ * @param {Keyboard | InlineKeyboard} markup - `mutable` markup
+ * @param {Image[]} buttons - list of button images
+ * @param {number} columnWidth - amount of columns
+ */
+const addButtons = (markup: Keyboard | InlineKeyboard, buttons: Image[], columnWidth: number) => {
+  buttons.forEach((button, index) => {
+    markup.text(button.label, button.value);
+    shouldBreakColumn(index, columnWidth) ?? markup.row();
+  });
+};
+
+/**
+ * Computes button props from given options
+ * @internal
+ * @param {MenuKeyboardOptions | InlineKeyboardOptions} options - options for button
+ * @returns {Required<KeyboardOptions & MenuKeyboardOptions>}
+ */
+const computeButtonProps = (options?: KeyboardOptions): Required<KeyboardOptions & MenuKeyboardOptions> => {
+  return {
     ...keyboardDefaultOptions,
     ...options,
     columns: calculateButtonColumnSize(options?.columns)
   };
+};
 
-  let markup: Keyboard | InlineKeyboard;
+const applyPropsToMarkup = <T extends Keyboard | InlineKeyboard, O extends (T extends Keyboard ? MenuKeyboardOptions : InlineKeyboardOptions)>(markup: T, options: O): void => {
+  if(markup instanceof Keyboard) {
+    const {oneTime, placeholder, resize, selective} = options as MenuKeyboardOptions;
 
-  if(type === "menu") {
-    markup = new Keyboard();
+    oneTime && markup.oneTime();
+    selective && markup.selected(true);
+    placeholder && markup.placeholder(placeholder);
 
-    markup.resized(keyboardOptions.resize);
-
-    keyboardOptions.oneTime ?? markup.oneTime();
-    keyboardOptions.selective ?? markup.selected(true);
-    keyboardOptions.placeholder ?? markup.placeholder(keyboardOptions.placeholder);
+    markup.resized(resize);
   } else {
-    markup = new InlineKeyboard();
+    // TODO: add props to an inline markup
   }
+};
 
-  buttons.forEach((button, index) => {
-    markup.text(button.label, button.value);
-    ((index + 1) % keyboardOptions.columns === 0) ?? markup.row();
-  });
-
-  return markup as InferReplyMarkupType<T>;
-}
+/**
+ * Calculates and returns the column size for buttons
+ * @internal
+ * @param {number} column? - given column size from props
+ * @returns {number}
+ */
+const calculateButtonColumnSize = (column?: number) => {
+  return column ?? keyboardDefaultOptions.columns;
+};
 
 // FIXME: doesn't work
 export const removeInlineKeyboard = (ctx: Context): boolean => {

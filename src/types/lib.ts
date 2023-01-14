@@ -11,9 +11,7 @@ export type KeyboardType = "menu" | "inline";
 
 export interface KeyboardOptions {
   columns?: number,
-  selective?: boolean,
-  oneTime?: boolean,
-  placeholder?: string
+  oneTime?: boolean
 }
 
 export enum ControlButtons {
@@ -22,9 +20,11 @@ export enum ControlButtons {
   HUB = "HUB"
 }
 
-export type InlineKeyboardOptions = KeyboardOptions
+export type InlineKeyboardOptions = KeyboardOptions;
 export interface MenuKeyboardOptions extends KeyboardOptions {
   resize?: boolean,
+  selective?: boolean,
+  placeholder?: string
 }
 
 export type ButtonImage = Image<keyof typeof ControlButtons>;
