@@ -2,10 +2,10 @@
   "name": "miit-guide-bot-next",
   "version": "2.0.0",
   "description": "",
-  "main": "./dist/main.js",
+  "main": "./dist/bootstrap.js",
   "scripts": {
     "build": "npm run clean && tsc && tsc-alias",
-    "start": "npm run build && node ./dist/main.js",
+    "start": "npm run build && node ./dist/bootstrap.js",
     "test": "jest",
     "clean": "rm -rf ./dist"
   },
