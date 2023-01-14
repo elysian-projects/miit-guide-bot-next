@@ -1,4 +1,4 @@
-import { KeyboardButtons } from "@/constants/buttons";
+import { KeyboardButtons } from "@/components/reply-markup";
 import { locationsImage } from "@/env";
 import { ContentNode } from "@/types/content";
 import { LocationImage } from "@/types/location";

@@ -30,6 +30,7 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["./*"],
+      "@/components/*": ["components/*"],
       "@/constants/*": ["constants/*"],
       "@/controller/*": ["controller/*"],
       "@/entities/*": ["entities/*"],

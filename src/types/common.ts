@@ -1,6 +1,3 @@
-import { InlineKeyboard, Keyboard } from "grammy";
-import { KeyboardType } from "./lib";
-
 export type LocationValueProp = string;
 export type LocationLabelProp = string;
 
@@ -20,5 +17,3 @@ export type StepInformation = {
   currentStep: number,
   maxSteps: number
 }
-
-export type InferReplyMarkupType<T extends KeyboardType> = T extends "menu" ? Keyboard : InlineKeyboard;

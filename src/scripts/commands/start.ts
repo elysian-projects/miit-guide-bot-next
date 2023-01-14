@@ -1,7 +1,7 @@
+import { createKeyboard } from "@/components/reply-markup";
 import * as replies from "@/constants/replies";
 import { storeController, tabsImage } from "@/env";
 import { MessageHandler } from "@/types/lib";
-import { createKeyboard } from "@/utils/keyboard";
 
 export const start: MessageHandler = async (ctx) => {
   if(!ctx.chat || !ctx.chat.id) {

@@ -1,12 +1,7 @@
 import { EventController } from "@/controllers/eventController";
-import { Context } from "grammy";
 import { ContentNode, WithPicture } from "./content";
 import { EventHandler, Events } from "./event";
 import { UserData, UserId, UserStatus } from "./user";
-
-export interface IControlFlow {
-  sendData: (ctx: Context, userId: UserId) => void,
-}
 
 export interface IUser {
   event: EventController,

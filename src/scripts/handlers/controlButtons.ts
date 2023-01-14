@@ -1,4 +1,4 @@
-import { ControlButtons } from "@/types/lib";
+import { ControlButtons } from "@/components/reply-markup";
 import { ButtonClickHandler } from "@/types/mixins";
 import { takeControlButtonAction } from "@/utils/common";
 

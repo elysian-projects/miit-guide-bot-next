@@ -1,10 +1,10 @@
+import { Pagination } from "@/components/control-flow/pagination";
 import { storeController } from "@/env";
 import { IUser } from "@/types/controllers";
 import { Events } from "@/types/event";
 import { LocationsList } from "@/types/location";
 import { UserData, UserId, UserStatus } from "@/types/user";
 import { computeTabProps } from "@/utils/common";
-import { Pagination } from "@/utils/pagination";
 import { Context } from "grammy";
 
 export const excursionHandler = (ctx: Context) => {

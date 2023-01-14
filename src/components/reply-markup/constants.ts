@@ -1,4 +1,4 @@
-import { ButtonImage, ControlButtons, InlineKeyboardOptions, MenuKeyboardOptions } from "@/types/lib";
+import { ButtonImage, ControlButtons, InlineKeyboardOptions, MenuKeyboardOptions } from "./types";
 
 export const keyboardDefaultOptions: Required<InlineKeyboardOptions & MenuKeyboardOptions> = {
   columns: 2,

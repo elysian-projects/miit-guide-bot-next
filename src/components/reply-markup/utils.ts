@@ -1,7 +1,7 @@
-import { keyboardDefaultOptions } from "@/constants/buttons";
-import { Image, InferReplyMarkupType } from "@/types/common";
-import { InlineKeyboardOptions, KeyboardOptions, KeyboardType, MenuKeyboardOptions } from "@/types/lib";
+import { Image } from "@/types/common";
 import { Context, InlineKeyboard, Keyboard } from "grammy";
+import { keyboardDefaultOptions } from "./constants";
+import { InferReplyMarkupType, InlineKeyboardOptions, KeyboardOptions, KeyboardType, MenuKeyboardOptions } from "./types";
 
 /**
  * Creates a keyboard markup, adds given buttons there and returns it

@@ -1,9 +1,9 @@
+import { createKeyboard } from "@/components/reply-markup";
 import { StoreController } from "./controllers/storeController";
 import { excursionHandler } from "./scripts/tabs/excursion";
 import { miitWar } from "./scripts/tabs/ww2";
 import { LocationImage, LocationsList } from "./types/location";
 import { TabImage, Tabs, TabsList } from "./types/tabs";
-import { createKeyboard } from "./utils/keyboard";
 
 export const storeController = new StoreController();
 

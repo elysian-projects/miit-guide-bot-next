@@ -1,9 +1,9 @@
-import { IControlFlow } from "@/types/controllers";
+import { IControlFlow } from "@/components/control-flow/types";
 import { UserId } from "@/types/user";
 import { Context } from "grammy";
-import { checkUserExists, useMessageController } from "./common";
+import { checkUserExists, useMessageController } from "../utils";
 
-export class Separator implements IControlFlow {
+export class Separation implements IControlFlow {
   public sendData = (ctx: Context, userId: UserId) => {
     checkUserExists(userId);
 

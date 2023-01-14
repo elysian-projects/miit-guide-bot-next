@@ -1,10 +1,9 @@
+import { ControlButtons, KeyboardButtons } from "@/components/reply-markup";
 import { locationsList, tabsList } from "@/env";
 import { help, messageHandler, start } from "@/scripts/commands";
 import { controlButtonClickHandler, locationButtonClickHandler, tabsButtonClickHandler } from "@/scripts/handlers/";
-import { ControlButtons } from "@/types/lib";
 import { config } from "@/utils/config";
 import { createBot } from "@/utils/lib";
-import { KeyboardButtons } from "./constants/buttons";
 import { buttonContextMixin } from "./utils/mixins";
 
 const bot = createBot(config.get("TOKEN"));

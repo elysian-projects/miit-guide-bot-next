@@ -5,27 +5,27 @@ type UserRecord = {
   messageId: number
 }
 
-export class PaginationStackController {
+export class PaginationBufferController {
   /** Stores list of user ids for whose the pagination pase message was sent */
-  private sentMessagesStack: UserRecord[] = [];
+  private sentMessagesBuffer: UserRecord[] = [];
 
   /**
-   * Adds a new user to pagination stack, if it already exists, first removes the previously added record
+   * Adds a new user to pagination buffer, if it already exists, first removes the previously added record
    * @param {UserId} userId - chat id provided by the Telegram API
    * @param {number} messageId - id of the message to be edited
    */
   public append = (userId: UserId, messageId: number): void => {
     this.removeUser(userId);
-    this.sentMessagesStack.push({id: userId, messageId: messageId});
+    this.sentMessagesBuffer.push({id: userId, messageId: messageId});
   };
 
   /**
-   * Returns user record from the stack. If no record is found, returns `undefined`
+   * Returns user record from the buffer. If no record is found, returns `undefined`
    * @param {UserId} userId - chat id provided by the Telegram API
    * @returns {UserRecord | undefined}
    */
   public getRecord = (userId: UserId): UserRecord | undefined => {
-    return this.sentMessagesStack.find(record => record.id === userId);
+    return this.sentMessagesBuffer.find(record => record.id === userId);
   };
 
   /**
@@ -34,17 +34,17 @@ export class PaginationStackController {
    * @returns {boolean}
    */
   public userExists = (userId: UserId): boolean => {
-    return this.sentMessagesStack.find(record => record.id === userId) !== undefined;
+    return this.sentMessagesBuffer.find(record => record.id === userId) !== undefined;
   };
 
   /**
-   * Removes a user from pagination stack
+   * Removes a user from pagination buffer
    * @param {UserId} userId - chat id provided by the Telegram API
    */
   public removeUser = (userId: UserId): void => {
-    for(const userData of this.sentMessagesStack) {
+    for(const userData of this.sentMessagesBuffer) {
       if(userData.id === userId) {
-        this.sentMessagesStack.splice(this.sentMessagesStack.indexOf(userData), 1);
+        this.sentMessagesBuffer.splice(this.sentMessagesBuffer.indexOf(userData), 1);
         return;
       }
     }

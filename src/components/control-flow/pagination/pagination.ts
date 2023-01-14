@@ -1,11 +1,11 @@
-import { PaginationStackController } from "@/controllers/paginationStackController";
-import { IControlFlow } from "@/types/controllers";
+import { IControlFlow } from "@/components/control-flow/types";
 import { UserId } from "@/types/user";
 import { Context } from "grammy";
-import { checkUserExists, useMessageController } from "./common";
+import { checkUserExists, useMessageController } from "../utils";
+import { PaginationBufferController } from "./bufferController";
 
 // This this is used to control the message to be displayed and edited for different users, and also at the same time
-export const paginationStack = new PaginationStackController();
+export const paginationStack = new PaginationBufferController();
 
 export class Pagination implements IControlFlow {
   public sendData = async (ctx: Context, userId: UserId) => {
