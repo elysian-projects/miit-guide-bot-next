@@ -1,6 +1,5 @@
 import { User } from "@/controllers/userController";
 import { IStoreController, IUser } from "@/types/controllers";
-import { Events } from "@/types/event";
 import { StorageState } from "@/types/store";
 import { UserId } from "@/types/user";
 
@@ -11,16 +10,12 @@ export class StoreController implements IStoreController {
     this.store = {};
   }
 
-  public addUser = (userId: UserId): boolean => {
-    if(this.userExists(userId)) {
-      return false;
-    }
-
+  /**
+   * Creates a new user whether it already exists or not. The existing user with the same `id` will be removed and recreated
+   * @param {UserId} userId - chat id provided by the Telegram API
+   */
+  public addUser = (userId: UserId): void => {
     this.store[userId] = new User(userId);
-
-    this.getUser(userId).event.on(Events.changeStep, () => console.log("Event changed"));
-
-    return true;
   };
 
   public getUser = (userId: number): IUser => {
@@ -36,17 +31,7 @@ export class StoreController implements IStoreController {
       return false;
     }
 
-    const updatedList: StorageState = {};
-
-    for(const key of Object.keys(this.store)) {
-      const currentUserId = Number(key);
-
-      if(currentUserId !== userId) {
-        updatedList[currentUserId] = this.store[currentUserId];
-      }
-    }
-
-    this.store = updatedList;
+    this.store = Object.values({...this.store}).filter(user => user.id() !== userId);
 
     return !this.userExists(userId);
   };

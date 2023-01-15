@@ -9,7 +9,6 @@ import { buttonContextMiddleware } from "./utils/middlewares";
 
 const bot = createBot(config.get("TOKEN"));
 
-// Base commands handlers
 bot.command("start", start);
 bot.command("help", help);
 
@@ -21,12 +20,10 @@ bot.callbackQuery(TabsController.getValues(), ctx => buttonContextMiddleware(ctx
 // Controls buttons caught as menu buttons
 bot.hears(KeyboardController.getLabels(), ctx => buttonContextMiddleware(ctx, controlButtonClickHandler));
 
-// The rest uncaught events
 bot.on("message", messageHandler);
 
-// Env event handlers
 process.once("SIGINT", () => bot.stop());
 process.once("SIGTERM", () => bot.stop());
 
-// Start main loop (this function uses pooling)
+// Start bot with pooling
 bot.start();

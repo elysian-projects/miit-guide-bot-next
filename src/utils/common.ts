@@ -1,34 +1,8 @@
-import { paginationStack } from "@/components/control-flow/pagination/pagination";
-import { ButtonsList, KeyboardController, removeInlineKeyboard } from "@/components/reply-markup";
+import { paginationBuffer } from "@/components/control-flow/pagination/pagination";
 import { storeController } from "@/env";
 import { Tab, TabsController, TabsList } from "@/external/tabs";
-import { start } from "@/scripts/commands";
 import { UserId } from "@/types/user";
 import { Context } from "grammy";
-
-// TODO: move this somewhere
-export const takeControlButtonAction = (ctx: Context, button: ButtonsList, userId: UserId) => {
-  switch (button) {
-    case "NEXT":
-    case KeyboardController.getLabelByValue("NEXT"):
-      storeController.getUser(userId).nextStep();
-      removeInlineKeyboard(ctx);
-      break;
-    case "PREV":
-    case KeyboardController.getLabelByValue("PREV"):
-      storeController.getUser(userId).prevStep();
-      removeInlineKeyboard(ctx);
-      break;
-    case "HUB":
-    case KeyboardController.getLabelByValue("HUB"):
-      // TODO: find a closer place to pagination module to remove user from the stack
-      // Remove user from the stack
-      paginationStack.removeUser(userId);
-      removeInlineKeyboard(ctx);
-      start(ctx);
-      break;
-  }
-};
 
 type TabProps = {
   userId: UserId,
@@ -38,15 +12,35 @@ export const computeTabProps = (ctx: Context, tabName: TabsList): TabProps => {
   // This definitely should NOT throw an exception but invalid context is the Telegram API
   // issue, so if this exception is thrown, there is a problem with Telegram and there must
   // be a better way to handle it rather than just throwing an exception
-  if (!ctx.chat || !ctx.chat.id) {
-    throw new Error("Invalid context!");
-  }
+  const chatId = getChatId(ctx);
 
-  const userId = ctx.chat.id;
+  const userId = chatId;
   const tabData = TabsController.getTabData(tabName);
 
   return {
     userId,
     tabData
   };
+};
+
+/**
+ * Removes user from the main application store and pagination buffer
+ * @param {UserId} userId - chat id provided by the Telegram API
+ */
+export const removeUserFromStores = (userId: UserId): void => {
+  // Remove user from the list to avoid unexpected bugs
+  storeController.removeUser(userId);
+  // Remove user from the stack
+  paginationBuffer.removeUser(userId);
+};
+
+/**
+ * Checks if chat id was provided in the context and throws an error if it's not.
+ * @param {Context} ctx - the context provided by the Telegram API
+ */
+export const getChatId = (ctx: Context): UserId => {
+  if(!ctx.chat || !ctx.chat.id) {
+    throw new Error("Cannot identify chat id!");
+  }
+  return ctx.chat.id;
 };

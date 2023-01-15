@@ -1,16 +1,15 @@
-import { EventController } from "@/controllers/eventController";
+import { EventHandler } from "./common";
 import { ContentNode, WithPicture } from "./content";
-import { EventHandler, Events } from "./event";
 import { UserData, UserId, UserStatus } from "./user";
 
 export interface IUser {
-  event: EventController,
   id: () => UserId,
   getStatus: () => UserStatus,
   setStatus: (status: UserStatus) => void,
   getData: () => UserData,
   setData: (data: UserData) => void,
   getCurrentContent: () => ContentNode & Partial<WithPicture>,
+  addChangeStepHandler: (handler: EventHandler) => void,
   nextStep: () => void,
   prevStep: () => void,
   isFirstStep: () => boolean,
@@ -18,17 +17,11 @@ export interface IUser {
 }
 
 export interface IStoreController {
-  addUser: (userId: UserId, data: UserData) => boolean,
+  addUser: (userId: UserId, data: UserData) => void,
   userExists: (userId: UserId) => boolean,
   /** Returns a MUTABLE user object */
   getUser: (userId: UserId) => IUser,
   removeUser: (userId: UserId) => boolean,
-}
-
-export interface IEventController {
-  on: (event: Events, handler: EventHandler) => void,
-  unsubscribe: (event: Events, handler: EventHandler) => void,
-  emit: (event: Events) => void
 }
 
 /** This should be implemented by static class */

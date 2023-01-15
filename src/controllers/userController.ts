@@ -1,22 +1,20 @@
 import { defaultUserState } from "@/constants/state";
 import { ContentNode, WithPicture } from "@/types/content";
 import { IUser } from "@/types/controllers";
-import { Events } from "@/types/event";
 import { UserData, UserId, UserState, UserStatus } from "@/types/user";
-import { EventController } from "./eventController";
 
 export class User implements IUser {
   private state: UserState;
-
-  public event: EventController;
+  private changeStepHandlers: (() => void)[];
 
   public constructor(id: UserId) {
     this.state = {...defaultUserState, id};
-    this.event = new EventController(id);
-
-    this.event.on(Events.prevStep, () => this.prevStep());
-    this.event.on(Events.nextStep, () => this.nextStep());
+    this.changeStepHandlers = [];
   }
+
+  public addChangeStepHandler = (handler: () => void) => {
+    this.changeStepHandlers.push(handler);
+  };
 
   public id = (): UserId => {
     return this.state.id;
@@ -55,7 +53,7 @@ export class User implements IUser {
 
     if(this.state.data.step !== this.state.data.content.length - 1) {
       this.state.data.step += 1;
-      this.event.emit(Events.changeStep);
+      this.callChangeStepHandlers();
     }
   };
 
@@ -66,8 +64,12 @@ export class User implements IUser {
 
     if(this.state.data.step !== 0) {
       this.state.data.step -= 1;
-      this.event.emit(Events.changeStep);
+      this.callChangeStepHandlers();
     }
+  };
+
+  private callChangeStepHandlers = (): void => {
+    this.changeStepHandlers.forEach(handler => handler());
   };
 
   public isFirstStep = (): boolean => {

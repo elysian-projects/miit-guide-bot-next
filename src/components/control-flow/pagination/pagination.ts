@@ -5,7 +5,7 @@ import { checkUserExists, useMessageController } from "../utils";
 import { PaginationBufferController } from "./bufferController";
 
 // This this is used to control the message to be displayed and edited for different users, and also at the same time
-export const paginationStack = new PaginationBufferController();
+export const paginationBuffer = new PaginationBufferController();
 
 export class Pagination implements IControlFlow {
   public sendData = async (ctx: Context, userId: UserId) => {
@@ -15,12 +15,12 @@ export class Pagination implements IControlFlow {
 
     if(isFirstStep && !this.isBaseMessageSent(userId)) {
       const sentMessage = await ctx.api.sendMessage(userId, message, {...props});
-      paginationStack.append(userId, sentMessage.message_id);
+      paginationBuffer.append(userId, sentMessage.message_id);
 
       return;
     }
 
-    const userRecord = paginationStack.getRecord(userId);
+    const userRecord = paginationBuffer.getRecord(userId);
 
     if(userRecord) {
       await ctx.api.editMessageText(userId, userRecord.messageId, message, props);
@@ -28,6 +28,6 @@ export class Pagination implements IControlFlow {
   };
 
   public isBaseMessageSent = (userId: UserId): boolean => {
-    return paginationStack.userExists(userId);
+    return paginationBuffer.userExists(userId);
   };
 }

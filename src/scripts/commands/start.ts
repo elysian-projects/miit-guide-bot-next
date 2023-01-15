@@ -1,16 +1,13 @@
 import { createKeyboard } from "@/components/reply-markup";
 import * as replies from "@/constants/replies";
-import { storeController } from "@/env";
 import { TabsController } from "@/external/tabs";
 import { MessageHandler } from "@/types/lib";
+import { getChatId, removeUserFromStores } from "@/utils/common";
 
 export const start: MessageHandler = async (ctx) => {
-  if(!ctx.chat || !ctx.chat.id) {
-    throw new Error("Cannot identify chat id!");
-  }
+  const chatId = getChatId(ctx);
 
-  // Remove user from the list to avoid unexpected bugs
-  storeController.removeUser(ctx.chat.id);
+  removeUserFromStores(chatId);
 
   const markup = createKeyboard("inline", TabsController.getImages(), {oneTime: true});
 

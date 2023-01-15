@@ -17,3 +17,5 @@ export type StepInformation = {
 export function StaticImplements<T>() {
   return <U extends T>(constructor: U) => {constructor;};
 }
+
+export type EventHandler = () => void;

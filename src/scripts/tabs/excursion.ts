@@ -1,9 +1,7 @@
-import { Separation } from "@/components/control-flow";
-// import { Pagination } from "@/components/control-flow/pagination";
+import { Pagination } from "@/components/control-flow";
 import { storeController } from "@/env";
 import { LocationsList } from "@/external/locations";
 import { IUser } from "@/types/controllers";
-import { Events } from "@/types/event";
 import { UserData, UserId, UserStatus } from "@/types/user";
 import { computeTabProps } from "@/utils/common";
 import { Context } from "grammy";
@@ -11,14 +9,8 @@ import { Context } from "grammy";
 export const excursionHandler = (ctx: Context) => {
   const {userId, tabData} = computeTabProps(ctx, "excursion");
 
-  // Remove user from the list in case of unexpected user behavior or improper script execution,
-  // this method should NOT throw an exception, so if the user is not on the list, it won't break
-  storeController.removeUser(userId);
-
   storeController.addUser(userId);
   storeController.getUser(userId).setStatus(UserStatus.EXCURSION_HUB);
-
-  console.log(storeController.getUser(userId).event);
 
   ctx.reply(tabData.content, {reply_markup: tabData.replyMarkup});
 };
@@ -27,11 +19,12 @@ export const initUserForExcursion = (ctx: Context, options: {userId: UserId, loc
   const {userId, location} = options;
 
   const locationData = fetchDataFromServer(location);
-  const controlFlow = new Separation();
+  const controlFlow = new Pagination();
 
   setUserState(storeController.getUser(userId), locationData);
 
-  storeController.getUser(userId).event.on(Events.changeStep, () => controlFlow.sendData(ctx, userId));
+  storeController.getUser(userId).addChangeStepHandler(() => controlFlow.sendData(ctx, userId));
+
   controlFlow.sendData(ctx, userId);
 };
 
