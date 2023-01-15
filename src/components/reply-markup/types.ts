@@ -10,6 +10,13 @@ export type ButtonsList = "NEXT" | "PREV" | "HUB";
  */
 export type KeyboardType = "menu" | "inline";
 
+/**
+ * Type of a keyboard markup supported Telegram
+ * - `Keyboard` is a keyboard by the input field
+ * - `InlineKeyboard` is an inline keyboard that is attached to the sent message
+ */
+export type ReplyMarkupType = Keyboard | InlineKeyboard;
+
 export interface KeyboardOptions {
   columns?: number,
   oneTime?: boolean

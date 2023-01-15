@@ -1,7 +1,7 @@
 import { Image } from "@/types/common";
 import { Context, InlineKeyboard, Keyboard } from "grammy";
 import { keyboardDefaultOptions } from "./constants";
-import { InferReplyMarkupType, InlineKeyboardOptions, KeyboardOptions, KeyboardType, MenuKeyboardOptions } from "./types";
+import { InferReplyMarkupType, InlineKeyboardOptions, KeyboardOptions, KeyboardType, MenuKeyboardOptions, ReplyMarkupType } from "./types";
 
 /**
  * Creates a keyboard markup, adds given buttons there and returns it
@@ -9,7 +9,7 @@ import { InferReplyMarkupType, InlineKeyboardOptions, KeyboardOptions, KeyboardT
  * @param {KeyboardType} type: type of the keyboard
  * @param {ButtonImage[]} buttons: array of button images to be shown as buttons
  * @param {MenuKeyboardOptions | InlineKeyboardOptions} options: optional settings to change the way buttons look
- * @returns {Keyboard | InlineKeyboard}
+ * @returns {ReplyMarkupType}
  */
 export function createKeyboard<
   T extends KeyboardType,
@@ -45,11 +45,11 @@ const shouldBreakColumn = (index: number, columnWidth: number) => {
 /**
  * Adds buttons from images to the `mutable` markup
  * @internal
- * @param {Keyboard | InlineKeyboard} markup - `mutable` markup
+ * @param {ReplyMarkupType} markup - `mutable` markup
  * @param {Image[]} buttons - list of button images
  * @param {number} columnWidth - amount of columns
  */
-const addButtons = (markup: Keyboard | InlineKeyboard, buttons: Image[], columnWidth: number) => {
+const addButtons = (markup: ReplyMarkupType, buttons: Image[], columnWidth: number) => {
   buttons.forEach((button, index) => {
     markup.text(button.label, button.value);
     shouldBreakColumn(index, columnWidth) ?? markup.row();
@@ -70,7 +70,7 @@ const computeButtonProps = (options?: KeyboardOptions): Required<KeyboardOptions
   };
 };
 
-const applyPropsToMarkup = <T extends Keyboard | InlineKeyboard, O extends (T extends Keyboard ? MenuKeyboardOptions : InlineKeyboardOptions)>(markup: T, options: O): void => {
+const applyPropsToMarkup = <T extends ReplyMarkupType, O extends (T extends Keyboard ? MenuKeyboardOptions : InlineKeyboardOptions)>(markup: T, options: O): void => {
   if(markup instanceof Keyboard) {
     const {oneTime, placeholder, resize, selective} = options as MenuKeyboardOptions;
 
@@ -94,7 +94,6 @@ const calculateButtonColumnSize = (column?: number) => {
   return column ?? keyboardDefaultOptions.columns;
 };
 
-// FIXME: doesn't work
 export const removeInlineKeyboard = (ctx: Context): boolean => {
   if(ctx.message?.reply_markup) {
     ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()});
