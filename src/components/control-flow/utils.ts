@@ -1,8 +1,7 @@
 import { storeController } from "@/env";
 import { StepInformation } from "@/types/common";
-import { ContentNode, WithLinks, WithPicture } from "@/types/content";
 import { MessageProps } from "@/types/lib";
-import { UserId } from "@/types/user";
+import { UserDataContent, UserId } from "@/types/user";
 import { formatMessage } from "@/utils/formatters";
 import { InlineKeyboard, Keyboard } from "grammy";
 import { ButtonImage, createKeyboard, InferReplyMarkupType, KeyboardController, KeyboardType } from "../reply-markup";
@@ -21,7 +20,7 @@ export function useMessageController<T extends KeyboardType>(replyMarkupType: T,
   props: MessageProps<InferReplyMarkupType<T>>,
   isFirstStep: boolean,
   isLastStep: boolean,
-  content: ContentNode & Partial<WithPicture> & Partial<WithLinks>
+  content: UserDataContent
 } {
   const user = storeController.getUser(userId);
 

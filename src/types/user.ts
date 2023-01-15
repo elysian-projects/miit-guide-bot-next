@@ -16,7 +16,7 @@ export enum UserStatus {
   IN_PROCESS
 }
 
-export type UserDataContent = ContentNode & Partial<WithPicture> & Partial<WithLinks>
+export type UserDataContent = ContentNode & WithPicture & Partial<WithLinks>
 
 /**
  * Object that represents data payload, that contains information to be shown on steps

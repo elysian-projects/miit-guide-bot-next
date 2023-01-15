@@ -2,12 +2,12 @@ import { InlineKeyboard, Keyboard } from "grammy";
 
 export interface WithPicture<T extends string = string> {
   /** Path to picture to be send with the node */
-  picture?: T,
+  picture: T,
 }
 
 export interface WithLinks<T extends string = string> {
   /** URL links to external sources  */
-  links?: T[]
+  links: T[]
 }
 
 export interface WithReplyMarkup<T extends InlineKeyboard | Keyboard = InlineKeyboard> {

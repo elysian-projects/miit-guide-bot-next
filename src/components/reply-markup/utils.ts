@@ -1,7 +1,14 @@
 import { Image } from "@/types/common";
 import { Context, InlineKeyboard, Keyboard } from "grammy";
 import { keyboardDefaultOptions } from "./constants";
-import { InferReplyMarkupType, InlineKeyboardOptions, KeyboardOptions, KeyboardType, MenuKeyboardOptions, ReplyMarkupType } from "./types";
+import {
+  InferReplyMarkupType,
+  InlineKeyboardOptions,
+  KeyboardOptions,
+  KeyboardType,
+  MenuKeyboardOptions,
+  ReplyMarkupType
+} from "./types";
 
 /**
  * Creates a keyboard markup, adds given buttons there and returns it
@@ -25,8 +32,8 @@ export function createKeyboard<
     ? new Keyboard()
     : new InlineKeyboard();
 
-    addButtons(markup, buttons, keyboardOptions.columns);
-    applyPropsToMarkup(markup, keyboardOptions);
+  addButtons(markup, buttons, keyboardOptions.columns);
+  applyPropsToMarkup(markup, keyboardOptions);
 
   return markup as InferReplyMarkupType<T>;
 }
@@ -80,7 +87,7 @@ const applyPropsToMarkup = <T extends ReplyMarkupType, O extends (T extends Keyb
 
     markup.resized(resize);
   } else {
-    // TODO: add props to an inline markup
+    // Add props to an inline markup here
   }
 };
 
@@ -96,7 +103,7 @@ const calculateButtonColumnSize = (column?: number) => {
 
 export const removeInlineKeyboard = (ctx: Context): boolean => {
   if(ctx.message?.reply_markup) {
-    ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()});
+    ctx.editMessageReplyMarkup({reply_markup: createKeyboard("inline", [])});
     return true;
   }
 

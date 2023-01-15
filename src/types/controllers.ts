@@ -1,6 +1,5 @@
 import { EventHandler } from "./common";
-import { ContentNode, WithPicture } from "./content";
-import { UserData, UserId, UserStatus } from "./user";
+import { UserData, UserDataContent, UserId, UserStatus } from "./user";
 
 export interface IUser {
   id: () => UserId,
@@ -8,7 +7,7 @@ export interface IUser {
   setStatus: (status: UserStatus) => void,
   getData: () => UserData,
   setData: (data: UserData) => void,
-  getCurrentContent: () => ContentNode & Partial<WithPicture>,
+  getCurrentContent: () => UserDataContent,
   addChangeStepHandler: (handler: EventHandler) => void,
   nextStep: () => void,
   prevStep: () => void,

@@ -1,7 +1,6 @@
 import { defaultUserState } from "@/constants/state";
-import { ContentNode, WithPicture } from "@/types/content";
 import { IUser } from "@/types/controllers";
-import { UserData, UserId, UserState, UserStatus } from "@/types/user";
+import { UserData, UserDataContent, UserId, UserState, UserStatus } from "@/types/user";
 
 export class User implements IUser {
   private state: UserState;
@@ -36,7 +35,7 @@ export class User implements IUser {
     this.state.data = data;
   };
 
-  public getCurrentContent = (): ContentNode & Partial<WithPicture> => {
+  public getCurrentContent = (): UserDataContent => {
     const currentStep = this.state.data.step;
 
     if(currentStep >= this.state.data.content.length) {

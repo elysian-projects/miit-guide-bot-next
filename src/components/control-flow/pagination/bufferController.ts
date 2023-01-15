@@ -1,9 +1,5 @@
 import { UserId } from "@/types/user";
-
-type UserRecord = {
-  id: UserId,
-  messageId: number
-}
+import { UserRecord } from "./types";
 
 export class PaginationBufferController {
   /** Stores list of user ids for whose the pagination pase message was sent */
@@ -16,7 +12,7 @@ export class PaginationBufferController {
    */
   public append = (userId: UserId, messageId: number): void => {
     this.removeUser(userId);
-    this.sentMessagesBuffer.push({id: userId, messageId: messageId});
+    this.sentMessagesBuffer.push({id: userId, messageId});
   };
 
   /**
@@ -24,8 +20,14 @@ export class PaginationBufferController {
    * @param {UserId} userId - chat id provided by the Telegram API
    * @returns {UserRecord | undefined}
    */
-  public getRecord = (userId: UserId): UserRecord | undefined => {
-    return this.sentMessagesBuffer.find(record => record.id === userId);
+  public getRecord = (userId: UserId): UserRecord => {
+    const record = this.sentMessagesBuffer.find(record => record.id === userId);
+
+    if(!record) {
+      throw new Error(`User record with id ${userId} not found!`);
+    }
+
+    return record;
   };
 
   /**

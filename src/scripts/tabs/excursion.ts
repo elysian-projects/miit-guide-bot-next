@@ -34,10 +34,9 @@ const fetchDataFromServer = (_location: LocationsList): UserData => {
   return {
     title: "Some title",
     content: [
-      // picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"
-      {label: "Title 1", content: "Some info to title 1"},
-      {label: "Title 2", content: "Some info to title 2", links: ["link1", "link2"]},
-      {label: "Title 3", content: "Some info to title 3"},
+      {label: "Title 1", content: "Some info to title 1", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
+      {label: "Title 2", content: "Some info to title 2", links: ["link1", "link2"], picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
+      {label: "Title 3", content: "Some info to title 3", picture: "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"},
     ],
     step: 0
   };
