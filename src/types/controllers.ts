@@ -24,7 +24,9 @@ export interface IStoreController {
   removeUser: (userId: UserId) => boolean,
 }
 
-/** This should be implemented by static class */
+/**
+ * @static interface for a static implementation
+ */
 export interface IExternalEntityController<V, I> {
   new(): unknown,
   getLabels: () => string[],
