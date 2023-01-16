@@ -9,10 +9,9 @@ export const equalObjects = (a: object, b: object): boolean => {
     return false;
   }
 
-  // FIXME: wtf?
   for (const key of Object.keys(a)) {
-    const valueA = a[key];
-    const valueB = b[key];
+    const valueA = a[key as keyof typeof a];
+    const valueB = b[key as keyof typeof b];
 
     const areObjects = isObject(valueA) && isObject(valueB);
 
