@@ -1,6 +1,5 @@
 import { IControlFlow } from "@/components/control-flow/types";
 import { UserId } from "@/types/user";
-import { equalObjects } from "@/utils/object";
 import { Context } from "grammy";
 import { checkUserExists, useMessageController } from "../utils";
 import { PaginationBufferController } from "./bufferController";
@@ -44,10 +43,7 @@ export class Pagination implements IControlFlow {
       }
     );
 
-    if(ctx.editedMessage && ctx.editedMessage.reply_markup && equalObjects(ctx.editedMessage.reply_markup, props.reply_markup)) {
-      return;
-    }
-
+    // Edit reply markup (why not just have the `reply_markup` property in the `editMessageMedia` type? fkn Telegram)
     await ctx.api.editMessageReplyMarkup(
       userId,
       record.messageId,
