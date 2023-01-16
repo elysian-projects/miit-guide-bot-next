@@ -1,0 +1,81 @@
+import { Image } from "@/types/common";
+import { Menu } from "@grammyjs/menu";
+import { Context, InlineKeyboard, Keyboard } from "grammy";
+import { defaultMenuKeyboardOptions } from "./constants";
+import {
+  InferReplyMarkupType,
+  InlineKeyboardOptions,
+  KeyboardContentType,
+  KeyboardType,
+  MenuKeyboardOptions
+} from "./types";
+import { addButtons, applyPropsToMarkup, clickHandlers, computeButtonProps, createMarkup, shouldBreakColumn } from "./utils";
+
+/**
+ * Creates a keyboard markup, adds given buttons there and returns it. It's recommended to
+ * use `Menu` for inline keyboards as they are more predictable and easier to handle
+ *
+ * @param {KeyboardType} type: type of the keyboard
+ * @param {ButtonImage[]} buttons: array of button images to be shown as buttons
+ * @param {MenuKeyboardOptions | InlineKeyboardOptions} options: optional settings to change the way buttons look
+ * @returns {ReplyMarkupType}
+ */
+export function createKeyboard<
+  T extends KeyboardType,
+  O extends (T extends "menu" ? MenuKeyboardOptions : InlineKeyboardOptions)
+>(type: T, buttons: Image[], options?: O): InferReplyMarkupType<T> {
+
+  if(buttons.length === 0) {
+    throw new Error("No buttons for menu keyboard given!");
+  }
+
+  const markup = (type === "menu")
+    ? createMenuKeyboard(options ?? defaultMenuKeyboardOptions)
+    : createInlineKeyboard();
+
+  addButtons(markup, buttons, options?.columns ?? defaultMenuKeyboardOptions.columns);
+
+  return markup as InferReplyMarkupType<T>;
+}
+
+const createMenuKeyboard = (options: MenuKeyboardOptions): Keyboard => {
+  const markup = createMarkup("menu");
+
+  applyPropsToMarkup(markup, computeButtonProps("menu", options));
+
+  return markup;
+};
+
+const createInlineKeyboard = (): InlineKeyboard => {
+  return createMarkup("inline");
+};
+
+export const initMenuButtons = (menu: Menu, buttons: Image[], contentType: KeyboardContentType, options?: InlineKeyboardOptions): Menu => {
+  const {columns, oneTime} = computeButtonProps("inline", options);
+
+  buttons.forEach((button, index) => {
+    menu.text(button.label, ctx => {
+      // Call default tab click handler
+      clickHandlers[contentType](ctx);
+      // Remove the keyboard on click after handler works out
+      oneTime && removeInlineKeyboard(ctx);
+    });
+    if(shouldBreakColumn(index, columns)) {
+      menu.row();
+    }
+  });
+
+  return menu;
+};
+
+/**
+ * Removes inline markup from from the previously sent message,
+ * if the previous message did not have inline markup, throws an error
+ * @param {Context} ctx - the message context provided by the Telegram API
+ */
+export const removeInlineKeyboard = (ctx: Context): void => {
+  if(!ctx.msg?.reply_markup) {
+    throw new Error("Cannot remove inline keyboard!");
+  }
+  ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()});
+};

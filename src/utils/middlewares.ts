@@ -2,6 +2,9 @@ import { ButtonClickHandler } from "@/types/mixins";
 import { Context } from "grammy";
 import { getChatId } from "./common";
 
+/**
+ * @deprecated
+ */
 export const buttonContextMiddleware = async (ctx: Context, callback: ButtonClickHandler) => {
   // This is required because the button load animation would last longer, even if the message is already sent
   if(ctx.callbackQuery) {

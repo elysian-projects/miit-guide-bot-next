@@ -1,14 +1,16 @@
 import { Image } from "@/types/common";
-import { ContentNode, WithReplyMarkup } from "@/types/content";
-import { Context } from "grammy";
+import { WithReplyMarkup } from "@/types/content";
 
 /** Tab inner names for convenience */
 export type TabsList = "excursion" | "ww2";
 
 /** Represents a tab, which is shown in the hub, data */
-export interface Tab extends ContentNode, WithReplyMarkup {
-  icon?: string,
-  onClick: (ctx: Context) => void
+// export interface Tab extends ContentNode, WithReplyMarkup {
+//   icon?: string,
+//   // onClick: (ctx: Context) => void
+// }
+export interface Tab extends Image, WithReplyMarkup {
+  content: string
 }
 
 /**

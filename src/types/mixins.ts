@@ -10,6 +10,9 @@ export interface ButtonContentOptions extends HandlerOptions {
   clickData: string
 }
 
+/**
+ * @deprecated
+ */
 export type ButtonClickHandler = {
   (options: ButtonContentOptions): void
 }

@@ -1,5 +1,5 @@
 import { Image } from "@/types/common";
-import { InlineKeyboard, Keyboard } from "grammy";
+import { Context, InlineKeyboard, Keyboard } from "grammy";
 
 export type ButtonsList = "NEXT" | "PREV" | "HUB";
 
@@ -32,3 +32,8 @@ export interface MenuKeyboardOptions extends KeyboardOptions {
 export type ButtonImage = Image<ButtonsList>;
 
 export type InferReplyMarkupType<T extends KeyboardType> = T extends "menu" ? Keyboard : InlineKeyboard;
+
+export type KeyboardContentType = "tabs" | "locations" | "controls";
+export type KeyboardClickHandler = {
+  (ctx: Context): void
+}
