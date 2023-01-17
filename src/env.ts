@@ -1,7 +1,7 @@
+import { excursionMenu } from "./bootstrap";
 import { createKeyboard } from "./components/reply-markup";
 import { StoreController } from "./controllers/storeController";
 import { Tab, TabsList } from "./external/tabs/types";
-import { excursionMenu } from "./scripts/handlers/menus";
 
 export const storeController = new StoreController();
 

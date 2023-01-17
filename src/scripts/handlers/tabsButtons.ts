@@ -9,11 +9,7 @@ export const handleTabClick = (ctx: Context) => {
   storeController.addUser(userId);
   storeController.getUser(userId).setStatus(UserStatus.EXCURSION_HUB);
 
+  console.log(tabData);
+
   ctx.reply(tabData.content, {reply_markup: tabData.replyMarkup});
 };
-
-// TODO: remove
-// export const tabsButtonClickHandler: ButtonClickHandler = async ({ctx}) => {
-//   // tabsData[clickData as TabsList].onClick(ctx);
-//   removeInlineKeyboard(ctx);
-// };

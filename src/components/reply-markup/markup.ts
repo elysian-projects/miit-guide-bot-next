@@ -50,22 +50,26 @@ const createInlineKeyboard = (): InlineKeyboard => {
   return createMarkup("inline");
 };
 
-export const initMenuButtons = (menu: Menu, buttons: Image[], contentType: KeyboardContentType, options?: InlineKeyboardOptions): Menu => {
+// Function-handler that returns array of images
+type ComputeImage = () => Image[];
+
+export const initMenuButtons = (menu: Menu, buttons: Image[] | ComputeImage, contentType: KeyboardContentType, options?: InlineKeyboardOptions): void => {
   const {columns, oneTime} = computeButtonProps("inline", options);
 
-  buttons.forEach((button, index) => {
+  const menuButtons = (typeof buttons === "function")
+    ? buttons()
+    : buttons;
+
+  menuButtons.forEach((button, index) => {
     menu.text(button.label, ctx => {
       // Call default tab click handler
       clickHandlers[contentType](ctx);
       // Remove the keyboard on click after handler works out
       oneTime && removeInlineKeyboard(ctx);
     });
-    if(shouldBreakColumn(index, columns)) {
-      menu.row();
-    }
+    // Break to new line
+    shouldBreakColumn(index, columns) && menu.row();
   });
-
-  return menu;
 };
 
 /**

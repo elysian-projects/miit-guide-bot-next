@@ -5,11 +5,9 @@ import { WithReplyMarkup } from "@/types/content";
 export type TabsList = "excursion" | "ww2";
 
 /** Represents a tab, which is shown in the hub, data */
-// export interface Tab extends ContentNode, WithReplyMarkup {
-//   icon?: string,
-//   // onClick: (ctx: Context) => void
-// }
 export interface Tab extends Image, WithReplyMarkup {
+  // TODO: make sure icons can be displayed in inline buttons
+  icon?: string,
   content: string
 }
 
