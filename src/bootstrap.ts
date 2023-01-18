@@ -6,8 +6,7 @@ import { LocationsController } from "./external/locations";
 import { TabsController } from "./external/tabs";
 import { handleControlClick, handleLocationClick, handleTabClick } from "./scripts/handlers";
 
-// Creation of the menu must be done here because it is a piece shit
-// and for some reason doesn't work out (probably there's not enough time)
+// Creation of the menu must be done here because it is a piece of shit and for some reason doesn't work out
 export const rootMenu = createMenu("root", TabsController.getImages(), handleTabClick, {oneTime: true});
 export const excursionMenu = createMenu("excursion", LocationsController.getImages(), handleLocationClick, {oneTime: true});
 
