@@ -1,4 +1,4 @@
-import { Pagination } from "@/components/control-flow";
+import { IControlFlow } from "@/components/control-flow/types";
 import { storeController } from "@/env";
 import { LocationsList } from "@/external/locations";
 import { IUser } from "@/types/controllers";
@@ -15,17 +15,23 @@ export const excursionHandler = (ctx: Context) => {
   ctx.reply(tabData.content, {reply_markup: tabData.replyMarkup});
 };
 
-export const initUserForExcursion = (ctx: Context, options: {userId: UserId, location: LocationsList}) => {
-  const {userId, location} = options;
-
+export const initUserForExcursion = (ctx: Context, options: {userId: UserId, location: LocationsList, controlFlow: IControlFlow}) => {
+  const {userId, location, controlFlow} = options;
   const locationData = fetchDataFromServer(location);
-  const controlFlow = new Pagination();
 
   setUserState(storeController.getUser(userId), locationData);
 
-  storeController.getUser(userId).addChangeStepHandler(() => controlFlow.sendData(ctx, userId));
+  // Avoiding copy-past
+  function send() {
+    controlFlow.sendData(ctx, userId);
+  }
 
-  controlFlow.sendData(ctx, userId);
+  // Attach the `send` function to give the `storeController` the control over
+  // when a new message must be sent for a concrete user
+  storeController.getUser(userId).addChangeStepHandler(send);
+
+  // First step can't we handled the other way, so we need to call it manually
+  send();
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

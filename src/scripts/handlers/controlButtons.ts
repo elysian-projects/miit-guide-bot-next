@@ -4,16 +4,12 @@ import { getChatId } from "@/utils/common";
 import { Context } from "grammy";
 import { start } from "../commands";
 
-export const handleControlClick = (ctx: Context) => {
+export const handleControlClick = (ctx: Context, clickData: string) => {
   const userId = getChatId(ctx);
 
-  const clickData = ctx.msg?.text ?? ctx.callbackQuery?.data;
-
-  if(!clickData) {
-    throw new Error("Invalid context!");
-  }
-
-
+  // FIXME: makes sense to place `removeInlineKeyboard` function after the switch-case
+  // but getting back to main hub must be checked (in this case we need to remove the keyboard
+  // before we call the `start` function as it includes its own inline keyboard)
   switch (clickData) {
     case "NEXT":
     case KeyboardController.getLabelByValue("NEXT"):
@@ -30,5 +26,5 @@ export const handleControlClick = (ctx: Context) => {
       removeInlineKeyboard(ctx);
       start(ctx);
       break;
-  }
+    }
 };
