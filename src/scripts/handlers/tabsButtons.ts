@@ -1,10 +1,11 @@
 import { storeController } from "@/env";
+import { TabsList } from "@/external/tabs";
 import { UserStatus } from "@/types/user";
 import { computeTabProps } from "@/utils/common";
 import { Context } from "grammy";
 
-export const handleTabClick = (ctx: Context) => {
-  const {userId, tabData} = computeTabProps(ctx, "excursion");
+export const handleTabClick = (ctx: Context, data: string) => {
+  const {userId, tabData} = computeTabProps(ctx, data as TabsList);
 
   storeController.addUser(userId);
   storeController.getUser(userId).setStatus(UserStatus.EXCURSION_HUB);

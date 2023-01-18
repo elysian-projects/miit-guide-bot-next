@@ -9,17 +9,9 @@ type TabProps = {
   tabData: Tab
 }
 export const computeTabProps = (ctx: Context, tabName: TabsList): TabProps => {
-  // This definitely should NOT throw an exception but invalid context is the Telegram API
-  // issue, so if this exception is thrown, there is a problem with Telegram and there must
-  // be a better way to handle it rather than just throwing an exception
-  const chatId = getChatId(ctx);
-
-  const userId = chatId;
-  const tabData = TabsController.getTabData(tabName);
-
   return {
-    userId,
-    tabData
+    userId: getChatId(ctx),
+    tabData: TabsController.getTabData(tabName)
   };
 };
 

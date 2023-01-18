@@ -35,5 +35,5 @@ export type InferReplyMarkupType<T extends KeyboardType> = T extends "menu" ? Ke
 
 export type KeyboardContentType = "tabs" | "locations" | "controls";
 export type KeyboardClickHandler = {
-  (ctx: Context): void
+  (ctx: Context, data: string): void
 }

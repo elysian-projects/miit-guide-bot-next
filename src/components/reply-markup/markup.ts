@@ -4,12 +4,10 @@ import { Context, InlineKeyboard, Keyboard } from "grammy";
 import { defaultMenuKeyboardOptions } from "./constants";
 import {
   InferReplyMarkupType,
-  InlineKeyboardOptions,
-  KeyboardContentType,
-  KeyboardType,
+  InlineKeyboardOptions, KeyboardClickHandler, KeyboardType,
   MenuKeyboardOptions
 } from "./types";
-import { addButtons, applyPropsToMarkup, clickHandlers, computeButtonProps, createMarkup, shouldBreakColumn } from "./utils";
+import { addButtons, applyPropsToMarkup, computeButtonProps, createMarkup, shouldBreakColumn } from "./utils";
 
 /**
  * Creates a keyboard markup, adds given buttons there and returns it. It's recommended to
@@ -53,23 +51,28 @@ const createInlineKeyboard = (): InlineKeyboard => {
 // Function-handler that returns array of images
 type ComputeImage = () => Image[];
 
-export const initMenuButtons = (menu: Menu, buttons: Image[] | ComputeImage, contentType: KeyboardContentType, options?: InlineKeyboardOptions): void => {
+export const createMenu = (id: string, buttons: Image[] | ComputeImage, handler: KeyboardClickHandler, options?: InlineKeyboardOptions): Menu => {
   const {columns, oneTime} = computeButtonProps("inline", options);
+
+  const menu = new Menu(id);
 
   const menuButtons = (typeof buttons === "function")
     ? buttons()
     : buttons;
 
   menuButtons.forEach((button, index) => {
-    menu.text(button.label, ctx => {
+    menu.text({text: button.label, payload: button.value}, ctx => {
+
       // Call default tab click handler
-      clickHandlers[contentType](ctx);
+      handler(ctx, ctx.match);
       // Remove the keyboard on click after handler works out
       oneTime && removeInlineKeyboard(ctx);
     });
     // Break to new line
     shouldBreakColumn(index, columns) && menu.row();
   });
+
+  return menu;
 };
 
 /**

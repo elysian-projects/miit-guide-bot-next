@@ -28,6 +28,12 @@ export class TabsController {
   };
 
   public static getTabData = (tab: TabsList): Tab => {
-    return tabsData[tab];
+    const data = tabsData[tab];
+
+    if(!data) {
+      throw new Error(`Tab ${tab} not found`);
+    }
+
+    return data;
   };
 }
