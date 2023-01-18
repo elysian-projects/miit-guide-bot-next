@@ -8,7 +8,9 @@ export type UserId = number;
 /**
  * Status that represents what tab is currently active.
  * This enum should be updated when new tabs are added to the application.
+ * @deprecated
  */
+// TODO: remove asap
 export enum UserStatus {
   MAIN_HUB,
   EXCURSION_HUB,
