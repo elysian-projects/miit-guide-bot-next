@@ -21,8 +21,6 @@ const bot = new Bot(process.env.TOKEN ?? "");
 bot.command("start", onStart);
 bot.command("help", onHelp);
 
-// Inline keyboard handlers //
-
 // Tab in the main hub clicked
 bot.callbackQuery(extractFromImages(tabImages, "value"), handleTabClick);
 // Works out on location selection
