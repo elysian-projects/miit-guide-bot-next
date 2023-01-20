@@ -31,15 +31,9 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["./*"],
-      "@/components/*": ["components/*"],
-      "@/constants/*": ["constants/*"],
-      "@/controller/*": ["controller/*"],
-      "@/external/*": ["external/*"],
-      "@/entities/*": ["entities/*"],
-      "@/scripts/*": ["scripts/*"],
-      "@/types/*": ["types/*"],
-      "@/utils/*": ["utils/*"],
-      "@/env": ["env"],
+      "@/chat/*": ["./chat/*"],
+      "@/components/*": ["./components/*"],
+      "@/types/*": ["./types/*"],
     }
   },
   "exclude": ["tests"]

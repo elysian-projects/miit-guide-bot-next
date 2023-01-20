@@ -1,37 +1,37 @@
-import { help, messageHandler, start } from "@/scripts/commands";
-import { config } from "@/utils/config";
-import { createBot } from "@/utils/lib";
-import { createMenu, KeyboardController } from "./components/reply-markup";
-import { LocationsController } from "./external/locations";
-import { TabsController } from "./external/tabs";
-import { handleControlClick, handleLocationClick, handleTabClick } from "./scripts/handlers";
+import { onHelp, onStart, onUnknown } from "@/chat/commands";
+import { config as dotenvConfig } from "dotenv";
+import { Bot } from "grammy";
+import { keyboardControls } from "./chat/controls";
+import { locationImages, tabImages } from "./chat/images";
+import { StoreController } from "./controllers/storeController";
+import { handleControlButtonClick } from "./handlers/controlButtons";
+import { handleLocationClick } from "./handlers/locations";
+import { handleTabClick } from "./handlers/tab";
+import { extractFromImages } from "./utils/image";
 
-// Creation of the menu must be done here because it is a piece of shit and for some reason doesn't work out
-export const rootMenu = createMenu("root", TabsController.getImages(), handleTabClick, {oneTime: true});
-export const excursionMenu = createMenu("excursion", LocationsController.getImages(), handleLocationClick, {oneTime: true});
+dotenvConfig();
 
-// Main `bot` instance, MAKE SURE IT IS NOT EXPORTED
-const bot = createBot(config.get("TOKEN"));
+// Global environment variables used in the application
+export const storeController = new StoreController();
 
-// Register pre-generated inline menus as middlewares to use them in different
-// parts of the application and not generate them manually in runtime
-bot.use(rootMenu, excursionMenu);
+// Main bot instance, make sure IT IS NOT EXPORTED!
+const bot = new Bot(process.env.TOKEN ?? "");
 
-bot.command("start", start);
-bot.command("help", help);
+// Casual bot commands
+bot.command("start", onStart);
+bot.command("help", onHelp);
 
-// Controls button caught as menu a button (requires for `separation`)
-bot.hears(
-  KeyboardController.getLabels(),
-  // Here we can be sure that `ctx.callbackQuery.data` exists, but if it does not, `handleControlClick`
-  // will throw an error, so if you see a weird error, start debugging from here
-  ctx => handleControlClick(ctx, ctx.callbackQuery?.data ?? "")
-);
+// Inline keyboard handlers //
 
-bot.on("message", messageHandler);
+// Tab in the main hub clicked
+bot.callbackQuery(extractFromImages(tabImages, "value"), handleTabClick);
+// Works out on location selection
+bot.callbackQuery(extractFromImages(locationImages, "value"), handleLocationClick);
+// Control button clicked
+bot.callbackQuery(extractFromImages(Object.values(keyboardControls), "value"), handleControlButtonClick);
 
-process.once("SIGINT", () => bot.stop());
-process.once("SIGTERM", () => bot.stop());
+// None of the above handlers were caught
+bot.on("message", onUnknown);
 
-// Start bot with pooling
+// Start bot using pooing
 bot.start();

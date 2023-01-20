@@ -1,7 +1,4 @@
-import { Menu } from "@grammyjs/menu";
-import { InlineKeyboard, Keyboard } from "grammy";
-
-export type ReplyMarkup = Keyboard | InlineKeyboard | Menu;
+import { AvailableKeyboardTypes } from "./lib";
 
 export interface WithPicture<T extends string = string> {
   /** Path to picture to be send with the node */
@@ -14,7 +11,7 @@ export interface WithLinks<T extends string = string> {
 }
 
 export interface WithReplyMarkup {
-  replyMarkup: ReplyMarkup
+  replyMarkup: AvailableKeyboardTypes
 }
 
 /**

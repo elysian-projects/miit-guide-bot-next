@@ -1,5 +1,5 @@
 import { IControlFlow } from "@/components/control-flow/types";
-import { UserId } from "@/types/user";
+import { ChatId } from "@/types/user";
 import { Context } from "grammy";
 import { checkUserExists, useMessageController } from "../utils";
 import { PaginationBufferController } from "./bufferController";
@@ -8,7 +8,7 @@ import { PaginationBufferController } from "./bufferController";
 export const paginationBuffer = new PaginationBufferController();
 
 export class Pagination implements IControlFlow {
-  public sendData = async (ctx: Context, userId: UserId) => {
+  public sendData = async (ctx: Context, userId: ChatId) => {
     checkUserExists(userId);
 
     const { content, message, props, isFirstStep } = useMessageController("inline", userId);
@@ -53,7 +53,7 @@ export class Pagination implements IControlFlow {
     );
   };
 
-  private shouldSendBaseMessage = (userId: UserId, isFirstMessage: boolean): boolean => {
+  private shouldSendBaseMessage = (userId: ChatId, isFirstMessage: boolean): boolean => {
     return isFirstMessage && !paginationBuffer.userExists(userId);
   };
 }

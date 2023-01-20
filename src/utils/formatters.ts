@@ -1,4 +1,4 @@
-import { EXTRA_LINKS } from "@/constants/replies";
+import { EXTRA_LINKS } from "@/chat/constants";
 import { ContentNode, WithLinks } from "@/types/content";
 
 /**

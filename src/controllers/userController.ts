@@ -1,12 +1,12 @@
-import { defaultUserState } from "@/constants/state";
+import { defaultUserState } from "@/constants/user";
 import { IUser } from "@/types/controllers";
-import { UserData, UserDataContent, UserId, UserState, UserStatus } from "@/types/user";
+import { ChatId, UserData, UserDataContent, UserState } from "@/types/user";
 
 export class User implements IUser {
   private state: UserState;
   private changeStepHandlers: (() => void)[];
 
-  public constructor(id: UserId) {
+  public constructor(id: ChatId) {
     this.state = {...defaultUserState, id};
     this.changeStepHandlers = [];
   }
@@ -15,16 +15,8 @@ export class User implements IUser {
     this.changeStepHandlers.push(handler);
   };
 
-  public id = (): UserId => {
+  public id = (): ChatId => {
     return this.state.id;
-  };
-
-  public getStatus = (): UserStatus => {
-    return this.state.status;
-  };
-
-  public setStatus = (status: UserStatus): void => {
-    this.state.status = status;
   };
 
   public getData = (): UserData => {

@@ -1,17 +1,10 @@
-import { InlineKeyboardOptions, KeyboardOptions, MenuKeyboardOptions } from "./types";
+import { MenuMarkupOptions } from "./types";
 
-const defaultKeyboardOptions: Required<KeyboardOptions> = {
-  columns: 2,
-  oneTime: false
-};
-
-export const defaultInlineKeyboardOptions: Required<InlineKeyboardOptions> = {
-  ...defaultKeyboardOptions
-};
-
-export const defaultMenuKeyboardOptions: Required<MenuKeyboardOptions> = {
-  ...defaultKeyboardOptions,
+export const defaultMenuKeyboardOptions: MenuMarkupOptions = {
+  persistent: false,
   selective: false,
-  resize: true,
-  placeholder: ""
+  placeholder: "",
+  oneTime: false,
+  resized: false,
+  columns: 2
 };

@@ -1,6 +1,6 @@
-import { UserId } from "@/types/user";
+import { ChatId } from "@/types/user";
 
 export interface UserRecord {
-  id: UserId,
+  id: ChatId,
   messageId: number
 }

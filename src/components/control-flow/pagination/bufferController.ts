@@ -1,4 +1,4 @@
-import { UserId } from "@/types/user";
+import { ChatId } from "@/types/user";
 import { UserRecord } from "./types";
 
 export class PaginationBufferController {
@@ -7,20 +7,20 @@ export class PaginationBufferController {
 
   /**
    * Adds a new user to pagination buffer, if it already exists, first removes the previously added record
-   * @param {UserId} userId - chat id provided by the Telegram API
+   * @param {ChatId} userId - chat id provided by the Telegram API
    * @param {number} messageId - id of the message to be edited
    */
-  public append = (userId: UserId, messageId: number): void => {
+  public append = (userId: ChatId, messageId: number): void => {
     this.removeUser(userId);
     this.sentMessagesBuffer.push({id: userId, messageId});
   };
 
   /**
    * Returns user record from the buffer. If no record is found, returns `undefined`
-   * @param {UserId} userId - chat id provided by the Telegram API
+   * @param {ChatId} userId - chat id provided by the Telegram API
    * @returns {UserRecord | undefined}
    */
-  public getRecord = (userId: UserId): UserRecord => {
+  public getRecord = (userId: ChatId): UserRecord => {
     const record = this.sentMessagesBuffer.find(record => record.id === userId);
 
     if(!record) {
@@ -32,18 +32,18 @@ export class PaginationBufferController {
 
   /**
    * Returns `true` if user with given id already exists, `false` otherwise
-   * @param {UserId} userId - chat id provided by the Telegram API
+   * @param {ChatId} userId - chat id provided by the Telegram API
    * @returns {boolean}
    */
-  public userExists = (userId: UserId): boolean => {
+  public userExists = (userId: ChatId): boolean => {
     return this.sentMessagesBuffer.find(record => record.id === userId) !== undefined;
   };
 
   /**
    * Removes a user from pagination buffer
-   * @param {UserId} userId - chat id provided by the Telegram API
+   * @param {ChatId} userId - chat id provided by the Telegram API
    */
-  public removeUser = (userId: UserId): void => {
+  public removeUser = (userId: ChatId): void => {
     for(const userData of this.sentMessagesBuffer) {
       if(userData.id === userId) {
         this.sentMessagesBuffer.splice(this.sentMessagesBuffer.indexOf(userData), 1);
