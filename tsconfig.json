@@ -33,8 +33,13 @@
       "@/*": ["./*"],
       "@/chat/*": ["./chat/*"],
       "@/components/*": ["./components/*"],
+      "@/constants/*": ["./constants/*"],
+      "@/controllers/*": ["./controllers/*"],
+      "@/handlers/*": ["./handler/*"],
+      "@/tabs/*": ["./tabs/*"],
       "@/types/*": ["./types/*"],
+      "@/utils/*": ["./utils/*"],
     }
   },
-  "exclude": ["tests"]
+  // "exclude": ["tests"]
 }
