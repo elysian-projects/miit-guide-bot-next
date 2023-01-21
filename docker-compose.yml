@@ -1,0 +1,14 @@
+version: '3'
+services:
+  app:
+    build: .
+    environment:
+      - TOKEN=$TOKEN
+  postgresql:
+    image: "postgres"
+    environment:
+      POSTGRES_DB: $DBNAME
+      POSTGRES_USER: $USER
+      POSTGRES_PASSWORD: $PASSWORD
+    ports:
+      - "5432:5432"
