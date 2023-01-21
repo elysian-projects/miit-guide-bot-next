@@ -31,12 +31,20 @@ export class StoreController implements IStoreController {
       return false;
     }
 
-    this.store = Object.values({...this.store}).filter(user => user.id() !== chatId);
+    const store: StorageState = {};
+
+    for(const user of Object.values(this.store)) {
+      if(user.id() !== chatId) {
+        store[user.id()] = user;
+      }
+    }
+
+    this.store = store;
 
     return !this.userExists(chatId);
   };
 
   public userExists = (chatId: ChatId): boolean => {
-    return Object.keys(this.store).includes(chatId.toString());
+    return Boolean(this.store[chatId]);
   };
 }
