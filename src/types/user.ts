@@ -8,17 +8,8 @@ import { Image } from "./lib";
 export type ChatId = number;
 
 /**
- * Status that represents what tab is currently active.
- * This enum should be updated when new tabs are added to the application.
+ * Represents a content node on each step of an article or excursion
  */
-// TODO: remove asap
-// export enum UserStatus {
-//   MAIN_HUB,
-//   EXCURSION_HUB,
-//   MIIT_WAR_HUB,
-//   IN_PROCESS
-// }
-
 export type UserDataContent = ContentNode & WithPicture & Partial<WithLinks>
 
 /**
