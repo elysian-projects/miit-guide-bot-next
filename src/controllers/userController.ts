@@ -59,16 +59,16 @@ export class User implements IUser {
     }
   };
 
-  private callChangeStepHandlers = (): void => {
-    this.changeStepHandlers.forEach(handler => handler());
-  };
-
   public isFirstStep = (): boolean => {
     return this.state.data.step === 0;
   };
 
   public isLastStep = (): boolean => {
     return this.state.data.step === this.state.data.content.length - 1;
+  };
+
+  private callChangeStepHandlers = (): void => {
+    this.changeStepHandlers.forEach(handler => handler());
   };
 
   private isPointsListSet = (): boolean => {
