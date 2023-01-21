@@ -1,5 +1,5 @@
 import { removeInlineReplyMarkup } from "@/components/reply-markup";
-import { locationChoiceHandler, tabWW2Handler } from "@/tabs/";
+import { locationChoiceHandler, tabWW2Handler } from "@/tabs";
 import { TabValues } from "@/types/user";
 import { Context } from "grammy";
 
