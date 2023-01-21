@@ -1,7 +1,7 @@
 import { createReplyMarkup, removeMenuReplyMarkup } from "@/components/reply-markup";
 import { getChatId, removeUserFromStores } from "@/utils/common";
 import { Context } from "grammy";
-import { GREETINGS, MAIN_HUB_PHOTO } from "./constants";
+import { GREETINGS, MAIN_HUB_PHOTO, UNKNOWN_COMMAND } from "./constants";
 import { tabImages } from "./images";
 
 export const onStart = async (ctx: Context) => {
@@ -20,5 +20,5 @@ export const onHelp = async (ctx: Context) => {
 };
 
 export const onUnknown = async (ctx: Context) => {
-  await ctx.reply("Unknown message");
+  await ctx.reply(UNKNOWN_COMMAND);
 };

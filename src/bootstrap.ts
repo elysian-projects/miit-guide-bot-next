@@ -28,6 +28,9 @@ bot.callbackQuery(extractFromImages(locationImages, "value"), handleLocationClic
 // Control button clicked
 bot.callbackQuery(extractFromImages(Object.values(keyboardControls), "value"), handleControlButtonClick);
 
+// Control button click from the menu keyboard
+bot.hears(extractFromImages(Object.values(keyboardControls), "label"), handleControlButtonClick);
+
 // None of the above handlers were caught
 bot.on("message", onUnknown);
 

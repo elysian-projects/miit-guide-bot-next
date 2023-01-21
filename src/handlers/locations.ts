@@ -1,6 +1,6 @@
 import { storeController } from "@/bootstrap";
 import { onStart } from "@/chat/commands";
-import { Pagination } from "@/components/control-flow";
+import { Separation } from "@/components/control-flow";
 import { removeInlineReplyMarkup } from "@/components/reply-markup";
 import { LocationValues } from "@/types/location";
 import { UserData } from "@/types/user";
@@ -24,7 +24,7 @@ export const handleLocationClick = (ctx: Context) => {
     return;
   }
 
-  const controlFlow = new Pagination();
+  const controlFlow = new Separation();
 
   storeController.addUser(chatId).setData(data);
 

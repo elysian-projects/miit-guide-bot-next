@@ -5,6 +5,6 @@ export const defaultMenuKeyboardOptions: MenuMarkupOptions = {
   selective: false,
   placeholder: "",
   oneTime: false,
-  resized: false,
+  resized: true,
   columns: 2
 };
