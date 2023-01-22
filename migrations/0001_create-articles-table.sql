@@ -1,9 +1,8 @@
 CREATE TABLE articles (
-  id int PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   tab_id int NOT NULL,
-  location_id int,
-  label varchar(255) NOT NULL,
+  title varchar(255) NOT NULL,
   content text NOT NULL,
   photo_url varchar(255) NOT NULL,
-  links varchar(255)[]
+  links varchar[]
 )
