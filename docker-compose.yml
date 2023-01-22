@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   app:
     build: .
@@ -11,4 +11,30 @@ services:
       POSTGRES_USER: $USER
       POSTGRES_PASSWORD: $PASSWORD
     ports:
-      - "5432:5432"
+      - $PORT:$PORT
+    volumes:
+       - postgres:/data/postgres
+    networks:
+      - postgres
+    restart: unless-stopped
+  pgadmin:
+      image: dpage/pgadmin4
+      environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+        PGADMIN_CONFIG_SERVER_MODE: 'False'
+      volumes:
+        - pgadmin:/var/lib/pgadmin
+      ports:
+        - "${PGADMIN_PORT:-5050}:80"
+      networks:
+        - postgres
+      restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:
+    pgadmin:
