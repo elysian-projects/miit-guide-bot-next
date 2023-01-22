@@ -1,5 +1,6 @@
 CREATE TABLE tabs (
-  id int PRIMARY KEY,
-  tab_name varchar,
-  tab_value varchar
+  id SERIAL PRIMARY KEY,
+  tab_label varchar NOT NULL,
+  tab_value varchar NOT NULL,
+  tab_type varchar NOT NULL
 )
