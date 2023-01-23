@@ -4,5 +4,5 @@ CREATE TABLE articles (
   title varchar(255) NOT NULL,
   content text NOT NULL,
   photo_url varchar(255) NOT NULL,
-  links varchar[]
+  links varchar[] DEFAULT NULL
 )
