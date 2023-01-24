@@ -35,7 +35,7 @@
       "@/components/*": ["./components/*"],
       "@/constants/*": ["./constants/*"],
       "@/controllers/*": ["./controllers/*"],
-      "@/handlers/*": ["./handler/*"],
+      "@/handlers/*": ["./handlers/*"],
       "@/tabs/*": ["./tabs/*"],
       "@/types/*": ["./types/*"],
       "@/utils/*": ["./utils/*"],
