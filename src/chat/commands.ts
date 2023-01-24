@@ -6,6 +6,8 @@ import { tabImages } from "./images";
 
 export const onStart = async (ctx: Context) => {
   const chatId = getChatId(ctx);
+
+  // TODO: rewrite when server is ready
   const markup = createReplyMarkup("inline", tabImages);
 
   removeUserFromStores(chatId);

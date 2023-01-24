@@ -23,3 +23,8 @@ export interface ContentNode {
   /** Rich content that includes main information on the node */
   content: string,
 }
+
+/**
+ * Type of the record from the database
+ */
+export type ArticleType = "article" | "location";
