@@ -1,22 +1,17 @@
 import { storeController } from "@/bootstrap";
 import { onStart } from "@/chat/commands";
+import { locationImages } from "@/chat/images";
 import { Separation } from "@/components/control-flow";
-import { removeInlineReplyMarkup } from "@/components/reply-markup";
+import { createReplyMarkup, removeInlineReplyMarkup } from "@/components/reply-markup";
 import { LocationValues } from "@/types/location";
 import { UserData } from "@/types/user";
 import { getChatId } from "@/utils/common";
 import { Context } from "grammy";
 
-export const handleLocationClick = (ctx: Context) => {
+export const handleLocationClick = (ctx: Context, locationData: string) => {
   removeInlineReplyMarkup(ctx);
 
   const chatId = getChatId(ctx);
-  const locationData = ctx.callbackQuery?.data ?? ctx.msg?.text;
-
-  if(!locationData) {
-    throw new Error("Invalid context, couldn't handle location choice!");
-  }
-
   const data = fetchData(locationData as LocationValues);
 
   if(!data) {
@@ -58,4 +53,10 @@ const fetchData = (_location: LocationValues): UserData => {
     ],
     step: 0
   };
+};
+
+// TODO: rewrite when server is ready
+export const openLocationsChoice = async (ctx: Context): Promise<void> => {
+  const markup = createReplyMarkup("inline", locationImages);
+  await ctx.reply("Here's the location choice", {reply_markup: markup});
 };

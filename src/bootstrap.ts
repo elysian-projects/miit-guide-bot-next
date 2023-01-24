@@ -2,11 +2,8 @@ import { onHelp, onStart, onUnknown } from "@/chat/commands";
 import { config as dotenvConfig } from "dotenv";
 import { Bot } from "grammy";
 import { keyboardControls } from "./chat/controls";
-import { locationImages, tabImages } from "./chat/images";
+import { keyboardClickRouter } from "./controllers/keyboardClickController";
 import { StoreController } from "./controllers/storeController";
-import { handleControlButtonClick } from "./handlers/controlButtons";
-import { handleLocationClick } from "./handlers/locations";
-import { handleTabClick } from "./handlers/tab";
 import { extractFromImages } from "./utils/image";
 
 dotenvConfig();
@@ -21,15 +18,11 @@ const bot = new Bot(process.env.TOKEN ?? "");
 bot.command("start", onStart);
 bot.command("help", onHelp);
 
-// Tab in the main hub clicked
-bot.callbackQuery(extractFromImages(tabImages, "value"), handleTabClick);
-// Works out on location selection
-bot.callbackQuery(extractFromImages(locationImages, "value"), handleLocationClick);
-// Control button clicked
-bot.callbackQuery(extractFromImages(Object.values(keyboardControls), "value"), handleControlButtonClick);
+// Trigger keyboard click router
+bot.on("callback_query:data", keyboardClickRouter);
 
 // Control button click from the menu keyboard
-bot.hears(extractFromImages(Object.values(keyboardControls), "label"), handleControlButtonClick);
+bot.hears(extractFromImages(Object.values(keyboardControls), "label"), keyboardClickRouter);
 
 // None of the above handlers were caught
 bot.on("message", onUnknown);
