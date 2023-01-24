@@ -1,25 +1,18 @@
+import { imageAdapter } from "@/adapters/images";
 import { storeController } from "@/bootstrap";
-import { onStart } from "@/chat/commands";
-import { locationImages } from "@/chat/images";
-import { Separation } from "@/components/control-flow";
+import { EXCURSION_REPLY } from "@/chat/constants";
+import { IControlFlow } from "@/components/control-flow/types";
 import { createReplyMarkup, removeInlineReplyMarkup } from "@/components/reply-markup";
-import { LocationValues } from "@/types/location";
-import { UserData } from "@/types/user";
+import { PostgreSQL } from "@/database/postgresql";
+import { UserData, UserDataContent } from "@/types/user";
 import { getChatId } from "@/utils/common";
 import { Context } from "grammy";
 
-export const handleLocationClick = (ctx: Context, locationData: string) => {
+export const handleArticleClick = (ctx: Context, locations: object[], controlFlow: IControlFlow) => {
   removeInlineReplyMarkup(ctx);
 
   const chatId = getChatId(ctx);
-  const data = fetchData(locationData as LocationValues);
-
-  if(!data) {
-    userHandleError(ctx);
-    return;
-  }
-
-  const controlFlow = new Separation();
+  const data = formatData(locations);
 
   storeController.addUser(chatId).setData(data);
 
@@ -36,27 +29,19 @@ export const handleLocationClick = (ctx: Context, locationData: string) => {
   send();
 };
 
-/** This function must handle an error so the application doesn't break down */
-const userHandleError = async (ctx: Context) => {
-  await ctx.reply("Произошла непредвиденная ошибка!");
-  onStart(ctx);
-};
-
-// TODO: implement fetching data from the server
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fetchData = (_location: LocationValues): UserData => {
+const formatData = (locations: object[]): UserData => {
   return {
-    title: "",
-    content: [
-      {label: "Заголовок 1", content: "Контент к заголовку 1", picture: "https://miit.ru/content/%E2%84%96%201.jpg?id_wm=797689&SWidth=1920"},
-      {label: "Заголовок 2", content: "Контент к заголовку 2", picture: "https://miit.ru/content/%E2%84%96%201.jpg?id_wm=797689&SWidth=1920"},
-    ],
+    content: locations as UserDataContent[],
     step: 0
   };
 };
 
-// TODO: rewrite when server is ready
 export const openLocationsChoice = async (ctx: Context): Promise<void> => {
-  const markup = createReplyMarkup("inline", locationImages);
-  await ctx.reply("Here's the location choice", {reply_markup: markup});
+  const data = await new PostgreSQL().query("SELECT * FROM tabs WHERE tab_type = $1", ["location"]);
+
+  if(data.rowCount === 0) {
+    throw new Error("No locations found!");
+  }
+
+  await ctx.reply(EXCURSION_REPLY, {reply_markup: createReplyMarkup("inline", imageAdapter(data.rows))});
 };

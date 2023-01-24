@@ -11,13 +11,12 @@ dotEnvConfig();
   const migrationsPath = resolve("migrations");
 
   const config = {
-    database: env.DBNAME || "miit",
-    user: env.USER_NAME || "postgres",
-    password: env.PASSWORD || "admin",
-    host: env.HOST || "localhost",
-    port: Number(env.PORT) || 5432,
-    ensureDatabaseExists: true,
-    defaultDatabase: "postgres"
+    database: env.PGDATABASE || "miit",
+    user: env.PGUSER || "docker",
+    password: env.PGPASSWORD || "admin",
+    host: env.PGHOST || "localhost",
+    port: Number(env.PGPORT) || 5432,
+    ensureDatabaseExists: true
   };
 
   await migrate(config, migrationsPath);

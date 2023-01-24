@@ -1,8 +1,9 @@
 import { keyboardControls } from "@/chat/controls";
 import { locationButton } from "@/chat/images";
-import { handleArticleClick } from "@/handlers/articles";
+import { Pagination, Separation } from "@/components/control-flow";
+import { PostgreSQL } from "@/database/postgresql";
 import { handleControlButtonClick } from "@/handlers/controls";
-import { handleLocationClick, openLocationsChoice } from "@/handlers/locations";
+import { handleArticleClick, openLocationsChoice } from "@/handlers/locations";
 import { ArticleType } from "@/types/content";
 import { extractFromImages } from "@/utils/image";
 import { Context } from "grammy";
@@ -25,32 +26,17 @@ export const keyboardClickRouter = async (ctx: Context) => {
   }
 
   // Button of type `location`
-  if(await matchButtonType(clickData, "location")) {
-    handleLocationClick(ctx, clickData);
-    return;
-  }
+  await matchButtonType(ctx, clickData, "location", (ctx, data) => handleArticleClick(ctx, data, new Separation()));
 
   // Button of type `article`
-  if(await matchButtonType(clickData, "article")) {
-    handleArticleClick(ctx, clickData);
-    return;
-  }
-
-  // The router was called but the clicked button is not valid
-  throw new Error("Invalid inline button!");
+  await matchButtonType(ctx, clickData, "article", (ctx, data) => handleArticleClick(ctx, data, new Pagination()));
 };
 
-// TODO: rewrite when server is ready
-const matchButtonType = async (clickData: string, type: ArticleType): Promise<boolean> => {
-  // const database = new PostgreSQL();
-  // const data = await database.query("SELECT * FROM articles WHERE `title` = $1::title AND type = $2::text", [clickData, type]);
+const matchButtonType = async (ctx: Context, clickData: string, type: ArticleType, handler: (ctx: Context, data: object[]) => void): Promise<void> => {
+  const data = await new PostgreSQL().query("SELECT * FROM articles WHERE (label = $1 OR _value = $1) AND _type = $2", [clickData, type]);
 
-  // return data.fields.length !== 0;
-
-  if(type === "article") {
-    return ["МИИТ в годы ВОВ", "ww2"].includes(clickData);
-  } else {
-    return ["Улица", "street", "Корпус 1", "building1"].includes(clickData);
+  if(data.rowCount !== 0) {
+    handler(ctx, data.rows);
   }
 };
 
