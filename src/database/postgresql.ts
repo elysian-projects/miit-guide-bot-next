@@ -12,16 +12,18 @@ export class PostgreSQL implements DatabaseController {
     return res;
   };
 
-  private connect = async (): Promise<Client> => {
+  public connect = async (): Promise<Client> => {
     const client = new Client({
-      database: process.env.DBNAME,
-      host: process.env.HOST,
-      port: Number(process.env.PORT),
-      user: process.env.USER,
-      password: process.env.PASSWORD
+      connectionString: this.getConnectionString(),
+      user: "postgres",
+      password: "admin"
     });
 
     await client.connect();
     return client;
+  };
+
+  private getConnectionString = (): string => {
+    return "jdbc:postgresql://localhost:5432/miit";
   };
 }
