@@ -7,11 +7,11 @@ services:
   postgresql:
     image: "postgres"
     environment:
-      POSTGRES_DB: $DBNAME
-      POSTGRES_USER: $USER
-      POSTGRES_PASSWORD: $PASSWORD
+      POSTGRES_USER: $PGUSER
+      POSTGRES_DB: $PGDATABASE
+      POSTGRES_PASSWORD: $PGPASSWORD
     ports:
-      - $PORT:$PORT
+      - $PGPORT:$PGPORT
     volumes:
       - postgres:/data/postgres
     restart: unless-stopped

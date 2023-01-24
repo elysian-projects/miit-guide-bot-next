@@ -4,7 +4,6 @@ import { UserData, UserState } from "@/types/user";
 export const defaultLocation: Image = {value: "unknown", label: "unknown"};
 
 export const defaultUserData: UserData = {
-  title: "",
   content: [],
   step: 0
 };
