@@ -1,13 +1,13 @@
 import { AvailableKeyboardTypes } from "./lib";
 
-export interface WithPicture<T extends string = string> {
+export interface WithPicture {
   /** Path to picture to be send with the node */
-  picture: T,
+  picture: string,
 }
 
-export interface WithLinks<T extends string = string> {
+export interface WithLinks {
   /** URL links to external sources  */
-  links: T[]
+  links: string[]
 }
 
 export interface WithReplyMarkup {
@@ -15,16 +15,22 @@ export interface WithReplyMarkup {
 }
 
 /**
- * Node that contains a piece of the whole information (might be a part of an article or a memorial article)
- */
-export interface ContentNode {
-  /** Public label of the current node */
-  label: string,
-  /** Rich content that includes main information on the node */
-  content: string,
-}
-
-/**
  * Type of the record from the database
  */
 export type ArticleType = "article" | "location";
+
+/**
+ * Node that contains a piece of the whole information (might be a part of an article or a memorial article)
+ */
+export interface ContentNode {
+  /** Id if the parent record */
+  tab_id: number,
+  /** Public label of the current node */
+  label: string,
+  /** Value for tracking state in the system */
+  _value: string,
+  /** Rich content that includes main information on the node */
+  content: string | string[],
+  /** Type of the record */
+  _type: ArticleType
+}

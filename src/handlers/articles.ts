@@ -1,18 +1,24 @@
+import { computeArticleData } from "@/adapters/content";
 import { imageAdapter } from "@/adapters/images";
 import { storeController } from "@/bootstrap";
 import { EXCURSION_REPLY } from "@/chat/constants";
+import { Pagination } from "@/components/control-flow";
 import { IControlFlow } from "@/components/control-flow/types";
-import { createReplyMarkup, removeInlineReplyMarkup } from "@/components/reply-markup";
+import { createReplyMarkup } from "@/components/reply-markup";
 import { PostgreSQL } from "@/database/postgresql";
+import { ContentNode } from "@/types/content";
 import { UserData, UserDataContent } from "@/types/user";
 import { getChatId } from "@/utils/common";
 import { Context } from "grammy";
 
 export const handleArticleClick = (ctx: Context, locations: object[], controlFlow: IControlFlow) => {
-  removeInlineReplyMarkup(ctx);
-
   const chatId = getChatId(ctx);
-  const data = formatData(locations);
+
+  const content = (controlFlow instanceof Pagination && locations.length === 1)
+    ? computeArticleData(locations[0] as ContentNode)
+    : locations;
+
+  const data = formatData(content);
 
   storeController.addUser(chatId).setData(data);
 

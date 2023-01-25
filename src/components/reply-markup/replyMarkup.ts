@@ -34,7 +34,9 @@ export const removeInlineReplyMarkup = (ctx: Context) => {
     return;
   }
 
-  ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()});
+  ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()}).catch(() => {
+    console.log("Could not remove inline reply!");
+  });
 };
 
 export const removeMenuReplyMarkup = (): ReplyKeyboardRemove => {
