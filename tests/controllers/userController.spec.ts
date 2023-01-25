@@ -5,10 +5,10 @@ import { describe, expect, jest, test } from "@jest/globals";
 
 const chatId = 1;
 const userData: UserData = {
-  title: "Title 1", content: [
-    {label: "Label 1", content: "Content 1", picture: "Picture 1"},
-    {label: "Label 2", content: "Content 2", picture: "Picture 2"},
-    {label: "Label 3", content: "Content 3", picture: "Picture 3"},
+  content: [
+    {tab_id: 1, label: "Label 1", _value: "label_1", _type: "article", content: "Content 1", picture: "Picture 1"},
+    {tab_id: 1, label: "Label 2", _value: "label_2", _type: "article", content: "Content 2", picture: "Picture 2"},
+    {tab_id: 1, label: "Label 3", _value: "label_3", _type: "article", content: "Content 3", picture: "Picture 3"},
   ], step: 0
 };
 const handlers = {
