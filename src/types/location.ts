@@ -1,6 +1,6 @@
-import { ContentNode, WithLinks, WithPicture } from "./content";
+import { UserDataContent } from "./user";
 
 export type LocationData = {
   title: string,
-  data: Array<ContentNode & WithPicture & Partial<WithLinks>>
+  data: UserDataContent[]
 }

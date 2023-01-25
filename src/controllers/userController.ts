@@ -1,4 +1,3 @@
-import { defaultUserState } from "@/constants/user";
 import { IUser } from "@/types/controllers";
 import { ChatId, UserData, UserDataContent, UserState } from "@/types/user";
 
@@ -7,7 +6,7 @@ export class User implements IUser {
   private changeStepHandlers: (() => void)[];
 
   public constructor(id: ChatId) {
-    this.state = {...defaultUserState, id};
+    this.state = {id, data: this.getDefaultData()};
     this.changeStepHandlers = [];
   }
 
@@ -73,5 +72,12 @@ export class User implements IUser {
 
   private isPointsListSet = (): boolean => {
     return this.state.data.content.length !== 0;
+  };
+
+  private getDefaultData = (): UserData => {
+    return {
+      content: [],
+      step: 0
+    };
   };
 }
