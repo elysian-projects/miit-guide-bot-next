@@ -1,9 +1,10 @@
 import { keyboardControls } from "@/chat/controls";
 import { locationButton } from "@/chat/images";
 import { Pagination, Separation } from "@/components/control-flow";
+import { removeInlineReplyMarkup } from "@/components/reply-markup";
 import { PostgreSQL } from "@/database/postgresql";
+import { handleArticleClick, openLocationsChoice } from "@/handlers/articles";
 import { handleControlButtonClick } from "@/handlers/controls";
-import { handleArticleClick, openLocationsChoice } from "@/handlers/locations";
 import { ArticleType } from "@/types/content";
 import { extractFromImages } from "@/utils/image";
 import { Context } from "grammy";
@@ -21,23 +22,43 @@ export const keyboardClickRouter = async (ctx: Context) => {
 
   // The clicked button is the location choice button
   if(locationButton.value === clickData || locationButton.label === clickData) {
+    removeInlineReplyMarkup(ctx);
     openLocationsChoice(ctx);
     return;
   }
 
   // Button of type `location`
-  await matchButtonType(ctx, clickData, "location", (ctx, data) => handleArticleClick(ctx, data, new Separation()));
+  const location = await matchButtonType(clickData, "location");
+  if(location.found && location.data) {
+    removeInlineReplyMarkup(ctx);
+    handleArticleClick(ctx, location.data, new Separation());
+    return;
+  }
 
   // Button of type `article`
-  await matchButtonType(ctx, clickData, "article", (ctx, data) => handleArticleClick(ctx, data, new Pagination()));
+  const article = await matchButtonType(clickData, "article");
+  if(article.found && article.data) {
+    removeInlineReplyMarkup(ctx);
+    handleArticleClick(ctx, article.data, new Pagination());
+    return;
+  }
 };
 
-const matchButtonType = async (ctx: Context, clickData: string, type: ArticleType, handler: (ctx: Context, data: object[]) => void): Promise<void> => {
+type Response = {
+  found: boolean,
+  data: object[] | null
+}
+const matchButtonType = async (clickData: string, type: ArticleType): Promise<Response> => {
   const data = await new PostgreSQL().query("SELECT * FROM articles WHERE (label = $1 OR _value = $1) AND _type = $2", [clickData, type]);
 
-  if(data.rowCount !== 0) {
-    handler(ctx, data.rows);
-  }
+  return (data.rowCount !== 0)
+    ? {
+      found: true,
+      data: data.rows
+    } : {
+      found: false,
+      data: null
+    };
 };
 
 const getClickData = (ctx: Context): string => {
