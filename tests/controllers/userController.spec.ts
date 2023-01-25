@@ -1,4 +1,3 @@
-import { defaultUserData } from "@/constants/user";
 import { User } from "@/controllers/userController";
 import { UserData } from "@/types/user";
 import { describe, expect, jest, test } from "@jest/globals";
@@ -23,7 +22,10 @@ describe("creates and mutates user object", () => {
 
     expect(user).toBeInstanceOf(User);
     expect(user.id()).toBe(chatId);
-    expect(user.getData()).toStrictEqual(defaultUserData);
+    expect(user.getData()).toStrictEqual({
+      content: [],
+      step: 0
+    });
 
     expect(() => {
       user.getCurrentContent();
