@@ -27,6 +27,6 @@ Telegram бот, который проводит экскурсию по тер�
 
   ```
   npm install
-  npm run migrate
   docker compose up
+  npm run migrate
   ```
