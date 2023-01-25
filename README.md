@@ -16,11 +16,11 @@ Telegram бот, который проводит экскурсию по тер�
   TOKEN=<your_token>
 
   # Database
-  HOST="127.0.0.1"
-  PORT="5432"
-  DBNAME="miit"
-  USER_NAME="postgres"
-  PASSWORD="admin"
+  PGHOST=localhost
+  PGUSER=docker
+  PGDATABASE=miit
+  PGPASSWORD=admin
+  PGPORT=5432
   ```
 - заполнить файл `.env` значениями (для режима разработки оставить значения `#Database` по умолчанию)
 - выполнить команды
