@@ -1,6 +1,7 @@
 import { keyboardControls } from "@/chat/controls";
 import { locationButton } from "@/chat/images";
 import { Pagination, Separation } from "@/components/control-flow";
+import { IControlFlow } from "@/components/control-flow/types";
 import { removeInlineReplyMarkup } from "@/components/reply-markup";
 import { PostgreSQL } from "@/database/postgresql";
 import { handleArticleClick, openLocationsChoice } from "@/handlers/articles";
@@ -9,66 +10,136 @@ import { ArticleType } from "@/types/content";
 import { extractFromImages } from "@/utils/image";
 import { Context } from "grammy";
 
-/** Head router that determines the type of the clicked button and calls its controller */
-export const keyboardClickRouter = async (ctx: Context) => {
-  const clickData = getClickData(ctx);
-
-  // Check if the clicked button is a control button
-  if(extractFromImages(Object.values(keyboardControls), "value").includes(clickData)
-  || extractFromImages(Object.values(keyboardControls), "label").includes(clickData)) {
-    handleControlButtonClick(ctx, clickData);
-    return;
-  }
-
-  // The clicked button is the location choice button
-  if(locationButton.value === clickData || locationButton.label === clickData) {
-    removeInlineReplyMarkup(ctx);
-    openLocationsChoice(ctx);
-    return;
-  }
-
-  // Button of type `location`
-  const location = await matchButtonType(clickData, "location");
-  if(location.found && location.data) {
-    removeInlineReplyMarkup(ctx);
-    handleArticleClick(ctx, location.data, new Separation());
-    return;
-  }
-
-  // Button of type `article`
-  const article = await matchButtonType(clickData, "article");
-  if(article.found && article.data) {
-    removeInlineReplyMarkup(ctx);
-    handleArticleClick(ctx, article.data, new Pagination());
-    return;
-  }
-};
-
-type Response = {
+type ResponseType = {
   found: boolean,
   data: object[] | null
 }
-const matchButtonType = async (clickData: string, type: ArticleType): Promise<Response> => {
-  const data = await new PostgreSQL().query("SELECT * FROM articles WHERE (label = $1 OR _value = $1) AND _type = $2", [clickData, type]);
 
-  return (data.rowCount !== 0)
-    ? {
-      found: true,
-      data: data.rows
-    } : {
-      found: false,
-      data: null
-    };
-};
+export class KeyboardRouter {
+  /**
+   * Main router redirection method
+   *
+   * @async
+   * @param {Context} ctx context provided by the Telegram API
+   */
+  public redirect = async (ctx: Context): Promise<void> => {
+    const clickData = this.getClickData(ctx);
 
-const getClickData = (ctx: Context): string => {
-  // The keyboard click might be triggered from the inline or menu keyboards
-  const clickData = ctx.callbackQuery?.data ?? ctx.msg?.text;
+    // Check if the clicked button is a control button
+    this.handleControlButton(ctx, clickData) ||
 
-  // If no click data is provided, the controller is called in the wrong place/order, so we need to know that
-  if(!clickData) {
-    throw new Error("Invalid context, could not find the keyboard click data!");
-  }
+    // The clicked button is the location choice button
+    this.handleLocationMenuButton(ctx, clickData) ||
 
-  return clickData;
-};
+    // Button of type `location`
+    await this.handleLocationChoiceButton(ctx, clickData, "location");
+
+    // Button of type `article`
+    await this.handleLocationChoiceButton(ctx, clickData, "article");
+  };
+
+  /**
+   * Control button click handler
+   *
+   * @param {Context} ctx context provided by the Telegram API
+   * @param {string} clickData value of the clicked button
+   * @returns {boolean}
+   */
+  private handleControlButton = (ctx: Context, clickData: string): boolean => {
+    if(extractFromImages(Object.values(keyboardControls), "value").includes(clickData)
+    || extractFromImages(Object.values(keyboardControls), "label").includes(clickData)) {
+      handleControlButtonClick(ctx, clickData);
+      return true;
+    }
+
+    return false;
+  };
+
+  /**
+   * Location choice button click handler
+   *
+   * @param {Context} ctx context provided by the Telegram API
+   * @param {string} clickData value of the clicked button
+   * @returns {boolean}
+   */
+  private handleLocationMenuButton = (ctx: Context, clickData: string): boolean => {
+    if(locationButton.value === clickData || locationButton.label === clickData) {
+      removeInlineReplyMarkup(ctx);
+      openLocationsChoice(ctx);
+      return true;
+    }
+
+    return false;
+  };
+
+  /**
+   * Location choice button click handler
+   *
+   * @async
+   * @param {Context} ctx context provided by the Telegram API
+   * @param {string} clickData value of the clicked button
+   * @param {ArticleType} articleType type of the article from the database
+   * @returns {boolean}
+   */
+  private handleLocationChoiceButton = async (ctx: Context, clickData: string, articleType: ArticleType): Promise<boolean> => {
+    const location = await this.matchButtonType(clickData, articleType);
+
+    if(location.found && location.data) {
+      removeInlineReplyMarkup(ctx);
+      handleArticleClick(ctx, location.data, this.getControlFlowType(articleType));
+      return true;
+    }
+
+    return false;
+  };
+
+  /**
+   * Returns the control flow object depending on the article type
+   *
+   * @param {ArticleType} articleType type of the article from the database
+   * @returns {IControlFlow}
+   */
+  private getControlFlowType = (articleType: ArticleType): IControlFlow => {
+    return (articleType === "location")
+      ? new Separation()
+      : new Pagination();
+  };
+
+  /**
+   * Send request to the database and returns the found data if it exists
+   *
+   * @async
+   * @param {string} clickData clicked button value
+   * @param {ArticleType} articleType type of the article from the database
+   * @returns {Promise<ResponseType>}
+   */
+  private matchButtonType = async (clickData: string, articleType: ArticleType): Promise<ResponseType> => {
+    const data = await new PostgreSQL().query("SELECT * FROM articles WHERE (label = $1 OR _value = $1) AND _type = $2", [clickData, articleType]);
+
+    return (data.rowCount !== 0)
+      ? {
+        found: true,
+        data: data.rows
+      } : {
+        found: false,
+        data: null
+      };
+  };
+
+  /**
+   * Extracts clicked button value from the given context, or throws an error if the context is invalid
+   *
+   * @param {Context} ctx context provided by the Telegram API
+   * @returns {string}
+   */
+  private getClickData = (ctx: Context): string => {
+    // The keyboard click might be triggered from the inline or menu keyboards
+    const clickData = ctx.callbackQuery?.data ?? ctx.msg?.text;
+
+    if(!clickData) {
+      throw new Error("Invalid context, could not find the keyboard click data!");
+    }
+
+    return clickData;
+  };
+}

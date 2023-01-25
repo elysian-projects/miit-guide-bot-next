@@ -51,12 +51,12 @@ export function computeControlsKeyboard<T extends KeyboardType>(type: T, options
   const controls: Image[] = [];
 
   // First button: menu keyboard cannot have a `Go back` button unlike inline keyboard
-  (type === "inline")
+  (type === "inline" && currentStep !== 0)
     ? controls.push(keyboardControls.PREV)
     : controls.push(keyboardControls.HUB);
 
   // Last button: `Next step`, if there is a next step, overwise - `Back to hub`
-  if(currentStep !== maxSteps - 1) {
+  if(currentStep !== (maxSteps - 1)) {
     controls.push(keyboardControls.NEXT);
   } else if(type === "inline") {
     controls.push(keyboardControls.HUB);

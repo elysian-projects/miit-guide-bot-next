@@ -8,33 +8,57 @@ import { PaginationBufferController } from "./bufferController";
 export const paginationBuffer = new PaginationBufferController();
 
 export class Pagination implements IControlFlow {
-  public sendData = async (ctx: Context, userId: ChatId) => {
-    checkUserExists(userId);
+  public sendData = async (ctx: Context, chatId: ChatId) => {
+    checkUserExists(chatId);
 
-    const { content, message, props, isFirstStep } = useMessageController("inline", userId);
-
-    // If the base message is not sent, user won't appear in the buffer so there will be nothing to display
-    // and edit in the further steps, so we need this logic to make sure that the `base message` is sent
-    if(this.shouldSendBaseMessage(userId, isFirstStep)) {
-
-      // This realization only works when the content photo is provided. To make it work with mixed content,
-      // which is half text and half photos, it's easier to rewrite Telegram Bot API rather than try to make it
-      // work, so just provide a fucking photo on each step and don't ask questions :)
-      const sentMessage = await ctx.api.sendPhoto(userId, content.picture, {caption: message, ...props});
-
-      // The buffer is required to keep track of the users using pagination and their base messages :/
-      paginationBuffer.append(userId, sentMessage.message_id);
-
+    if(await this.sendBaseMessage(ctx, chatId)) {
       return;
     }
 
-    // Record of the user from the pagination buffer to get the base message id
-    const record = paginationBuffer.getRecord(userId);
+    await this.editBaseMessage(ctx, chatId);
+    await this.editReplyMarkup(ctx, chatId);
+  };
 
-    // Edit message text and photo
+  /**
+   * Send the base message that must be edited at the next steps
+   *
+   * @param {Context} ctx - the context provided by the Telegram API
+   * @param {ChatId} chatId - the id of the user that the message must be sent to
+   * @return {Promise<void>}
+   */
+  private sendBaseMessage = async (ctx: Context, chatId: ChatId): Promise<boolean> => {
+    const { content, message, props, isFirstStep } = useMessageController("inline", chatId);
+
+    // If the base message is not sent, user won't appear in the buffer so there will be nothing to display
+    // and edit in the further steps, so we need this logic to make sure that the `base message` is sent
+    if(!this.shouldSendBaseMessage(chatId, isFirstStep)) {
+      return false;
+    }
+
+    // This realization only works when the content photo is provided. To make it work with mixed content,
+    // which is half text and half photos, it's easier to rewrite Telegram Bot API rather than try to make it
+    // work, so just provide a fucking photo on each step and don't ask questions :)
+    const sentMessage = await ctx.api.sendPhoto(chatId, content.picture, {caption: message, ...props});
+
+    paginationBuffer.append(chatId, sentMessage.message_id);
+
+    return true;
+  };
+
+  /**
+   * Edits the base message with the updated content
+   *
+   * @param {Context} ctx - the context provided by the Telegram API
+   * @param {ChatId} chatId - the id of the user that the message must be sent to
+   * @return {Promise<void>}
+   */
+  private editBaseMessage = async (ctx: Context, chatId: ChatId): Promise<void> => {
+    const { messageId } = paginationBuffer.getRecord(chatId);
+    const { content, message, props } = useMessageController("inline", chatId);
+
     await ctx.api.editMessageMedia(
-      userId,
-      record.messageId,
+      chatId,
+      messageId,
       {
         type: "photo",
         caption: message,
@@ -42,11 +66,22 @@ export class Pagination implements IControlFlow {
         parse_mode: props.parse_mode
       }
     );
+  };
 
-    // Edit reply markup (why not just have the `reply_markup` property in the `editMessageMedia` type? fkn Telegram)
+  /**
+   * Edits the base message reply markup
+   *
+   * @param {Context} ctx - the context provided by the Telegram API
+   * @param {ChatId} chatId - the id of the user that the message must be sent to
+   * @return {Promise<void>}
+   */
+  private editReplyMarkup = async (ctx: Context, chatId: ChatId): Promise<void> => {
+    const { messageId } = paginationBuffer.getRecord(chatId);
+    const { props } = useMessageController("inline", chatId);
+
     await ctx.api.editMessageReplyMarkup(
-      userId,
-      record.messageId,
+      chatId,
+      messageId,
       {
         reply_markup: props.reply_markup
       }

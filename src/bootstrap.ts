@@ -2,7 +2,7 @@ import { onHelp, onStart, onUnknown } from "@/chat/commands";
 import { config as dotenvConfig } from "dotenv";
 import { Bot, GrammyError, HttpError } from "grammy";
 import { keyboardControls } from "./chat/controls";
-import { keyboardClickRouter } from "./controllers/keyboardClickController";
+import { KeyboardRouter } from "./controllers/keyboardClickController";
 import { StoreController } from "./controllers/storeController";
 import { extractFromImages } from "./utils/image";
 
@@ -14,15 +14,18 @@ export const storeController = new StoreController();
 // Main bot instance, make sure IT IS NOT EXPORTED!
 const bot = new Bot(process.env.TOKEN ?? "");
 
+// Router of the keyboard button click
+const keyboardRouter = new KeyboardRouter();
+
 // Casual bot commands
 bot.command("start", onStart);
 bot.command("help", onHelp);
 
 // Trigger keyboard click router
-bot.on("callback_query:data", keyboardClickRouter);
+bot.on("callback_query:data", keyboardRouter.redirect);
 
 // Control button click from the menu keyboard
-bot.hears(extractFromImages(Object.values(keyboardControls), "label"), keyboardClickRouter);
+bot.hears(extractFromImages(Object.values(keyboardControls), "label"), keyboardRouter.redirect);
 
 // None of the above handlers were caught
 bot.on("message", onUnknown);
