@@ -1,12 +1,34 @@
 version: '3.8'
 services:
+  # Telegram bot
   app:
+    container_name: app
     build: ./app
+    configs:
+      - source: base_tsconfig
+        target: /tsconfig.json
+      - source: base_eslintrc
+        target: /.eslintrc.json
     env_file:
       - .env
-    environment:
-      - TOKEN=$TOKEN
+
+  # Server
+  server:
+    container_name: server
+    build: ./server
+    configs:
+      - source: base_tsconfig
+        target: /tsconfig.json
+      - source: base_eslintrc
+        target: /.eslintrc.json
+    env_file:
+      - .env
+    ports:
+      - $SERVER_PORT:$SERVER_PORT
+
+  # Database
   postgresql:
+    container_name: database
     image: "postgres"
     environment:
       POSTGRES_USER: $PGUSER
@@ -22,5 +44,11 @@ networks:
   postgres:
     driver: bridge
 
+configs:
+  base_tsconfig:
+    file: ./tsconfig.json
+  base_eslintrc:
+    file: ./.eslintrc.json
+
 volumes:
-    postgres:
+  postgres:

@@ -2,7 +2,6 @@ import { ContentNode } from "@/types/content";
 
 export const computeArticleData = <T extends ContentNode>(node: T): T[] => {
   if(node._type !== "article" || typeof node.content !== "string") {
-    console.log(node._type !== "article", typeof node.content !== "string");
     throw new Error("The given node is not of article type!");
   }
 
