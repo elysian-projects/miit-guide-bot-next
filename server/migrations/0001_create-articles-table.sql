@@ -6,5 +6,5 @@ CREATE TABLE articles (
   content text NOT NULL,
   _type varchar NOT NULL,
   picture varchar(255) NOT NULL,
-  links varchar[] DEFAULT NULL
+  links varchar DEFAULT NULL
 )

@@ -1,6 +1,12 @@
 {
   "cSpell.words": [
     "DBNAME",
-    "miit"
+    "miit",
+    "PGCONNECTION",
+    "PGDATABASE",
+    "PGHOST",
+    "PGPASSWORD",
+    "PGPORT",
+    "PGUSER"
   ]
 }
