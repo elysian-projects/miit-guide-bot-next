@@ -1,7 +1,9 @@
 version: '3.8'
 services:
   app:
-    build: .
+    build: ./app
+    env_file:
+      - .env
     environment:
       - TOKEN=$TOKEN
   postgresql:
