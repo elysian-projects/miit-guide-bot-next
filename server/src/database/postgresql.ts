@@ -4,17 +4,16 @@ import { PgPoolQueryRunner } from "ts-sql-query/queryRunners/PgPoolQueryRunner";
 import { PostgresConnection } from "./connection";
 
 const pool = new Pool({
-  user: process.env.PGUSER,
   host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
+  user: process.env.PGUSER,
   password: process.env.PGPASSWORD,
-  port: Number(process.env.PGPORT)
+  connectionString: process.env.PGCONNECTION_STRING
 });
 
 export class PostgreSQL {
-  public getConnection = (): PostgresConnection => {
+  public getConnection = async (): Promise<PostgresConnection> => {
     const connection = new PostgresConnection(new ConsoleLogQueryRunner(new PgPoolQueryRunner(pool)));
-    connection.beginTransaction();
+    await connection.beginTransaction();
     return connection;
   };
 }

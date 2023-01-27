@@ -1,8 +1,9 @@
 import bodyParser from "body-parser";
 import express, { Router } from "express";
 import { join } from "path";
-import { userController } from "./controllers/users.controller";
-import baseRoutes from "./routes/base";
+import * as tabController from "./controllers/tabs.controller";
+import * as userController from "./controllers/users.controller";
+import * as baseRoutes from "./routes/base";
 
 const server = express();
 const PORT = process.env.SERVER_PORT || 5000;
@@ -14,8 +15,12 @@ const router = Router();
 router.get("/", baseRoutes.index);
 
 // User routes
-router.get("/api/user/:id", userController.getUser);
+router.get("/api/users", userController.getUser);
 
+// Tab routes
+router.post("/api/tabs", tabController.insertTab);
+router.get("/api/tabs", tabController.getTabs);
+router.put("/api/tabs", tabController.updateTab);
 
 router.get("*", baseRoutes.notFound);
 

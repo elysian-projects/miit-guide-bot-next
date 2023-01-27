@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "start": "npm run build && node ./dist/index.js",
-    "build": "tsc"
+    "build": "tsc && tsc-alias"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "@types/pg": "^8.6.6",
     "eslint": "^8.32.0",
     "ts-sql-query": "^1.48.0",
+    "tsc-alias": "^1.8.2",
     "typescript": "^4.9.4"
   },
   "dependencies": {
