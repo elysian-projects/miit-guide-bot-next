@@ -7,8 +7,6 @@ services:
     configs:
       - source: base_tsconfig
         target: /tsconfig.json
-      - source: base_eslintrc
-        target: /.eslintrc.json
     env_file:
       - .env
 
@@ -19,8 +17,6 @@ services:
     configs:
       - source: base_tsconfig
         target: /tsconfig.json
-      - source: base_eslintrc
-        target: /.eslintrc.json
     env_file:
       - .env
     ports:
@@ -47,8 +43,6 @@ networks:
 configs:
   base_tsconfig:
     file: ./tsconfig.json
-  base_eslintrc:
-    file: ./.eslintrc.json
 
 volumes:
   postgres:
