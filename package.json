@@ -6,7 +6,7 @@
     "start": "docker compose up",
     "build": "docker compose build",
     "install:all": "npm i && cd ./app && npm install && cd ../server && npm install",
-    "migrate": "node ./server/scripts/migrate.mjs"
+    "migrate": "cd ./server && npm run migrate"
   },
   "repository": {
     "type": "git",
