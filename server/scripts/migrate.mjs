@@ -1,23 +1,30 @@
+/**
+ * This script is required because of the specific location of the `.env` file. As it
+ * is only exported properly on `docker compose up`, at development time the virtual path
+ * does not actually match the "physical" path to the `.env` file, so it can't be just
+ * ran as a casual npm script. This script file fixes the problem with the paths just
+ * manually importing config file from the outer directory so it work just fine
+ */
+
 // @ts-check
 
-import { config as dotEnvConfig } from "dotenv";
+import { exec } from "child_process";
+import { config as dotenvConfig } from "dotenv";
+import { expand as dotenvExpand } from "dotenv-expand";
 import { resolve } from "path";
-import { migrate } from "postgres-migrations";
-import { env } from "process";
+import { stdout } from "process";
 
-dotEnvConfig();
+dotenvExpand(dotenvConfig({path: resolve("../.env")}));
 
 (async () => {
-  const migrationsPath = resolve("migrations");
+  const migration = exec("npx prisma migrate dev --name postgres-init", (err) => {
+    if(err) {
+      stdout.write("Failed to migrate!\n");
+      stdout.write(err.message);
+    }
+  });
 
-  const config = {
-    database: env.PGDATABASE || "miit",
-    user: env.PGUSER || "docker",
-    password: env.PGPASSWORD || "admin",
-    host: env.PGHOST || "localhost",
-    port: Number(env.PGPORT) || 5432,
-    ensureDatabaseExists: true
-  };
-
-  await migrate(config, migrationsPath);
+  migration.on("end", (code) => {
+    stdout.write("Process finished with code: " + code);
+  });
 })();
