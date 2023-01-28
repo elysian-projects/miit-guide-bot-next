@@ -5,8 +5,7 @@
   "scripts": {
     "start": "docker compose up",
     "build": "docker compose build",
-    "install:all": "npm i && cd ./app && npm install && cd ../server && npm install",
-    "migrate": "cd ./server && npm run migrate"
+    "install:all": "npm i && cd ./app && npm install && cd ../server && npm install"
   },
   "repository": {
     "type": "git",

@@ -5,7 +5,6 @@
   "main": "./dist/index.js",
   "scripts": {
     "start": "npm run build && node ./dist/index.js",
-    "migrate": "node ./scripts/migrate.mjs",
     "build": "tsc && tsc-alias"
   },
   "keywords": [],
