@@ -1,13 +1,17 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
     "outDir": "./dist",
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
       "@/database/*": ["./database/*"],
+      "@/entity/*": ["./entity/*"],
       "@/types/*": ["./types/*"],
       "@/utils/*": ["./utils/*"]
     }
   },
+  "include": ["./src/**/*.ts"]
 }

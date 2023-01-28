@@ -1,137 +1,183 @@
+import { DBSource } from "@/database/data-source";
+import { Tab } from "@/entity/tabs";
+import { createResponse } from "@/utils/response";
+import { serializeTabLabel } from "@/utils/serializer";
+import { isValidId, isValidTabBody } from "@/utils/validations";
 import { Handler } from "express";
 
-export const getTabs: Handler = async () => {
-  // const queryParams = req.query;
+export const getTabs: Handler = async (req, res) => {
+  const {id, label, value, type} = req.query;
 
-  // const db = new PostgreSQL();
+  const conditions: Partial<Tab> = {};
 
-  // const candidateId = (isNaN(Number(queryParams.id)) === false) ? Number(queryParams.id) : null;
-  // const candidateType = (queryParams.type) ? String(queryParams.type) : null;
-  // const candidateLabel = (queryParams.label) ? String(queryParams.label) : null;
-  // const candidateValue = (queryParams.value) ? String(queryParams.value) : null;
+  id && (conditions.id = Number(id));
+  label && (conditions.label = String(label));
+  value && (conditions.value = String(value));
+  type && (conditions.type = String(type));
 
-  // const connection = await db.getConnection();
+  const tabs = await DBSource.getRepository(Tab).find({
+    where: conditions,
+    order: {
+      id: "DESC"
+    }
+  });
 
-  // const data = await connection
-  //   .selectFrom(tTabs)
-  //   .where(tTabs.id.equalsIfValue(candidateId))
-  //   .and(tTabs.type.equalsIfValue(candidateType))
-  //   .and(tTabs.label.equalsIfValue(candidateLabel))
-  //   .and(tTabs.value.equalsIfValue(candidateValue))
-  //   .select({
-  //     id: tTabs.id,
-  //     label: tTabs.label,
-  //     value: tTabs.value,
-  //     type: tTabs.type
-  //   })
-  //   .executeSelectMany();
+  if(tabs.length === 0) {
+    res.status(404).json(createResponse({
+      status: 404,
+      ok: false,
+      message: "No tabs found"
+    }));
 
-  // const response: IResponse = (data.length !== 0)
-  //   ? createResponse({
-  //     status: 200,
-  //     ok: true,
-  //     data
-  //   })
-  //   : createResponse({
-  //     status: 404,
-  //     ok: false,
-  //     message: "Not found!"
-  //   });
+    return;
+  }
 
-  // res.json(response);
+  res.status(200).json(createResponse({
+    status: 200,
+    ok: true,
+    data: tabs
+  }));
 };
 
-export const insertTab: Handler = async () => {
-  // const body = req.body;
+export const insertTab: Handler = async (req, res) => {
+  const body = req.body;
 
-  // if(!isValidTabBody(body)) {
-  //   res.status(400).json(createResponse({
-  //     status: 400,
-  //     ok: false,
-  //     message: "Invalid data!"
-  //   }));
+  if(!isValidTabBody(body)) {
+    res.status(400).json(createResponse({
+      status: 400,
+      ok: false,
+      message: "Invalid data!"
+    }));
 
-  //   return;
-  // }
+    return;
+  }
 
-  // const tabValue = serializeTabLabel(body.label);
+  const {label, type} = body;
+  const tabValue = serializeTabLabel(label);
 
-  // const connection = await new PostgreSQL().getConnection();
-  // const insertedId = await connection
-  //   .insertInto(tTabs)
-  //   .set({
-  //     label: String(body.label),
-  //     value: tabValue,
-  //     type: String(body.type)
-  //   })
-  //   .onConflictDoNothing()
-  //   .returning({id: tTabs.id})
-  //   .executeInsertNoneOrOne();
+  const existingTab = await DBSource.getRepository(Tab).countBy({
+    label
+  });
 
-  // Boolean(insertedId) === false
-  // ? res.status(409).json(createResponse({
-  //     status: 409,
-  //     ok: false,
-  //     message: "A tab with given name already exists!"
-  //   }))
-  // : res.status(201).json(createResponse({
-  //     status: 201,
-  //     ok: true
-  //   }));
+  if(existingTab !== 0) {
+    res.status(409).json(createResponse({
+      status: 409,
+      ok: false,
+      message: "A tab with given name already exists!"
+    }));
+
+    return;
+  }
+
+  const tab = new Tab();
+  tab.label = String(label);
+  tab.value = tabValue;
+  tab.type = String(type);
+
+  await DBSource.getRepository(Tab).save(tab);
+
+  res.status(201).json(createResponse({
+    status: 201,
+    ok: true
+  }));
 };
 
-export const updateTab: Handler = async () => {
-  // const body = req.body;
+export const updateTab: Handler = async (req, res) => {
+  const body = req.body;
 
-  // const connection = await new PostgreSQL().getConnection();
+  const {id, label, type} = body;
 
-  // if(!body.id || !await tabExists(connection, {id: body.id})) {
-  //   res.status(404).json(createResponse({
-  //     status: 404,
-  //     ok: false,
-  //     message: "No tab found!"
-  //   }));
+  if(!isValidId(id)) {
+    res.status(400).json(createResponse({
+      status: 400,
+      ok: false,
+      message: "Invalid id!"
+    }));
 
-  //   return;
-  // }
+    return;
+  }
 
-  // const tabValue = (body.label)
-  //   ? serializeTabLabel(body.label)
-  //   : null;
+  if(!label && !type) {
+    res.status(400).json(createResponse({
+      status: 400,
+      ok: false,
+      message: "Invalid data!"
+    }));
 
-  //   await connection
-  //   .update(tTabs)
-  //   .setIfValue({
-  //     label: body.label,
-  //     value: tabValue,
-  //     type: body.type
-  //   })
-  //   .where(tTabs.id.equals(Number(body.id)))
-  //   .executeUpdate();
+    return;
+  }
 
-  // res.json(createResponse({
-  //   status: 200,
-  //   ok: true
-  // }));
+  const tabRepo = DBSource.getRepository(Tab);
+
+  const foundTab = await tabRepo.findOneBy({
+    id: Number(id)
+  });
+
+  if(!foundTab) {
+    res.status(404).json(createResponse({
+      status: 404,
+      ok: false,
+      message: "No tab found!"
+    }));
+
+    return;
+  }
+
+  const tabValue = (label)
+    ? serializeTabLabel(label)
+    : null;
+
+  label && (foundTab.label = label);
+  tabValue && (foundTab.value = tabValue);
+  type && (foundTab.type = type);
+
+  tabRepo.save(foundTab);
+
+  res.json(createResponse({
+    status: 200,
+    ok: true
+  }));
 };
 
-// type PropsType = {
-//   id?: number,
-//   label?: string,
-//   value?: string,
-//   type?: string
-// }
-// const tabExists = async (connection: PostgresConnection, props: PropsType): Promise<boolean> => {
-//   const candidateLabel = (props.label) ? String(props.label) : null;
-//   const candidateValue = (props.value) ? String(props.value) : null;
-//   const candidateType = (props.type) ? String(props.type) : null;
+export const deleteTab: Handler = async (req, res) => {
+  const {id: bodyId} = req.body;
+  const {id: queryId} = req.query;
 
-//   return (await connection
-//     .selectFrom(tTabs)
-//     .where(tTabs.id.equalsIfValue(props.id))
-//     .and(tTabs.label.containsIfValue(candidateLabel))
-//     .and(tTabs.value.containsIfValue(candidateValue))
-//     .and(tTabs.type.containsIfValue(candidateType))
-//     .select({id: tTabs.id})
-//     .executeSelectMany()).length !== 0;
-// };
+  if(!hasValidId(bodyId, queryId)) {
+    res.status(400).json(createResponse({
+      status: 400,
+      ok: false,
+      message: "Tab id was not provided!"
+    }));
+
+    return;
+  }
+
+  const id = Number(bodyId ?? queryId);
+
+  const tabRepo = DBSource.getRepository(Tab);
+  const foundTab = await tabRepo.findOneBy({
+    id
+  });
+
+  if(!foundTab) {
+    res.status(404).json(createResponse({
+      status: 404,
+      ok: false,
+      message: "No tab found!"
+    }));
+
+    return;
+  }
+
+  await tabRepo.delete(foundTab);
+
+  res.json(createResponse({
+    status: 200,
+    ok: true
+  }));
+};
+
+const hasValidId = (id1: unknown, id2: unknown): boolean => {
+  return (!id1 && !id2) || (isNaN(Number(id1)) && isNaN(Number(id2))) === false;
+};
