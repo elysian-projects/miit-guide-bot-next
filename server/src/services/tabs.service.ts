@@ -4,19 +4,22 @@ import { createResponse } from "@/utils/response";
 import { serializeTabLabel } from "@/utils/serializer";
 import { isValidId, isValidTabBody } from "@/utils/validations";
 import { Handler } from "express";
+import { FindOptionsWhere } from "typeorm";
 
 export const getTabs: Handler = async (req, res) => {
   const {id, label, value, type} = req.query;
 
-  const conditions: Partial<Tab> = {};
+  const conditions: FindOptionsWhere<Tab> = {};
 
-  id && (conditions.id = Number(id));
+  isValidId(id) && (conditions.id = Number(id));
   label && (conditions.label = String(label));
   value && (conditions.value = String(value));
   type && (conditions.type = String(type));
 
   const tabs = await DBSource.getRepository(Tab).find({
     where: conditions,
+
+    // TODO: add orderBy query prop
     order: {
       id: "DESC"
     }
@@ -143,7 +146,7 @@ export const deleteTab: Handler = async (req, res) => {
   const {id: bodyId} = req.body;
   const {id: queryId} = req.query;
 
-  if(!hasValidId(bodyId, queryId)) {
+  if(!isValidId(bodyId) && !isValidId(queryId)) {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
@@ -176,8 +179,4 @@ export const deleteTab: Handler = async (req, res) => {
     status: 200,
     ok: true
   }));
-};
-
-const hasValidId = (id1: unknown, id2: unknown): boolean => {
-  return (!id1 && !id2) || (isNaN(Number(id1)) && isNaN(Number(id2))) === false;
 };

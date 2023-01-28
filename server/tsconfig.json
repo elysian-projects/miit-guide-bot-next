@@ -9,6 +9,7 @@
       "@/*": ["./*"],
       "@/database/*": ["./database/*"],
       "@/entity/*": ["./entity/*"],
+      "@/services/*": ["./services/*"],
       "@/types/*": ["./types/*"],
       "@/utils/*": ["./utils/*"]
     }

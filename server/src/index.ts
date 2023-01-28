@@ -1,10 +1,11 @@
 import bodyParser from "body-parser";
 import express, { Router } from "express";
 import { join } from "path";
-import * as tabController from "./controllers/tabs.controller";
-import * as userController from "./controllers/users.controller";
 import { DBSource } from "./database/data-source";
-import * as baseRoutes from "./routes/base";
+import * as articleService from "./services/articles.service";
+import * as baseService from "./services/base.service";
+import * as tabService from "./services/tabs.service";
+import * as userService from "./services/users.service";
 
 // Initialize database connection and make migrations
 DBSource
@@ -20,18 +21,25 @@ const PORT = process.env.SERVER_PORT || 5000;
 const router = Router();
 
 // Router handlers
-router.get("/", baseRoutes.index);
+router.get("/", baseService.index);
 
 // User routes
-router.get("/api/users", userController.getUser);
+router.get("/api/users", userService.getUser);
 
 // Tab routes
-router.post("/api/tabs", tabController.insertTab);
-router.get("/api/tabs", tabController.getTabs);
-router.put("/api/tabs", tabController.updateTab);
-router.delete("/api/tabs", tabController.deleteTab);
+router.post("/api/tabs", tabService.insertTab);
+router.get("/api/tabs", tabService.getTabs);
+router.put("/api/tabs", tabService.updateTab);
+router.delete("/api/tabs", tabService.deleteTab);
 
-router.get("*", baseRoutes.notFound);
+// Article routes
+router.post("/api/articles", articleService.insertArticle);
+router.get("/api/articles", articleService.getArticles);
+router.put("/api/articles", articleService.updateArticle);
+router.delete("/api/articles", articleService.deleteArticle);
+
+// The rest queries must be considered as non-correct routes
+router.get("*", baseService.notFound);
 
 // Middlewares
 server.use(bodyParser.json());

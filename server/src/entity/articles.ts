@@ -17,12 +17,14 @@ export class Article {
   @Column("text")
   content: string;
 
+  // TODO: think about this props, we should probably remove it
+  // as the type is tracked in the tabs table
   @Column("varchar")
   type: string;
 
   @Column("varchar")
   picture: string;
 
-  @Column({type: "varchar", array: true})
-  links: string[];
+  @Column({type: "varchar", array: true, default: []})
+  links?: string;
 }
