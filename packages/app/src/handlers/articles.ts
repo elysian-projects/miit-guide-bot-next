@@ -5,10 +5,12 @@ import { EXCURSION_REPLY } from "@/chat/constants";
 import { Pagination } from "@/components/control-flow";
 import { IControlFlow } from "@/components/control-flow/types";
 import { createReplyMarkup } from "@/components/reply-markup";
-import { PostgreSQL } from "@/database/postgresql";
 import { ContentNode } from "@/types/content";
+import { IResponse } from "@/types/server";
 import { UserData, UserDataContent } from "@/types/user";
 import { getChatId } from "@/utils/common";
+import { getApiURL } from "@/utils/server";
+import axios from "axios";
 import { Context } from "grammy";
 
 export const handleArticleClick = (ctx: Context, locations: object[], controlFlow: IControlFlow) => {
@@ -43,11 +45,11 @@ const formatData = (locations: object[]): UserData => {
 };
 
 export const openLocationsChoice = async (ctx: Context): Promise<void> => {
-  const data = await new PostgreSQL().query("SELECT * FROM tabs WHERE tab_type = $1", ["location"]);
+  const response = await axios.get<IResponse>(`${getApiURL()}/tabs?type=location`);
 
-  if(data.rowCount === 0) {
-    throw new Error("No locations found!");
+  if(!response.data.ok || !response.data.data) {
+    throw new Error(response.data.message || "Error fetching data!");
   }
 
-  await ctx.reply(EXCURSION_REPLY, {reply_markup: createReplyMarkup("inline", imageAdapter(data.rows))});
+  await ctx.reply(EXCURSION_REPLY, {reply_markup: createReplyMarkup("inline", imageAdapter(response.data.data))});
 };

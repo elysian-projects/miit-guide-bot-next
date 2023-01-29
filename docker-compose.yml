@@ -1,26 +1,31 @@
 version: '3.8'
 services:
-  # Telegram bot
+  # Packages
   app:
     container_name: app
-    build: ./app
+    build: ./packages/app
+    depends_on:
+      - server
     configs:
       - source: base_tsconfig
-        target: /tsconfig.json
+        target: /tsconfig.options.json
     env_file:
       - .env
+    restart: unless-stopped
 
-  # Server
   server:
     container_name: server
-    build: ./server
+    build: ./packages/server
     configs:
       - source: base_tsconfig
-        target: /tsconfig.json
+        target: /tsconfig.options.json
     env_file:
       - .env
     ports:
       - $SERVER_PORT:$SERVER_PORT
+    expose:
+      - $SERVER_PORT
+    restart: unless-stopped
 
   # Database
   postgresql:
@@ -42,7 +47,7 @@ networks:
 
 configs:
   base_tsconfig:
-    file: ./tsconfig.json
+    file: ./tsconfig.options.json
 
 volumes:
   postgres:

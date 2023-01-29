@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../../tsconfig.options.json",
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
@@ -10,6 +10,7 @@
       "@/database/*": ["./database/*"],
       "@/entity/*": ["./entity/*"],
       "@/services/*": ["./services/*"],
+      "@/types": ["./types"],
       "@/types/*": ["./types/*"],
       "@/utils/*": ["./utils/*"]
     }

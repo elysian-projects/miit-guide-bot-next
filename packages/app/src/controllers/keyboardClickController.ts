@@ -3,11 +3,13 @@ import { locationButton } from "@/chat/images";
 import { Pagination, Separation } from "@/components/control-flow";
 import { IControlFlow } from "@/components/control-flow/types";
 import { removeInlineReplyMarkup } from "@/components/reply-markup";
-import { PostgreSQL } from "@/database/postgresql";
 import { handleArticleClick, openLocationsChoice } from "@/handlers/articles";
 import { handleControlButtonClick } from "@/handlers/controls";
 import { ArticleType } from "@/types/content";
+import { IResponse } from "@/types/server";
 import { extractFromImages } from "@/utils/image";
+import { getApiURL } from "@/utils/server";
+import axios from "axios";
 import { Context } from "grammy";
 
 type ResponseType = {
@@ -114,12 +116,15 @@ export class KeyboardRouter {
    * @returns {Promise<ResponseType>}
    */
   private matchButtonType = async (clickData: string, articleType: ArticleType): Promise<ResponseType> => {
-    const data = await new PostgreSQL().query("SELECT * FROM articles WHERE (label = $1 OR _value = $1) AND _type = $2", [clickData, articleType]);
+    const {data: responseWithLabel} = await axios.get<IResponse>(`${getApiURL()}/articles?label=${clickData}&type=${articleType}`);
+    const {data: responseWithValue} = await axios.get<IResponse>(`${getApiURL()}/articles?value=${clickData}&type=${articleType}`);
 
-    return (data.rowCount !== 0)
+    const data = responseWithValue.data ?? responseWithLabel.data ?? [];
+
+    return (data.length !== 0)
       ? {
         found: true,
-        data: data.rows
+        data
       } : {
         found: false,
         data: null

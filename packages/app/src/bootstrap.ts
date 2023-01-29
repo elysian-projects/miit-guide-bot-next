@@ -30,8 +30,8 @@ bot.hears(extractFromImages(Object.values(keyboardControls), "label"), keyboardR
 // None of the above handlers were caught
 bot.on("message", onUnknown);
 
-// Catching errors
-bot.catch((err) => {
+// Handling errors
+bot.catch(err => {
   const ctx = err.ctx;
   console.error(`Error while handling update ${ctx.update.update_id}:`);
   const e = err.error;
