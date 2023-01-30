@@ -57,7 +57,7 @@ bot.catch(err => {
     // Appear when our server sends a response with status different from `2**` or doesn't respond at all,
     // in this case the data cannot be fetched or there is just nothing to fetch (empty response with `404` status code)
     case AxiosError: {
-      console.error("Axios error:", e.description);
+      console.error("Axios error:", e);
       ctx.reply(NO_CONTENT);
       break;
     }
