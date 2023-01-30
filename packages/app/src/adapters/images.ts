@@ -6,15 +6,17 @@ import { Image } from "@/types/lib";
  * @param {object[]} data - data from the table `tabs`
  * @returns {Image[]}
  */
-export const imageAdapter = (data: object[]): Image[] => {
+export const imageAdapter = <T extends Image>(data: T[]): Image[] => {
   const images: Image[] = [];
 
   for(const row of data) {
-    if(Object.hasOwn(row, "tab_value") && Object.hasOwn(row, "tab_label")) {
+    if(Object.hasOwn(row, "value") && Object.hasOwn(row, "value")) {
       images.push({
-        value: row["tab_value" as unknown as keyof typeof row],
-        label: row["tab_label" as unknown as keyof typeof row],
+        value: row.value,
+        label: row.label,
       });
+    } else {
+      throw new Error("Invalid data!");
     }
   }
 

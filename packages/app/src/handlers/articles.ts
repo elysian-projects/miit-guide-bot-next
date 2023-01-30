@@ -6,6 +6,7 @@ import { Pagination } from "@/components/control-flow";
 import { IControlFlow } from "@/components/control-flow/types";
 import { createReplyMarkup } from "@/components/reply-markup";
 import { ContentNode } from "@/types/content";
+import { Image } from "@/types/lib";
 import { IResponse } from "@/types/server";
 import { UserData, UserDataContent } from "@/types/user";
 import { getChatId } from "@/utils/common";
@@ -17,7 +18,7 @@ export const handleArticleClick = (ctx: Context, locations: object[], controlFlo
   const chatId = getChatId(ctx);
 
   const content = (controlFlow instanceof Pagination && locations.length === 1)
-    ? computeArticleData(locations[0] as ContentNode)
+    ? computeArticleData(locations[0] as ContentNode[])
     : locations;
 
   const data = formatData(content);
@@ -45,11 +46,11 @@ const formatData = (locations: object[]): UserData => {
 };
 
 export const openLocationsChoice = async (ctx: Context): Promise<void> => {
-  const response = await axios.get<IResponse>(`${getApiURL()}/tabs?type=location`);
+  const {data} = await axios.get<IResponse>(`${getApiURL()}/tabs?type=location`);
 
-  if(!response.data.ok || !response.data.data) {
-    throw new Error(response.data.message || "Error fetching data!");
+  if(!data.ok || !data.data) {
+    throw new Error(data.message || "Error fetching data!");
   }
 
-  await ctx.reply(EXCURSION_REPLY, {reply_markup: createReplyMarkup("inline", imageAdapter(response.data.data))});
+  await ctx.reply(EXCURSION_REPLY, {reply_markup: createReplyMarkup("inline", imageAdapter(data.data as Image[]))});
 };

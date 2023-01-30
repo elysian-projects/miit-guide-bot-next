@@ -9,7 +9,7 @@ import { ArticleType } from "@/types/content";
 import { IResponse } from "@/types/server";
 import { extractFromImages } from "@/utils/image";
 import { getApiURL } from "@/utils/server";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Context } from "grammy";
 
 type ResponseType = {
@@ -38,6 +38,8 @@ export class KeyboardRouter {
 
     // Button of type `article`
     await this.handleLocationChoiceButton(ctx, clickData, "article");
+
+    throw new AxiosError("No data found!");
   };
 
   /**
@@ -84,11 +86,11 @@ export class KeyboardRouter {
    * @returns {boolean}
    */
   private handleLocationChoiceButton = async (ctx: Context, clickData: string, articleType: ArticleType): Promise<boolean> => {
-    const location = await this.matchButtonType(clickData, articleType);
+    const {found, data} = await this.matchButtonType(clickData, articleType);
 
-    if(location.found && location.data) {
+    if(found && data) {
       removeInlineReplyMarkup(ctx);
-      handleArticleClick(ctx, location.data, this.getControlFlowType(articleType));
+      handleArticleClick(ctx, data, this.getControlFlowType(articleType));
       return true;
     }
 
@@ -115,20 +117,22 @@ export class KeyboardRouter {
    * @param {ArticleType} articleType type of the article from the database
    * @returns {Promise<ResponseType>}
    */
-  private matchButtonType = async (clickData: string, articleType: ArticleType): Promise<ResponseType> => {
-    const {data: responseWithLabel} = await axios.get<IResponse>(`${getApiURL()}/articles?label=${clickData}&type=${articleType}`);
-    const {data: responseWithValue} = await axios.get<IResponse>(`${getApiURL()}/articles?value=${clickData}&type=${articleType}`);
-
-    const data = responseWithValue.data ?? responseWithLabel.data ?? [];
-
-    return (data.length !== 0)
-      ? {
-        found: true,
-        data
-      } : {
+  private matchButtonType = (clickData: string, articleType: ArticleType): Promise<ResponseType> => {
+    return axios.get<IResponse>(`${getApiURL()}/articles?value=${clickData}&type=${articleType}`)
+    .then(({data}) => {
+      return {
+        found: Boolean(data.data),
+        data: data.data ?? null
+      };
+    })
+    // We don't want an error to be thrown further, so we catch it here and treat it
+    // not as an error, but as a flag that article in current configuration is not found
+    .catch(() => {
+      return {
         found: false,
         data: null
       };
+    });
   };
 
   /**

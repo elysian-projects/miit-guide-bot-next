@@ -24,13 +24,13 @@ export type ArticleType = "article" | "location";
  */
 export interface ContentNode {
   /** Id if the parent record */
-  tab_id: number,
+  tabId: number,
   /** Public label of the current node */
   label: string,
   /** Value for tracking state in the system */
-  _value: string,
+  value: string,
   /** Rich content that includes main information on the node */
   content: string | string[],
   /** Type of the record */
-  _type: ArticleType
+  type: ArticleType
 }

@@ -1,5 +1,6 @@
 import { imageAdapter } from "@/adapters/images";
 import { createReplyMarkup, removeMenuReplyMarkup } from "@/components/reply-markup";
+import { Image } from "@/types/lib";
 import { IResponse } from "@/types/server";
 import { getChatId, removeUserFromStores } from "@/utils/common";
 import { getApiURL } from "@/utils/server";
@@ -13,13 +14,14 @@ export const onStart = async (ctx: Context) => {
 
   const {data: response} = await axios.get<IResponse>(`${getApiURL()}/tabs?type=article`);
 
+  // FIXME: This will probably never happen because the bot panics before this error is sent, maybe it should just be removed?
   if(!response.ok || !response.data) {
     throw new Error(response.message ?? "Error fetching data!");
   }
 
   removeUserFromStores(chatId);
 
-  const replyMarkup = createReplyMarkup("inline", [locationButton, ...imageAdapter(response.data)]);
+  const replyMarkup = createReplyMarkup("inline", [locationButton, ...imageAdapter(response.data as Image[])]);
 
   // Separate caption and photo into different messages to be able to remove the menu keyboard
   await ctx.replyWithPhoto(MAIN_HUB_PHOTO, {reply_markup: removeMenuReplyMarkup()});
