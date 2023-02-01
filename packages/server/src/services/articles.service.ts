@@ -1,24 +1,24 @@
 import { DBSource } from "@/database/data-source";
 import { Article } from "@/entity/articles";
+import { normalizeContent } from "@/utils/formatters";
 import { createResponse } from "@/utils/response";
 import { serializeTabLabel as serializeLabel } from "@/utils/serializer";
 import { hasNonEmpty, isValidArticleBody, isValidId } from "@/utils/validations";
 import { Handler } from "express";
-import { FindOptionsWhere } from "typeorm";
 
 export const getArticles: Handler = async (req, res) => {
-  const {id, tabId, label, value, type} = req.query;
+  const query = req.query;
 
-  const conditions: FindOptionsWhere<Article> = {};
+  // const conditions: FindOptionsWhere<Article> = {};
 
-  isValidId(id) && (conditions.id = Number(id));
-  isValidId(tabId) && (conditions.tabId = Number(tabId));
-  label && (conditions.label = String(label));
-  value && (conditions.value = String(value));
-  type && (conditions.type = String(type));
+  // isValidId(isd) && (conditions.id = Number(id));
+  // isValidId(tabId) && (conditions.tabId = Number(tabId));
+  // label && (conditions.label = String(label));
+  // value && (conditions.value = String(value));
+  // type && (conditions.type = String(type));
 
   const articles = await DBSource.getRepository(Article).find({
-    where: conditions,
+    where: query,
 
     // TODO: add orderBy query prop
     order: {
@@ -57,7 +57,7 @@ export const insertArticle: Handler = async (req, res) => {
     return;
   }
 
-  const {tabId, label, content, type, picture, links} = body;
+  const {tabValue, label, content, type, picture, links} = body;
   const articleValue = serializeLabel(label);
 
   const existingArticle = await DBSource.getRepository(Article).countBy({label});
@@ -73,10 +73,12 @@ export const insertArticle: Handler = async (req, res) => {
   }
 
   const article = new Article();
-  article.tabId = Number(tabId);
+  article.tabValue = String(tabValue);
   article.label = String(label);
   article.value = articleValue;
-  article.content = String(content);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  article.content = normalizeContent(content);
   article.type = String(type);
   article.picture = String(picture);
 
@@ -95,7 +97,7 @@ export const insertArticle: Handler = async (req, res) => {
 export const updateArticle: Handler = async (req, res) => {
   const body = req.body;
 
-  const {id, tabId, label, content, type, picture, links} = body;
+  const {id, tabId: tabValue, label, content, type, picture, links} = body;
 
   if(!isValidId(id)) {
     res.status(400).json(createResponse({
@@ -107,7 +109,7 @@ export const updateArticle: Handler = async (req, res) => {
     return;
   }
 
-  if(!hasNonEmpty(tabId, label, content, type, picture, links) || (links && !Array.isArray(links))) {
+  if(!hasNonEmpty(tabValue, label, content, type, picture, links) || (links && !Array.isArray(links))) {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
@@ -137,7 +139,7 @@ export const updateArticle: Handler = async (req, res) => {
     ? serializeLabel(label)
     : null;
 
-  isValidId(tabId) && (foundArticle.tabId = tabId);
+  tabValue && (foundArticle.tabValue = tabValue);
   label && (foundArticle.label = label);
   content && (foundArticle.content = content);
   articleValue && (foundArticle.value = articleValue);

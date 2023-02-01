@@ -5,8 +5,8 @@ export class Article {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("int4")
-  tabId: number;
+  @Column("varchar")
+  tabValue: string;
 
   @Column("varchar")
   label: string;
@@ -14,11 +14,9 @@ export class Article {
   @Column("varchar")
   value: string;
 
-  @Column("text")
+  @Column({type: "text", array: true})
   content: string;
 
-  // TODO: think about this props, we should probably remove it
-  // as the type is tracked in the tabs table
   @Column("varchar")
   type: string;
 
