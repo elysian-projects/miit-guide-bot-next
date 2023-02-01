@@ -11,3 +11,8 @@ export const keyboardControls: {[key in ControlButtons]: Image} = {
   NEXT: {value: "NEXT", label: "Далее"},
   HUB: {value: "HUB", label: "В меню"},
 };
+
+/** Button that triggers location choice menu */
+export const locationButton: Image = {
+  label: "Памятники РУТ", value: "locations"
+};
