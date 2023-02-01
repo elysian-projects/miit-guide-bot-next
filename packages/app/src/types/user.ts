@@ -1,5 +1,5 @@
+import { Content } from "@/components/content";
 import { User } from "@/entities/user";
-import { ContentManager } from "@/utils/contentManager";
 import { ContentNode, WithLinks, WithPicture } from "./content";
 
 /**
@@ -19,7 +19,7 @@ export interface UserState {
   /** Chat id, provided by Telegram API through context */
   readonly id: ChatId,
   /** Array with content nodes to be shown to user on each step */
-  content: ContentManager,
+  content: Content,
   /** Current content step, that represents index of the active content node. Default value is `0` */
   step: number
 }

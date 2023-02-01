@@ -1,6 +1,6 @@
+import { Content } from "@/components/content";
 import { IUser } from "@/types/controllers";
 import { ChatId, FlatContent, UserDataContent, UserState } from "@/types/user";
-import { ContentManager } from "@/utils/contentManager";
 
 export class User implements IUser {
   private state: UserState;
@@ -22,7 +22,7 @@ export class User implements IUser {
   public setContent = (data: UserDataContent[]): void => {
     this.state = {
       ...this.getDefaultData(this.id()),
-      content: new ContentManager(data)
+      content: new Content(data)
     };
   };
 
@@ -85,7 +85,7 @@ export class User implements IUser {
   private getDefaultData = (id: ChatId): UserState => {
     return {
       id,
-      content: new ContentManager([]),
+      content: new Content([]),
       step: 0
     };
   };

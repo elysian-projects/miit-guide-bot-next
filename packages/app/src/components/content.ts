@@ -1,7 +1,7 @@
 import { ArticleType } from "@/types/content";
 import { FlatContent, UserDataContent } from "@/types/user";
 
-export class ContentManager {
+export class Content {
   private content!: UserDataContent<FlatContent>[];
   private contentAmount = 0;
 
