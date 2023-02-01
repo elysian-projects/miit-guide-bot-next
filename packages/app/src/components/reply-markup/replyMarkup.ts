@@ -55,6 +55,6 @@ const computeMenuKeyboardOptions = (options: Partial<MenuMarkupOptions>): MenuMa
 const addButtons = (markup: Keyboard | InlineKeyboard, buttons: Image[], columns: number) => {
   buttons.forEach((button, index) => {
     markup.text(button.label, button.value);
-    shouldBreakRow(index, columns) ?? markup.row();
+    shouldBreakRow(index, columns) && markup.row();
   });
 };
