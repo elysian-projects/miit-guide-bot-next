@@ -12,6 +12,7 @@
       "@/entities/*": ["./entities/*"],
       "@/handlers/*": ["./handlers/*"],
       "@/models/*": ["./models/*"],
+      "@/services/*": ["./services/*"],
       "@/types/*": ["./types/*"],
       "@/utils/*": ["./utils/*"],
       "@/views/*": ["./views/*"],

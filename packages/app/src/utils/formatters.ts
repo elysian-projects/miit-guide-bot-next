@@ -1,7 +1,6 @@
-import { EXTRA_LINKS } from "@/chat/constants";
-import { ContentNode, WithLinks } from "@/types/content";
-
-// TODO: create message builder service
+import { EXTRA_LINKS } from "@/constants/messages";
+import { MessageBuilder } from "@/services/messageBuilder";
+import { StepInformation, UserDataContent } from "@/types/user";
 
 /**
  * Represents user data steps like `1/5`, where `1` is the current step, `5` is the last possible step.
@@ -15,17 +14,28 @@ export const formatCountLabel = (currentStep: number, maxSteps: number): string 
  * Takes content node and returns string with well-formatted message to be sent to the user.
  * The message will contain bold title, main content info, and extra links part, if links are provided.
  */
-export const formatMessage = (content: ContentNode & Partial<WithLinks>, options: {currentStep: number, maxSteps: number}): string => {
-  let message = `
-*${content.label}*
+export const formatMessage = (content: UserDataContent, options: StepInformation): string => {
+  const messageBuilder = new MessageBuilder();
 
-${content.content[options.currentStep]}`;
+  messageBuilder
+    .append(content.label, "*")
+    .appendEmptyLine()
+    .appendLine(content.content[options.currentStep]);
 
-  if(content.links && (options.currentStep === options.maxSteps - 1)) {
-    message += `\n\n${EXTRA_LINKS} ${content.links.join(", ")}`;
+  if(shouldAddLinks(content, options)) {
+    messageBuilder
+      .appendEmptyLine()
+      .appendLine(EXTRA_LINKS)
+      .append(" ")
+      .append(content.links.join(", "));
   }
 
-  message += `\n\n*(${formatCountLabel(options.currentStep, options.maxSteps)})*`;
+  return messageBuilder
+    .appendEmptyLine()
+    .appendLine(formatCountLabel(options.currentStep, options.maxSteps), "*")
+    .message;
+};
 
-  return message;
+const shouldAddLinks = (content: UserDataContent, options: StepInformation): content is UserDataContent & {links: string[]} & boolean => {
+  return (content.links && (options.currentStep === options.maxSteps - 1)) ?? false;
 };
