@@ -1,7 +1,7 @@
 import { onHelp, onStart, onUnknown } from "@/controllers/commands.controller";
 import { config as dotenvConfig } from "dotenv";
 import { Bot } from "grammy";
-import { keyboardControls } from "./chat/controls";
+import { keyboardControls } from "./constants/controls";
 import { errorController } from "./controllers/error.controller";
 import { onKeyboardClick } from "./controllers/keyboard.controller";
 import { Store } from "./entities/store";
