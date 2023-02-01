@@ -1,12 +1,13 @@
 import { IUser } from "@/types/controllers";
-import { ChatId, UserData, UserDataContent, UserState } from "@/types/user";
+import { ChatId, FlatContent, UserDataContent, UserState } from "@/types/user";
+import { ContentManager } from "@/utils/contentManager";
 
 export class User implements IUser {
   private state: UserState;
   private changeStepHandlers: (() => void)[];
 
   public constructor(id: ChatId) {
-    this.state = {id, data: this.getDefaultData()};
+    this.state = this.getDefaultData(id);
     this.changeStepHandlers = [];
   }
 
@@ -18,89 +19,59 @@ export class User implements IUser {
     return this.state.id;
   };
 
-  public getData = (): UserData => {
-    return this.state.data;
-  };
-
   public setContent = (data: UserDataContent[]): void => {
-    this.state.data = {
-      ...this.getDefaultData(),
-      content: data
+    this.state = {
+      ...this.getDefaultData(this.id()),
+      content: new ContentManager(data)
     };
   };
 
-  public getCurrentContent = (): UserDataContent => {
-    const outerStep = this.state.data.outerStep;
-
+  public getCurrentContent = (): UserDataContent<FlatContent> => {
     if(!this.isPointsListSet()) {
       throw new Error("Cannot handle step, too few data!");
     }
 
-    return this.state.data.content[outerStep];
+    return this.state.content.getContent(this.state.step);
   };
 
-  public getCurrentInnerStep = (): number => {
-    return this.state.data.innerStep;
+  public getAmountOfContent = (): number => {
+    return this.state.content.getAmountOfContent();
   };
 
-  public getAmountOfInnerContent = (): number => {
-    return this.state.data.content[this.state.data.outerStep].content.length;
+  public getCurrentStep = (): number => {
+    return this.state.step;
   };
 
-  // TODO: refactor these chains
   public nextStep = (): void => {
     if(!this.isPointsListSet()) {
       throw new Error("Location points list was not provided!");
     }
 
-    const innerStep = this.state.data.innerStep;
-    const outerStep = this.state.data.outerStep;
-
-    if(innerStep < this.state.data.content[outerStep].content.length - 1) {
-      this.state.data.innerStep++;
-      this.callChangeStepHandlers();
-      return;
-    }
-
-    if(outerStep < this.state.data.content.length - 1) {
-      this.state.data.outerStep++;
-      this.state.data.innerStep = 0;
+    if(!this.isLastStep()) {
+      this.state.step++;
       this.callChangeStepHandlers();
       return;
     }
   };
 
-  // TODO: refactor these chains
   public prevStep = (): void => {
     if(!this.isPointsListSet()) {
       throw new Error("Location points list was not provided!");
     }
 
-    const innerStep = this.state.data.innerStep;
-    const outerStep = this.state.data.outerStep;
-
-    if(innerStep > 0) {
-      this.state.data.innerStep--;
-      this.callChangeStepHandlers();
-      return;
-    }
-
-    if(outerStep > 0) {
-      this.state.data.outerStep--;
-      this.state.data.innerStep = this.state.data.content[this.state.data.outerStep].content.length - 1;
+    if(!this.isFirstStep()) {
+      this.state.step--;
       this.callChangeStepHandlers();
       return;
     }
   };
 
   public isFirstStep = (): boolean => {
-    return this.state.data.innerStep === 0 && this.state.data.outerStep === 0;
+    return this.state.step === 0;
   };
 
-  // TODO: refactor chains!!!
   public isLastStep = (): boolean => {
-    return (this.state.data.outerStep === this.state.data.content.length - 1)
-    && (this.state.data.innerStep === this.state.data.content[this.state.data.outerStep].content.length - 1);
+    return (this.state.step === this.state.content.getAmountOfContent() - 1);
   };
 
   private callChangeStepHandlers = (): void => {
@@ -108,14 +79,14 @@ export class User implements IUser {
   };
 
   private isPointsListSet = (): boolean => {
-    return this.state.data.content.length !== 0;
+    return this.state.content.isSet();
   };
 
-  private getDefaultData = (): UserData => {
+  private getDefaultData = (id: ChatId): UserState => {
     return {
-      content: [],
-      innerStep: 0,
-      outerStep: 0
+      id,
+      content: new ContentManager([]),
+      step: 0
     };
   };
 }

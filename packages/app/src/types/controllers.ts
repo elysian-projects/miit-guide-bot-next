@@ -1,14 +1,13 @@
-import { ChatId, UserDataContent } from "./user";
+import { ChatId, FlatContent, UserDataContent } from "./user";
 
 export type EventHandler = () => void;
 
 export interface IUser {
   id: () => ChatId,
-  // getData: () => UserData,
   setContent: (data: UserDataContent[]) => void,
-  getCurrentContent: () => UserDataContent,
-  getCurrentInnerStep: () => number,
-  getAmountOfInnerContent: () => number,
+  getCurrentContent: () => UserDataContent<FlatContent>,
+  getCurrentStep: () => number,
+  getAmountOfContent: () => number,
   addChangeStepHandler: (handler: EventHandler) => void,
   nextStep: () => void,
   prevStep: () => void,

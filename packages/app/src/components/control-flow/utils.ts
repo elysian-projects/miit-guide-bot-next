@@ -2,7 +2,7 @@ import { store } from "@/bootstrap";
 import { createReplyMarkup } from "@/components/reply-markup";
 import { keyboardControls } from "@/constants/controls";
 import { Image, KeyboardType, MessageProps, ReplyMarkupType } from "@/types/lib";
-import { ChatId, StepInformation, UserDataContent } from "@/types/user";
+import { ChatId, FlatContent, StepInformation, UserDataContent } from "@/types/user";
 import { formatMessage } from "@/utils/formatters";
 
 /**
@@ -19,13 +19,13 @@ export function useMessageController<T extends KeyboardType>(replyMarkupType: T,
   props: MessageProps<ReplyMarkupType[T]>,
   isFirstStep: boolean,
   isLastStep: boolean,
-  content: UserDataContent
+  content: UserDataContent<FlatContent>
 } {
   const user = store.getUser(chatId);
 
-  const options = {
-    currentStep: user.getCurrentInnerStep(),
-    maxSteps: user.getAmountOfInnerContent()
+  const options: StepInformation = {
+    currentStep: user.getCurrentStep(),
+    maxSteps: user.getAmountOfContent()
   };
 
   const content = user.getCurrentContent();

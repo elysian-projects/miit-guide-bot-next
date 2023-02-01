@@ -1,7 +1,7 @@
 import { ChatId } from "@/types/user";
 import { UserRecord } from "./types";
 
-export class PaginationBufferController {
+export class PaginationBuffer {
   /** Stores list of user ids for whose the pagination pase message was sent */
   private sentMessagesBuffer: UserRecord[] = [];
 

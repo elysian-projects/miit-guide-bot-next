@@ -65,12 +65,10 @@ export const articleButtonModel = async (ctx: Context, clickData: string): Promi
 const fetchData = async (clickData: string, articleType: ArticleType): Promise<object[]> => {
   try {
     const { data: response } = await axios.get<IResponse>(`${getApiURL()}/articles?tabValue=${clickData}&type=${articleType}`);
-    console.log(response);
     return (response.ok && response.data)
       ? response.data
       : [];
-  } catch (response_1) {
-    console.log(response_1);
+  } catch {
     return [];
   }
 };

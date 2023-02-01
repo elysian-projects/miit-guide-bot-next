@@ -2,10 +2,10 @@ import { IControlFlow } from "@/components/control-flow/types";
 import { ChatId } from "@/types/user";
 import { Context } from "grammy";
 import { checkUserExists, useMessageController } from "../utils";
-import { PaginationBufferController } from "./bufferController";
+import { PaginationBuffer } from "./bufferController";
 
 // This this is used to control the message to be displayed and edited for different users, and also at the same time
-export const paginationBuffer = new PaginationBufferController();
+export const paginationBuffer = new PaginationBuffer();
 
 export class Pagination implements IControlFlow {
   public sendData = async (ctx: Context, chatId: ChatId) => {

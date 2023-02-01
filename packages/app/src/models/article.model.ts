@@ -1,8 +1,8 @@
 import { store } from "@/bootstrap";
 import { Pagination, Separation } from "@/components/control-flow";
-import { ArticleType } from "@/types/content";
 import { UserDataContent } from "@/types/user";
 import { getChatId } from "@/utils/common";
+import { getArticleType } from "@/utils/contentManager";
 import { Context } from "grammy";
 
 export const articleModel = async (ctx: Context, data: UserDataContent[]) => {
@@ -25,14 +25,4 @@ export const articleModel = async (ctx: Context, data: UserDataContent[]) => {
   store.getUser(chatId).addChangeStepHandler(changeStepHandler);
 
   changeStepHandler();
-};
-
-const getArticleType = (content: UserDataContent[]): ArticleType | "invalid" => {
-  const types = content.map(item => item.type);
-
-  return types.every(value => value === "article")
-    ? "article"
-    : types.every(value => value === "location")
-    ? "location"
-    : "invalid";
 };

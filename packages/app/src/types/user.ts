@@ -1,4 +1,5 @@
 import { User } from "@/entities/user";
+import { ContentManager } from "@/utils/contentManager";
 import { ContentNode, WithLinks, WithPicture } from "./content";
 
 /**
@@ -6,28 +7,21 @@ import { ContentNode, WithLinks, WithPicture } from "./content";
  */
 export type ChatId = number;
 
+export type RichContent = string[];
+export type FlatContent = string;
+
 /**
  * Represents a content node on each step of an article or excursion
  */
-export type UserDataContent = ContentNode & WithPicture & Partial<WithLinks>
-
-/**
- * Object that represents data payload, that contains information to be shown on steps
- */
-export interface UserData {
-  /** Array with content nodes to be shown to user on each step */
-  content: UserDataContent[],
-  /** Current step, that represents index of the active content node. Default value is `0`. This value must not be changed manually */
-  // step: number,
-  innerStep: number,
-  outerStep: number
-}
+export type UserDataContent<T extends RichContent | FlatContent = RichContent> = ContentNode<T> & WithPicture & Partial<WithLinks>
 
 export interface UserState {
   /** Chat id, provided by Telegram API through context */
   readonly id: ChatId,
-  /** Data to be shown to a user */
-  data: UserData
+  /** Array with content nodes to be shown to user on each step */
+  content: ContentManager,
+  /** Current content step, that represents index of the active content node. Default value is `0` */
+  step: number
 }
 
 export type StepInformation = {
