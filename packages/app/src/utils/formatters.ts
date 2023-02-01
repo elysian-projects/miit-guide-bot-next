@@ -1,6 +1,6 @@
 import { EXTRA_LINKS } from "@/constants/messages";
-import { MessageBuilder } from "@/services/messageBuilder";
 import { StepInformation, UserDataContent } from "@/types/user";
+import { MessageBuilder } from "@/utils/messageBuilder";
 
 /**
  * Represents user data steps like `1/5`, where `1` is the current step, `5` is the last possible step.
