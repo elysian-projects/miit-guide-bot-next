@@ -30,7 +30,7 @@ export interface ContentNode {
   /** Value for tracking state in the system */
   value: string,
   /** Rich content that includes main information on the node */
-  content: string | string[],
+  content: string[],
   /** Type of the record */
   type: ArticleType
 }

@@ -5,14 +5,16 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
+      "@/adapters/*": ["./adapters/*"],
       "@/chat/*": ["./chat/*"],
       "@/components/*": ["./components/*"],
-      "@/constants/*": ["./constants/*"],
       "@/controllers/*": ["./controllers/*"],
+      "@/entities/*": ["./entities/*"],
       "@/handlers/*": ["./handlers/*"],
-      "@/tabs/*": ["./tabs/*"],
+      "@/models/*": ["./models/*"],
       "@/types/*": ["./types/*"],
       "@/utils/*": ["./utils/*"],
+      "@/views/*": ["./views/*"],
     }
   },
   "include": ["./src/**/*.ts"],

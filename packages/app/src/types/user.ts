@@ -1,4 +1,4 @@
-import { User } from "@/controllers/userController";
+import { User } from "@/entities/user";
 import { ContentNode, WithLinks, WithPicture } from "./content";
 
 /**
@@ -18,7 +18,9 @@ export interface UserData {
   /** Array with content nodes to be shown to user on each step */
   content: UserDataContent[],
   /** Current step, that represents index of the active content node. Default value is `0`. This value must not be changed manually */
-  step: number,
+  // step: number,
+  innerStep: number,
+  outerStep: number
 }
 
 export interface UserState {

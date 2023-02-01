@@ -1,4 +1,4 @@
-import { storeController } from "@/bootstrap";
+import { store } from "@/bootstrap";
 import { keyboardControls } from "@/chat/controls";
 import { createReplyMarkup } from "@/components/reply-markup";
 import { Image, KeyboardType, MessageProps, ReplyMarkupType } from "@/types/lib";
@@ -9,7 +9,7 @@ import { formatMessage } from "@/utils/formatters";
  * Throws an error if user is not added
  */
 export const checkUserExists = (chatId: ChatId): void => {
-  if (!storeController.userExists(chatId)) {
+  if (!store.userExists(chatId)) {
     throw new Error(`User with id ${chatId} not found!`);
   }
 };
@@ -21,11 +21,11 @@ export function useMessageController<T extends KeyboardType>(replyMarkupType: T,
   isLastStep: boolean,
   content: UserDataContent
 } {
-  const user = storeController.getUser(chatId);
+  const user = store.getUser(chatId);
 
   const options = {
-    currentStep: user.getData().step,
-    maxSteps: user.getData().content.length
+    currentStep: user.getCurrentInnerStep(),
+    maxSteps: user.getAmountOfInnerContent()
   };
 
   const content = user.getCurrentContent();

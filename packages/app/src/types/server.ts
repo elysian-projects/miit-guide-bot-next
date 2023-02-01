@@ -1,6 +1,6 @@
-export interface IResponse {
+export interface IResponse<T extends object = object> {
   status: number,
   ok: boolean,
   message?: string,
-  data?: object[]
+  data?: T[]
 }

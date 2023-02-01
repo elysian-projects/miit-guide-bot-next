@@ -1,12 +1,14 @@
-import { ChatId, UserData, UserDataContent } from "./user";
+import { ChatId, UserDataContent } from "./user";
 
 export type EventHandler = () => void;
 
 export interface IUser {
   id: () => ChatId,
-  getData: () => UserData,
-  setData: (data: UserData) => void,
+  // getData: () => UserData,
+  setContent: (data: UserDataContent[]) => void,
   getCurrentContent: () => UserDataContent,
+  getCurrentInnerStep: () => number,
+  getAmountOfInnerContent: () => number,
   addChangeStepHandler: (handler: EventHandler) => void,
   nextStep: () => void,
   prevStep: () => void,
@@ -14,8 +16,8 @@ export interface IUser {
   isLastStep: () => boolean,
 }
 
-export interface IStoreController {
-  addUser: (chatId: ChatId, data: UserData) => IUser,
+export interface IStore {
+  addUser: (chatId: ChatId) => IUser,
   userExists: (chatId: ChatId) => boolean,
   /** Returns a MUTABLE user object */
   getUser: (chatId: ChatId) => IUser,

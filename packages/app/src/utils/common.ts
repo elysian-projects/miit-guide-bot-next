@@ -1,4 +1,4 @@
-import { storeController } from "@/bootstrap";
+import { store } from "@/bootstrap";
 import { paginationBuffer } from "@/components/control-flow/pagination/pagination";
 import { ChatId } from "@/types/user";
 import { Context } from "grammy";
@@ -19,7 +19,7 @@ export const getChatId = (ctx: Context): ChatId => {
  */
 export const removeUserFromStores = (chatId: ChatId): void => {
   // Remove user from the list to avoid unexpected bugs
-  storeController.removeUser(chatId);
+  store.removeUser(chatId);
   // Remove user from the stack
   paginationBuffer.removeUser(chatId);
 };

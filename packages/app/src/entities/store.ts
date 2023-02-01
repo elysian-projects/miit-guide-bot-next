@@ -1,8 +1,8 @@
-import { User } from "@/controllers/userController";
-import { IStoreController, IUser } from "@/types/controllers";
+import { User } from "@/entities/user";
+import { IStore, IUser } from "@/types/controllers";
 import { ChatId, StorageState } from "@/types/user";
 
-export class StoreController implements IStoreController {
+export class Store implements IStore {
   private store: StorageState;
 
   public constructor() {

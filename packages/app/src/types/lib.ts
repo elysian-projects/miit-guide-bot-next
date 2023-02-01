@@ -1,11 +1,11 @@
 import { Context, InlineKeyboard, Keyboard } from "grammy";
-import { ParseMode } from "grammy/out/types.node";
+import { ParseMode, ReplyKeyboardRemove } from "grammy/out/types.node";
 
 /** Keyboard type that represents how the markup is displayed */
 export type KeyboardType = "menu" | "inline";
 
 /** Keyboard types used in a chat */
-export type AvailableKeyboardTypes = Keyboard | InlineKeyboard;
+export type AvailableKeyboardTypes = Keyboard | InlineKeyboard | ReplyKeyboardRemove;
 
 /** Available library reply markup types */
 export type ReplyMarkupType = {
