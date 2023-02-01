@@ -1,5 +1,5 @@
-import { NO_CONTENT, NO_TG_CONNECTION } from "@/chat/constants";
 import { removeInlineReplyMarkup } from "@/components/reply-markup";
+import { NO_CONTENT, NO_TG_CONNECTION } from "@/constants/messages";
 import { sendMessage } from "@/views/general.view";
 import { AxiosError } from "axios";
 import { Context, GrammyError, HttpError } from "grammy";

@@ -1,7 +1,7 @@
 import { store } from "@/bootstrap";
-import { EXCURSION_REPLY } from "@/chat/constants";
-import { keyboardControls } from "@/chat/controls";
 import { createReplyMarkup, removeInlineReplyMarkup } from "@/components/reply-markup";
+import { keyboardControls } from "@/constants/controls";
+import { EXCURSION_REPLY } from "@/constants/messages";
 import { onStart } from "@/controllers/commands.controller";
 import { ArticleType } from "@/types/content";
 import { Image } from "@/types/lib";

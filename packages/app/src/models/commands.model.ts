@@ -1,8 +1,7 @@
-import { imageAdapter } from "@/adapters/images";
-import { GREETINGS, MAIN_HUB_PHOTO, UNKNOWN_COMMAND } from "@/chat/constants";
-import { locationButton } from "@/chat/images";
+import { isValidImage } from "@/adapters/images";
 import { createReplyMarkup, removeMenuReplyMarkup } from "@/components/reply-markup";
-import { Image } from "@/types/lib";
+import { locationButton } from "@/constants/controls";
+import { GREETINGS, MAIN_HUB_PHOTO, UNKNOWN_COMMAND } from "@/constants/messages";
 import { IResponse } from "@/types/server";
 import { ChatId } from "@/types/user";
 import { removeUserFromStores } from "@/utils/common";
@@ -17,7 +16,12 @@ export const startCommandModel = async (ctx: Context, chatId: ChatId) => {
   removeUserFromStores(chatId);
 
   const {data: response} = await axios.get<IResponse>(`${getApiURL()}/tabs?type=article`);
-  const replyMarkup = createReplyMarkup("inline", [locationButton, ...imageAdapter(response.data as Image[] ?? [])]);
+
+  if(!isValidImage(response.data)) {
+    throw new Error("Invalid data!");
+  }
+
+  const replyMarkup = createReplyMarkup("inline", [locationButton, ...response.data]);
 
   // Separate caption and photo into different messages to be able to remove the menu keyboard
   await sendPhoto(ctx, {

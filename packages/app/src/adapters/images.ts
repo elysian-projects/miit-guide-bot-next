@@ -1,26 +1,25 @@
 import { Image } from "@/types/lib";
 
 /**
- * Computes data received from the table `tabs` in the database and makes an array of images out of it
+ * Returns `true` if the given array of objects contains all of the required properties
+ * to be considered as array of images, and `false` otherwise.
  *
- * @deprecated do I really need this? seems weird
- * @param {object[]} data - data from the table `tabs`
- * @returns {Image[]}
+ * @param {object[] | undefined} data unknown array of objects or undefined
+ * @return {boolean} data is Image[]
  */
-// FIXME: maybe replace it with a validator?
-export const imageAdapter = <T extends Image>(data: T[]): Image[] => {
-  const images: Image[] = [];
-
-  for(const row of data) {
-    if(Object.hasOwn(row, "value") && Object.hasOwn(row, "value")) {
-      images.push({
-        value: row.value,
-        label: row.label,
-      });
-    } else {
-      throw new Error("Invalid data!");
-    }
+export const isValidImage = (data: object[] | undefined): data is Image[] => {
+  if(!data) {
+    return false;
   }
 
-  return images;
+  let foundInvalid = false;
+
+  data.forEach(item => {
+    if(!item["value" as keyof object] || !item["label" as keyof object]) {
+      foundInvalid = true;
+      return;
+    }
+  });
+
+  return !foundInvalid;
 };

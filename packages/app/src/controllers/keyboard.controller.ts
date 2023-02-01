@@ -1,5 +1,4 @@
-import { keyboardControls } from "@/chat/controls";
-import { locationButton } from "@/chat/images";
+import { keyboardControls, locationButton } from "@/constants/controls";
 import { articleButtonModel, controlButtonModel, excursionButtonModel } from "@/models/keyboard.model";
 import { extractFromImages } from "@/utils/image";
 import { Context } from "grammy";

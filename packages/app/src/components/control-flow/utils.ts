@@ -1,6 +1,6 @@
 import { store } from "@/bootstrap";
-import { keyboardControls } from "@/chat/controls";
 import { createReplyMarkup } from "@/components/reply-markup";
+import { keyboardControls } from "@/constants/controls";
 import { Image, KeyboardType, MessageProps, ReplyMarkupType } from "@/types/lib";
 import { ChatId, StepInformation, UserDataContent } from "@/types/user";
 import { formatMessage } from "@/utils/formatters";
