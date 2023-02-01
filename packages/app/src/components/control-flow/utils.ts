@@ -58,7 +58,7 @@ export function computeControlsKeyboard<T extends KeyboardType>(type: T, options
   // Last button: `Next step`, if there is a next step, overwise - `Back to hub`
   if(currentStep !== (maxSteps - 1)) {
     controls.push(keyboardControls.NEXT);
-  } else if(type === "inline") {
+  } else if(type === "inline" && !controls.includes(keyboardControls.HUB)) {
     controls.push(keyboardControls.HUB);
   }
 
