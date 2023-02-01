@@ -37,5 +37,5 @@ export const formatMessage = (content: UserDataContent, options: StepInformation
 };
 
 const shouldAddLinks = (content: UserDataContent, options: StepInformation): content is UserDataContent & {links: string[]} & boolean => {
-  return (content.links && (options.currentStep === options.maxSteps - 1)) ?? false;
+  return (content.links && content.links.length !== 0 && (options.currentStep === options.maxSteps - 1)) ?? false;
 };
