@@ -4,7 +4,7 @@ import { normalizeContent } from "@/utils/formatters";
 import { useOrderBy } from "@/utils/orderBy";
 import { createResponse } from "@/utils/response";
 import { serializeTabLabel as serializeLabel } from "@/utils/serializer";
-import { hasNonEmpty, isValidArticleBody, isValidId } from "@/utils/validations";
+import { hasNonEmpty, isValidArticleBody, isValidId, isValidURL } from "@/utils/validations";
 import { Handler } from "express";
 
 // sorting: ?orderBy=id.asc
@@ -45,7 +45,6 @@ export const getArticles: Handler = async (req, res) => {
   }));
 };
 
-// TODO: add picture, links and `tabId` existence validation
 export const insertArticle: Handler = async (req, res) => {
   const body = req.body;
 
@@ -62,6 +61,18 @@ export const insertArticle: Handler = async (req, res) => {
   const {tabValue, label, content, type, picture, links} = body;
   const articleValue = serializeLabel(label);
 
+  const existingTab = await DBSource.getRepository(Article).countBy({value: tabValue});
+
+  if(existingTab === 0) {
+    res.status(400).json(createResponse({
+      status: 400,
+      ok: false,
+      message: "Tab with given value was not found!"
+    }));
+
+    return;
+  }
+
   const existingArticle = await DBSource.getRepository(Article).countBy({label});
 
   if(existingArticle !== 0) {
@@ -69,6 +80,30 @@ export const insertArticle: Handler = async (req, res) => {
       status: 409,
       ok: false,
       message: "An article with given name already exists!"
+    }));
+
+    return;
+  }
+
+  if(links && Array.isArray(links)) {
+    for(const link of links) {
+      if(!isValidURL(link)) {
+        res.status(400).json(createResponse({
+          status: 400,
+          ok: false,
+          message: "Invalid URL links were given!"
+        }));
+
+        return;
+      }
+    }
+  }
+
+  if(!isValidURL(picture)) {
+    res.status(400).json(createResponse({
+      status: 400,
+      ok: false,
+      message: "Invalid picture link was given!"
     }));
 
     return;
