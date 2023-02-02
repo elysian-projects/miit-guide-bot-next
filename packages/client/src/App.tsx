@@ -1,12 +1,10 @@
 import { Page } from "./components/page";
-import { Sidebar } from "./components/sidebar";
-import { Unauth } from "./components/unauth";
+import { ArticlePage } from "./pages/article";
 
-function App() {
+const App = () => {
   return (
     <Page>
-      <Sidebar />
-      <Unauth />
+      <ArticlePage />
     </Page>
   );
 }
