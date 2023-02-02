@@ -1,29 +1,31 @@
 import { DBSource } from "@/database/data-source";
 import { Article } from "@/entity/articles";
 import { normalizeContent } from "@/utils/formatters";
+import { useOrderBy } from "@/utils/orderBy";
 import { createResponse } from "@/utils/response";
 import { serializeTabLabel as serializeLabel } from "@/utils/serializer";
 import { hasNonEmpty, isValidArticleBody, isValidId } from "@/utils/validations";
 import { Handler } from "express";
 
+// sorting: ?orderBy=id.asc
 export const getArticles: Handler = async (req, res) => {
-  const query = req.query;
+  const {orderBy, ...query} = req.query;
 
-  // const conditions: FindOptionsWhere<Article> = {};
+  const order = useOrderBy(orderBy, new Article());
 
-  // isValidId(isd) && (conditions.id = Number(id));
-  // isValidId(tabId) && (conditions.tabId = Number(tabId));
-  // label && (conditions.label = String(label));
-  // value && (conditions.value = String(value));
-  // type && (conditions.type = String(type));
+  if(orderBy && !order) {
+    res.json(createResponse({
+      status: 400,
+      ok: false,
+      message: "Invalid query parameters passed!"
+    }));
+
+    return;
+  }
 
   const articles = await DBSource.getRepository(Article).find({
     where: query,
-
-    // TODO: add orderBy query prop
-    order: {
-      id: "DESC"
-    }
+    order: order ?? {}
   });
 
   if(articles.length === 0) {

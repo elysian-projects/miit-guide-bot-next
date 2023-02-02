@@ -1,28 +1,29 @@
 import { DBSource } from "@/database/data-source";
 import { Tab } from "@/entity/tabs";
+import { useOrderBy } from "@/utils/orderBy";
 import { createResponse } from "@/utils/response";
 import { serializeTabLabel } from "@/utils/serializer";
 import { isValidId, isValidTabBody } from "@/utils/validations";
 import { Handler } from "express";
-import { FindOptionsWhere } from "typeorm";
 
 export const getTabs: Handler = async (req, res) => {
-  const {id, label, value, type} = req.query;
+  const {orderBy, ...query} = req.query;
 
-  const conditions: FindOptionsWhere<Tab> = {};
+  const order = useOrderBy(orderBy, new Tab());
 
-  isValidId(id) && (conditions.id = Number(id));
-  label && (conditions.label = String(label));
-  value && (conditions.value = String(value));
-  type && (conditions.type = String(type));
+  if(orderBy && !order) {
+    res.json(createResponse({
+      status: 400,
+      ok: false,
+      message: "Invalid query parameters passed!"
+    }));
+
+    return;
+  }
 
   const tabs = await DBSource.getRepository(Tab).find({
-    where: conditions,
-
-    // TODO: add orderBy query prop
-    order: {
-      id: "DESC"
-    }
+    where: query,
+    order: order ?? {}
   });
 
   if(tabs.length === 0) {
