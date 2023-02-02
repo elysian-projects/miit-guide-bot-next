@@ -4,6 +4,7 @@ import { join } from "path";
 import { DBSource } from "./database/data-source";
 import * as articleService from "./services/articles.service";
 import * as baseService from "./services/base.service";
+import { invalidSyntaxError } from "./services/error.service";
 import * as tabService from "./services/tabs.service";
 import * as userService from "./services/users.service";
 
@@ -43,6 +44,7 @@ router.get("*", baseService.notFound);
 
 // Middlewares
 server.use(bodyParser.json());
+server.use(invalidSyntaxError);
 server.use("/assets", express.static(join(__dirname, "../assets")));
 server.use(router);
 
