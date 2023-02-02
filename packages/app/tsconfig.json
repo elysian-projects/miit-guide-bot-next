@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.options.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "@/adapters/*": ["./adapters/*"],
+      "@/chat/*": ["./chat/*"],
+      "@/components/*": ["./components/*"],
+      "@/controllers/*": ["./controllers/*"],
+      "@/entities/*": ["./entities/*"],
+      "@/handlers/*": ["./handlers/*"],
+      "@/models/*": ["./models/*"],
+      "@/types/*": ["./types/*"],
+      "@/utils/*": ["./utils/*"],
+      "@/views/*": ["./views/*"],
+    }
+  },
+  "include": ["./src/**/*.ts"],
+}
