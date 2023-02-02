@@ -8,6 +8,9 @@
     "PGPASSWORD",
     "PGPORT",
     "PGUSER",
-    "typeorm"
+    "Signin",
+    "typeorm",
+    "Unauth",
+    "webp"
   ]
 }
