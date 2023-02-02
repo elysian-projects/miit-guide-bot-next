@@ -1,5 +1,6 @@
 import { DBSource } from "@/database/data-source";
 import { Article } from "@/entity/articles";
+import { Tab } from "@/entity/tabs";
 import { normalizeContent } from "@/utils/formatters";
 import { useOrderBy } from "@/utils/orderBy";
 import { createResponse } from "@/utils/response";
@@ -61,7 +62,7 @@ export const insertArticle: Handler = async (req, res) => {
   const {tabValue, label, content, type, picture, links} = body;
   const articleValue = serializeLabel(label);
 
-  const existingTab = await DBSource.getRepository(Article).countBy({value: tabValue});
+  const existingTab = await DBSource.getRepository(Tab).countBy({value: tabValue});
 
   if(existingTab === 0) {
     res.status(400).json(createResponse({
