@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Wrapper } from "../../components/wrapper/Wrapper.styles";
+import { Wrapper } from "../../../components/wrapper/Wrapper.styles";
 import { LoginForm } from "./LoginForm";
 
 export const LoginPage: FC = () => {

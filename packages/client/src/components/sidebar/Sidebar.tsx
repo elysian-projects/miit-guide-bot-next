@@ -22,23 +22,23 @@ export const Sidebar: FC = () => {
           <SidebarDivider />
         </SidebarBlock>
         <SidebarBlock>
-          <SidebarItem href="/">
+          <SidebarItem to="/">
             <Home />
             Главная
           </SidebarItem>
-          <SidebarItem href="/">
+          <SidebarItem to="/">
             <Storage />
             Вкладки
           </SidebarItem>
-          <SidebarItem href="/">
+          <SidebarItem to="/content/articles">
             <Article />
             Статьи
           </SidebarItem>
-          <SidebarItem href="/auth/login">
+          <SidebarItem to="/auth/login">
             <Login />
             Вход
           </SidebarItem>
-          <SidebarItem href="/auth/logout">
+          <SidebarItem to="/auth/logout">
             <Logout />
             Выход
           </SidebarItem>

@@ -1,8 +1,8 @@
 import { Alert, Typography } from "@mui/material";
 import { FC } from "react";
 import { useQuery } from "react-query";
-import { Wrapper } from "../../components/wrapper";
-import { getData } from "../../utils/server";
+import { Wrapper } from "../../../components/wrapper";
+import { getData } from "../../../utils/server";
 
 export const ArticlePage: FC = () => {
   const query = useQuery("articles", () => getData("articles"));

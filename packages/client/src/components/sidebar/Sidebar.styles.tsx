@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const SidebarFrame = styled.header`
@@ -67,7 +68,7 @@ export const SidebarDivider = styled.hr`
   color: #8a8a8a;
 `
 
-export const SidebarItem = styled.a`
+export const SidebarItem = styled(Link)`
   display: flex;
   width: 100%;
   /* justify-content: center; */
