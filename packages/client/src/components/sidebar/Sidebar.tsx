@@ -1,5 +1,5 @@
-import { Article, Home, Login, Logout, Storage } from "@mui/icons-material";
 import { FC } from "react";
+import { sidebarContent } from "./content";
 import {
   SidebarBlock,
   SidebarDivider,
@@ -10,6 +10,8 @@ import {
 } from "./Sidebar.styles";
 
 export const Sidebar: FC = () => {
+  const isAuth = true;
+
   return (
     <SidebarFrame>
       <SidebarWrapper>
@@ -22,26 +24,12 @@ export const Sidebar: FC = () => {
           <SidebarDivider />
         </SidebarBlock>
         <SidebarBlock>
-          <SidebarItem to="/">
-            <Home />
-            Главная
-          </SidebarItem>
-          <SidebarItem to="/">
-            <Storage />
-            Вкладки
-          </SidebarItem>
-          <SidebarItem to="/content/articles">
-            <Article />
-            Статьи
-          </SidebarItem>
-          <SidebarItem to="/auth/login">
-            <Login />
-            Вход
-          </SidebarItem>
-          <SidebarItem to="/auth/logout">
-            <Logout />
-            Выход
-          </SidebarItem>
+          {sidebarContent.map(item => item.auth === isAuth && (
+            <SidebarItem to={item.link}>
+              {item.icon}
+              {item.label}
+            </SidebarItem>
+          ))}
         </SidebarBlock>
       </SidebarWrapper>
     </SidebarFrame>
