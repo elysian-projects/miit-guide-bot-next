@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-export const SidebarFrame = styled.header`
+export const SidebarFrame = styled.nav`
   margin: 0;
   padding: 0;
   background-color: #101827;
@@ -68,10 +68,9 @@ export const SidebarDivider = styled.hr`
   color: #8a8a8a;
 `
 
-export const SidebarItem = styled(Link)`
+export const SidebarItem = styled(NavLink)`
   display: flex;
   width: 100%;
-  /* justify-content: center; */
   align-items: center;
   width: 100%;
   padding: 10px 15px;
@@ -81,9 +80,14 @@ export const SidebarItem = styled(Link)`
   color: #A1A8B4 !important;
   border-radius: 8px;
 
-  .active, :hover {
+  &.active, :focus-visible, :hover {
     color: #16a17a !important;
     background-color: #242A38;
     cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 1px 1px #16a17a;
   }
 `
