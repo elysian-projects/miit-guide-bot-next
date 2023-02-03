@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router, Route, Routes as Switch } from "react-router-dom";
 import { Page } from "./components/page";
+import { NotFoundPage } from "./pages/404";
 import { LoginPage } from "./pages/auth/login";
 import { ArticlePage } from "./pages/content/articles";
 import { IndexPage } from "./pages/index";
@@ -19,6 +20,7 @@ const App = () => {
               <ArticlePage />
             </QueryClientProvider>
           } />
+          <Route path="*" element={<NotFoundPage />} />
         </Switch>
       </Page>
     </Router>

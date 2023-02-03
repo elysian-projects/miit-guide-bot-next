@@ -1,5 +1,5 @@
-import { Article, Home, Login, Logout, Storage } from "@mui/icons-material"
-import { ReactElement } from "react"
+import { Article, Home, Login, Logout, Storage } from "@mui/icons-material";
+import { ReactElement } from "react";
 
 export type SidebarContentType = {
   label: string,
@@ -14,4 +14,4 @@ export const sidebarContent: SidebarContentType[] = [
   {label: "Статьи", link: "/content/articles", auth: true, icon: (<Article />)},
   {label: "Вход", link: "/auth/login", auth: false, icon: (<Login />)},
   {label: "Выход", link: "/auth/logout", auth: true, icon: (<Logout />)},
-]
+];

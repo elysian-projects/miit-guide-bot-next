@@ -25,7 +25,7 @@ export const Sidebar: FC = () => {
         </SidebarBlock>
         <SidebarBlock>
           {sidebarContent.map(item => item.auth === isAuth && (
-            <SidebarItem to={item.link}>
+            <SidebarItem key={item.label} to={item.link}>
               {item.icon}
               {item.label}
             </SidebarItem>
