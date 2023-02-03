@@ -1,5 +1,6 @@
 import axios from "axios";
-import { ContentNode, Data, IResponse } from "../types";
+import { ContentNode, IResponse } from "../../../common/src";
+import { Data } from "../types";
 
 type SearchOptions = {
   [key in keyof ContentNode]: string
@@ -19,7 +20,7 @@ export const getData = async (type: "articles" | "locations", options?: SearchOp
 
   return {
     status: response.status,
-    content: response.data ?? []
+    content: response.data as ContentNode[] ?? []
   }
 }
 
