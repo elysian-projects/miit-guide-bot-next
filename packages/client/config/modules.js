@@ -36,11 +36,10 @@ function getAdditionalModulePaths(options = {}) {
   // not transpiled outside of `src`. We do allow importing them with the
   // absolute path (e.g. `src/Components/Button.js`) but we set that up with
   // an alias.
-  if (path.relative(paths.appPath, baseUrlResolved) === '') {
-    return null;
-  }
+  // if (path.relative(paths.appPath, baseUrlResolved) === '') {
+  //   return null;
+  // }
 
-  // Otherwise, throw an error.
   throw new Error(
     chalk.red.bold(
       "Your project's `baseUrl` can only be set to `src` or `node_modules`." +
@@ -49,33 +48,11 @@ function getAdditionalModulePaths(options = {}) {
   );
 }
 
-// Default function provided by the creators
-// /**
-//  * Get webpack aliases based on the baseUrl of a compilerOptions object.
-//  *
-//  * @param {*} options
-//  */
-// function getWebpackAliases(options = {}) {
-//   const baseUrl = options.baseUrl;
-
-//   if (!baseUrl) {
-//     return {};
-//   }
-
-//   const baseUrlResolved = path.resolve(paths.appPath, baseUrl);
-
-//   if (path.relative(paths.appPath, baseUrlResolved) === '') {
-//     return {
-//       src: paths.appSrc,
-//     };
-//   }
-// }
-
 /**
  * @param {string} prop
  */
 function removeWildcardTemplatePart(prop) {
-  return prop.replace('/*', '/')
+  return prop.replace('/*', '')
 }
 
 function resolveAliasPath(...args) {
@@ -90,7 +67,6 @@ function getWebpackAliases(options = {}) {
   }
 
   const baseAlias = {src: paths.appSrc};
-
 
   const customAliases = Object.keys(options.paths).reduce((aliasAcc, alias) => ({
     ...aliasAcc,
@@ -119,28 +95,6 @@ function getJestAliases(options = {}) {
   )
 }
 
-// Default function provided by the creators
-// /**
-//  * Get jest aliases based on the baseUrl of a compilerOptions object.
-//  *
-//  * @param {*} options
-//  */
-// function getJestAliases(options = {}) {
-//   const baseUrl = options.baseUrl;
-
-//   if (!baseUrl) {
-//     return {};
-//   }
-
-//   const baseUrlResolved = path.resolve(paths.appPath, baseUrl);
-
-//   if (path.relative(paths.appPath, baseUrlResolved) === '') {
-//     return {
-//       '^src/(.*)$': '<rootDir>/src/$1',
-//     };
-//   }
-// }
-
 function getModules() {
   const hasTsConfig = fs.existsSync(paths.appTsConfig);
   const hasJsConfig = fs.existsSync(paths.appJsConfig);
@@ -155,10 +109,7 @@ function getModules() {
 
   if (hasTsConfig) {
     const ts = require(resolve.sync('typescript', {basedir: paths.appNodeModules}));
-    config = {
-      ...ts.readConfigFile(paths.appTsConfig, ts.sys.readFile).config,
-      ...ts.readConfigFile(paths.pathsTsConfig, ts.sys.readFile).config
-    };
+    config = ts.readConfigFile(paths.appTsConfig, ts.sys.readFile).config;
   } else if (hasJsConfig) {
     config = require(paths.appJsConfig);
   }

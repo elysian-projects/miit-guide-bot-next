@@ -188,12 +188,6 @@ module.exports = function (webpackEnv) {
     return loaders;
   };
 
-  const aliases = ((() => {
-    return modules.webpackAliases;
-  })() || {});
-
-  console.log(aliases)
-
   return {
     target: ['browserslist'],
     // Webpack noise constrained to errors and warnings
@@ -326,7 +320,7 @@ module.exports = function (webpackEnv) {
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling',
         }),
-        ...aliases,
+        ...(modules.webpackAliases || {})
       },
       plugins: [
         // Prevents users from importing files from outside of src/ (or node_modules/).
