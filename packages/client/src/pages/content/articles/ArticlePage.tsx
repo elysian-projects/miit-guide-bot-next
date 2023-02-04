@@ -1,11 +1,11 @@
 import { Alert, Typography } from "@mui/material";
+import { getArticles } from "api/articles";
 import { FC } from "react";
 import { useQuery } from "react-query";
 import { Wrapper } from "../../../components/wrapper";
-import { getData } from "../../../utils/server";
 
 export const ArticlePage: FC = () => {
-  const query = useQuery("articles", () => getData("articles"));
+  const query = useQuery("articles", getArticles);
 
   console.log(query);
 
@@ -21,7 +21,7 @@ export const ArticlePage: FC = () => {
       )}
 
       <div>
-        {query.data?.content.map(item => (
+        {query.data?.map(item => (
           <div>{item.label}</div>
         ))}
       </div>
