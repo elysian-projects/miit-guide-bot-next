@@ -31,15 +31,17 @@ export const getData = async (type: ApiData, options?: SearchOptions): Promise<D
 };
 
 export const getServerURL = (): string => {
-  const PROTOCOL = process.env.SERVER_PROTOCOL;
+  const PROTOCOL = (process.env.HTTPS === "true") ? "https" : "http";
   const HOST = process.env.SERVER_HOST;
   const PORT = process.env.SERVER_PORT;
+
+  console.log(process.env);
 
   if(!PROTOCOL || !HOST || !PORT) {
     throw new Error("Couldn't load `.env` config!");
   }
 
-  return `${PROTOCOL}:${HOST}:${PORT}`;
+  return `${PROTOCOL}://${HOST}:${PORT}`;
 };
 
 export const getOptionsString = (options: SearchOptions): string => {
