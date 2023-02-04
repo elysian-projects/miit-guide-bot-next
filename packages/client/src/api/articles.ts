@@ -1,5 +1,4 @@
-import { getData } from "@/common";
-import { ContentNode } from "@/common/types";
+import { ContentNode, getData } from "@/common/";
 
 export const getArticles = async (): Promise<ContentNode[]> => {
   return (await getData("articles")).content ?? [];

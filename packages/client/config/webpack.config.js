@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
@@ -13,7 +11,11 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+
+// Removing this plugin allows to import from outside of the `src` directory which is needed
+// here because of the `common` package which contains utils and types used on the client side
+// const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const paths = require('./paths');
@@ -31,18 +33,18 @@ const createEnvironmentHash = require('./webpack/persistentCache/createEnvironme
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 
-const reactRefreshRuntimeEntry = require.resolve('react-refresh/runtime');
-const reactRefreshWebpackPluginRuntimeEntry = require.resolve(
-  '@pmmmwh/react-refresh-webpack-plugin'
-);
-const babelRuntimeEntry = require.resolve('babel-preset-react-app');
-const babelRuntimeEntryHelpers = require.resolve(
-  '@babel/runtime/helpers/esm/assertThisInitialized',
-  { paths: [babelRuntimeEntry] }
-);
-const babelRuntimeRegenerator = require.resolve('@babel/runtime/regenerator', {
-  paths: [babelRuntimeEntry],
-});
+// const reactRefreshRuntimeEntry = require.resolve('react-refresh/runtime');
+// const reactRefreshWebpackPluginRuntimeEntry = require.resolve(
+//   '@pmmmwh/react-refresh-webpack-plugin'
+// );
+// const babelRuntimeEntry = require.resolve('babel-preset-react-app');
+// const babelRuntimeEntryHelpers = require.resolve(
+//   '@babel/runtime/helpers/esm/assertThisInitialized',
+//   { paths: [babelRuntimeEntry] }
+// );
+// const babelRuntimeRegenerator = require.resolve('@babel/runtime/regenerator', {
+//   paths: [babelRuntimeEntry],
+// });
 
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
@@ -186,6 +188,12 @@ module.exports = function (webpackEnv) {
     return loaders;
   };
 
+  const aliases = ((() => {
+    return modules.webpackAliases;
+  })() || {});
+
+  console.log(aliases)
+
   return {
     target: ['browserslist'],
     // Webpack noise constrained to errors and warnings
@@ -318,7 +326,7 @@ module.exports = function (webpackEnv) {
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling',
         }),
-        ...(modules.webpackAliases || {}),
+        ...aliases,
       },
       plugins: [
         // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -326,14 +334,16 @@ module.exports = function (webpackEnv) {
         // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
         // please link the files into your node_modules/ and let module-resolution kick in.
         // Make sure your source files are compiled, as they will not be processed in any way.
-        new ModuleScopePlugin(paths.appSrc, [
-          paths.appPackageJson,
-          reactRefreshRuntimeEntry,
-          reactRefreshWebpackPluginRuntimeEntry,
-          babelRuntimeEntry,
-          babelRuntimeEntryHelpers,
-          babelRuntimeRegenerator,
-        ]),
+
+        // This is the place `ModuleScopePlugin` is included so, if there is a need to get it back, go ahead
+        // new ModuleScopePlugin(paths.appSrc, [
+        //   paths.appPackageJson,
+        //   reactRefreshRuntimeEntry,
+        //   reactRefreshWebpackPluginRuntimeEntry,
+        //   babelRuntimeEntry,
+        //   babelRuntimeEntryHelpers,
+        //   babelRuntimeRegenerator,
+        // ]),
       ],
     },
     module: {
@@ -419,7 +429,7 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                 ],
-                
+
                 plugins: [
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
@@ -453,7 +463,7 @@ module.exports = function (webpackEnv) {
                 cacheDirectory: true,
                 // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
-                
+
                 // Babel sourcemaps are needed for debugging into node_modules
                 // code.  Without the options below, debuggers like VSCode
                 // show incorrect code and set breakpoints on the wrong lines.
@@ -693,6 +703,7 @@ module.exports = function (webpackEnv) {
                 noEmit: true,
                 incremental: true,
                 tsBuildInfoFile: paths.appTsBuildInfoFile,
+                paths: modules.webpackAliases
               },
             },
             context: paths.appPath,

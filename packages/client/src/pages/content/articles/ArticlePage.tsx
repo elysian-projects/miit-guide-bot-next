@@ -1,5 +1,5 @@
+import { getArticles } from "@/api/articles";
 import { Alert, Typography } from "@mui/material";
-import { getArticles } from "api/articles";
 import { FC } from "react";
 import { useQuery } from "react-query";
 import { Wrapper } from "../../../components/wrapper";

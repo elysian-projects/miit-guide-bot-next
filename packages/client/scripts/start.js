@@ -1,5 +1,3 @@
-'use strict';
-
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
@@ -18,7 +16,10 @@ const fs = require('fs');
 const chalk = require('react-dev-utils/chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
+
+// Uncomment the following line and the further usage line to clear console on server startup
 const clearConsole = require('react-dev-utils/clearConsole');
+
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const {
   choosePort,
@@ -26,7 +27,10 @@ const {
   prepareProxy,
   prepareUrls,
 } = require('react-dev-utils/WebpackDevServerUtils');
-const openBrowser = require('react-dev-utils/openBrowser');
+
+// Uncomment the following line and the further usage line to open a new browser tab with the local website
+// const openBrowser = require('react-dev-utils/openBrowser');
+
 const semver = require('semver');
 const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
@@ -113,10 +117,11 @@ checkBrowsers(paths.appPath, isInteractive)
       port,
     };
     const devServer = new WebpackDevServer(serverConfig, compiler);
+
     // Launch WebpackDevServer.
     devServer.startCallback(() => {
       if (isInteractive) {
-        clearConsole();
+        // clearConsole();
       }
 
       if (env.raw.FAST_REFRESH && semver.lt(react.version, '16.10.0')) {
@@ -128,7 +133,9 @@ checkBrowsers(paths.appPath, isInteractive)
       }
 
       console.log(chalk.cyan('Starting the development server...\n'));
-      openBrowser(urls.localUrlForBrowser);
+
+      // Uncomment to let the script to open a new browser tab with the local client website
+      // openBrowser(urls.localUrlForBrowser);
     });
 
     ['SIGINT', 'SIGTERM'].forEach(function (sig) {

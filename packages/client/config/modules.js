@@ -1,4 +1,4 @@
-'use strict';
+
 
 const fs = require('fs');
 const path = require('path');
@@ -49,50 +49,99 @@ function getAdditionalModulePaths(options = {}) {
   );
 }
 
+// Default function provided by the creators
+// /**
+//  * Get webpack aliases based on the baseUrl of a compilerOptions object.
+//  *
+//  * @param {*} options
+//  */
+// function getWebpackAliases(options = {}) {
+//   const baseUrl = options.baseUrl;
+
+//   if (!baseUrl) {
+//     return {};
+//   }
+
+//   const baseUrlResolved = path.resolve(paths.appPath, baseUrl);
+
+//   if (path.relative(paths.appPath, baseUrlResolved) === '') {
+//     return {
+//       src: paths.appSrc,
+//     };
+//   }
+// }
+
 /**
- * Get webpack aliases based on the baseUrl of a compilerOptions object.
- *
- * @param {*} options
+ * @param {string} prop
  */
+function removeWildcardTemplatePart(prop) {
+  return prop.replace('/*', '/')
+}
+
+function resolveAliasPath(...args) {
+  return path.resolve(...args);
+}
+
 function getWebpackAliases(options = {}) {
-  const baseUrl = options.baseUrl;
+  const baseUrl = options.baseUrl
 
-  if (!baseUrl) {
-    return {};
+  if(!baseUrl) {
+    return {}
   }
 
-  const baseUrlResolved = path.resolve(paths.appPath, baseUrl);
+  const baseAlias = {src: paths.appSrc};
 
-  if (path.relative(paths.appPath, baseUrlResolved) === '') {
-    return {
-      src: paths.appSrc,
-    };
-  }
+
+  const customAliases = Object.keys(options.paths).reduce((aliasAcc, alias) => ({
+    ...aliasAcc,
+    [removeWildcardTemplatePart(alias)]: resolveAliasPath(baseAlias.src, options.paths[alias].map(removeWildcardTemplatePart)[0])
+  }), {});
+
+  return {...baseAlias, ...customAliases};
 }
 
-/**
- * Get jest aliases based on the baseUrl of a compilerOptions object.
- *
- * @param {*} options
- */
 function getJestAliases(options = {}) {
-  const baseUrl = options.baseUrl;
+  const baseUrl = options.baseUrl
 
   if (!baseUrl) {
-    return {};
+    return {}
   }
 
-  const baseUrlResolved = path.resolve(paths.appPath, baseUrl);
+  let resultAlias = {'^src/(.*)$': '<rootDir>/src/$1'}
 
-  if (path.relative(paths.appPath, baseUrlResolved) === '') {
-    return {
-      '^src/(.*)$': '<rootDir>/src/$1',
-    };
-  }
+  return Object.assign({}, resultAlias,
+    Object.keys(options.paths).reduce(
+      (obj, alias) => {
+        obj[`^${removeWildcardTemplatePart(alias)}(.*)$`] = options.paths[alias].map(p => `<rootDir>/src/${removeWildcardTemplatePart(p)}/$1`)
+        return obj
+      }, {}
+    )
+  )
 }
+
+// Default function provided by the creators
+// /**
+//  * Get jest aliases based on the baseUrl of a compilerOptions object.
+//  *
+//  * @param {*} options
+//  */
+// function getJestAliases(options = {}) {
+//   const baseUrl = options.baseUrl;
+
+//   if (!baseUrl) {
+//     return {};
+//   }
+
+//   const baseUrlResolved = path.resolve(paths.appPath, baseUrl);
+
+//   if (path.relative(paths.appPath, baseUrlResolved) === '') {
+//     return {
+//       '^src/(.*)$': '<rootDir>/src/$1',
+//     };
+//   }
+// }
 
 function getModules() {
-  // Check if TypeScript is setup
   const hasTsConfig = fs.existsSync(paths.appTsConfig);
   const hasJsConfig = fs.existsSync(paths.appJsConfig);
 
@@ -104,16 +153,12 @@ function getModules() {
 
   let config;
 
-  // If there's a tsconfig.json we assume it's a
-  // TypeScript project and set up the config
-  // based on tsconfig.json
   if (hasTsConfig) {
-    const ts = require(resolve.sync('typescript', {
-      basedir: paths.appNodeModules,
-    }));
-    config = ts.readConfigFile(paths.appTsConfig, ts.sys.readFile).config;
-    // Otherwise we'll check if there is jsconfig.json
-    // for non TS projects.
+    const ts = require(resolve.sync('typescript', {basedir: paths.appNodeModules}));
+    config = {
+      ...ts.readConfigFile(paths.appTsConfig, ts.sys.readFile).config,
+      ...ts.readConfigFile(paths.pathsTsConfig, ts.sys.readFile).config
+    };
   } else if (hasJsConfig) {
     config = require(paths.appJsConfig);
   }
