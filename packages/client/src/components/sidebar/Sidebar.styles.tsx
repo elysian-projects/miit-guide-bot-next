@@ -1,3 +1,4 @@
+import { IconButton } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
@@ -8,8 +9,36 @@ export const SidebarFrame = styled.nav`
   color: white;
   position: relative;
   height: 100vh;
-  width: 400px;
+  min-width: 400px;
+  max-width: 400px;
   overflow-y: scroll;
+  animation-duration: .5s;
+
+  // FIXME: this animation must not be played on page load
+  /* &.open {
+    animation: toggle_sidebar 0.5s ease-out reverse;
+  } */
+
+  &.closed {
+    animation: toggle_sidebar 0.5s ease-in-out;
+    margin-left: -400px;
+  }
+
+  // FIXME: this animation must be played when toggling the sidebar
+  @keyframes toggle_sidebar {
+    from {
+      margin-left: 0;
+    }
+    to {
+      margin-left: -400px;
+    }
+  }
+
+  &.curtain {
+    position: absolute;
+    z-index: 9000;
+    left: 0;
+  }
 `
 
 export const SidebarWrapper = styled.div`
@@ -51,14 +80,13 @@ export const SidebarLogo = styled.div`
   padding: 5px;
 `
 
-// TODO: crop the image white space a bit
-export const SidebarIcon = styled.span`
-  background-image: url("/logo_large.webp");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  width: 64px;
-  height: 64px;
+export const SidebarToggleButton = styled(IconButton)`
+  z-index: 100000;
+  position: absolute !important;
+  right: -50px !important;
+  color: white !important;
+  box-shadow: 0 0 2px 2px black;
+  background-color: #c5c5c5 !important;
 `
 
 export const SidebarDivider = styled.hr`
