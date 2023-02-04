@@ -1,8 +1,8 @@
 import { isValidImage } from "@/adapters/images";
+import { IResponse } from "@/common";
 import { createReplyMarkup, removeMenuReplyMarkup } from "@/components/reply-markup";
 import { locationButton } from "@/constants/controls";
 import { GREETINGS, MAIN_HUB_PHOTO, UNKNOWN_COMMAND } from "@/constants/messages";
-import { IResponse } from "@/types/server";
 import { ChatId } from "@/types/user";
 import { removeUserFromStores } from "@/utils/common";
 import { getApiURL } from "@/utils/server";

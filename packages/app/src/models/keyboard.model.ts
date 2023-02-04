@@ -1,12 +1,10 @@
 import { store } from "@/bootstrap";
+import { ArticleType, ContentNode, IResponse } from "@/common";
 import { createReplyMarkup, removeInlineReplyMarkup } from "@/components/reply-markup";
 import { keyboardControls } from "@/constants/controls";
 import { EXCURSION_REPLY } from "@/constants/messages";
 import { onStart } from "@/controllers/commands.controller";
-import { ArticleType } from "@/types/content";
 import { Image } from "@/types/lib";
-import { IResponse } from "@/types/server";
-import { UserDataContent } from "@/types/user";
 import { getChatId } from "@/utils/common";
 import { getApiURL } from "@/utils/server";
 import { sendMessage } from "@/views/general.view";
@@ -50,8 +48,8 @@ export const articleButtonModel = async (ctx: Context, clickData: string): Promi
   // In this model we have to check if the given click data satisfies the article button choice as there
   // was no way to validate it on the previous level (controller) without breaking the MVC model
 
-  const dataAsArticle = await fetchData(clickData, "article") as UserDataContent[];
-  const dataAsLocation = await fetchData(clickData, "location") as UserDataContent[];
+  const dataAsArticle = await fetchData(clickData, "article") as ContentNode[];
+  const dataAsLocation = await fetchData(clickData, "location") as ContentNode[];
 
   if(dataAsLocation.length !== 0 || dataAsArticle.length !== 0) {
     const data = [...dataAsArticle, ...dataAsLocation];

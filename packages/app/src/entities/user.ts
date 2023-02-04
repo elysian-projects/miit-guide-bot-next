@@ -1,8 +1,8 @@
+import { ContentNode, FlatContent } from "@/common";
 import { Content } from "@/components/content";
-import { IUser } from "@/types/controllers";
-import { ChatId, FlatContent, UserDataContent, UserState } from "@/types/user";
+import { ChatId, UserState } from "@/types/user";
 
-export class User implements IUser {
+export class User {
   private state: UserState;
   private changeStepHandlers: (() => void)[];
 
@@ -19,14 +19,14 @@ export class User implements IUser {
     return this.state.id;
   };
 
-  public setContent = (data: UserDataContent[]): void => {
+  public setContent = (data: ContentNode[]): void => {
     this.state = {
       ...this.getDefaultData(this.id()),
       content: new Content(data)
     };
   };
 
-  public getCurrentContent = (): UserDataContent<FlatContent> => {
+  public getCurrentContent = (): ContentNode<FlatContent> => {
     if(!this.isPointsListSet()) {
       throw new Error("Cannot handle step, too few data!");
     }

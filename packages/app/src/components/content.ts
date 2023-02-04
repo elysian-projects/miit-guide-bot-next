@@ -1,11 +1,10 @@
-import { ArticleType } from "@/types/content";
-import { FlatContent, UserDataContent } from "@/types/user";
+import { ArticleType, ContentNode, FlatContent } from "@/common";
 
 export class Content {
-  private content!: UserDataContent<FlatContent>[];
+  private content!: ContentNode<FlatContent>[];
   private contentAmount = 0;
 
-  public constructor(content: UserDataContent[]) {
+  public constructor(content: ContentNode[]) {
     this.setContent(content);
   }
 
@@ -17,7 +16,7 @@ export class Content {
     return this.contentAmount;
   };
 
-  public getContent = (step: number): UserDataContent<FlatContent> => {
+  public getContent = (step: number): ContentNode<FlatContent> => {
     if(step < 0 || step > this.contentAmount - 1) {
       throw new Error("Invalid step value!");
     }
@@ -25,7 +24,7 @@ export class Content {
     return this.content[step];
   };
 
-  public setContent = (content: UserDataContent[]): void => {
+  public setContent = (content: ContentNode[]): void => {
     if(!this.validContent(content)) {
       throw new Error("Content of different type was given!");
     }
@@ -34,16 +33,16 @@ export class Content {
     this.contentAmount = this.content.length;
   };
 
-  private getFlatContentProjection = (content: UserDataContent[]): UserDataContent<FlatContent>[] => {
+  private getFlatContentProjection = (content: ContentNode[]): ContentNode<FlatContent>[] => {
     return content.flatMap(item => item.content.map(currentContent => ({...item, content: currentContent})));
   };
 
-  private validContent = (content: UserDataContent[]): boolean => {
+  private validContent = (content: ContentNode[]): boolean => {
     return getArticleType(content) !== "invalid";
   };
 }
 
-export const getArticleType = (content: UserDataContent[]): ArticleType | "invalid" => {
+export const getArticleType = (content: ContentNode[]): ArticleType | "invalid" => {
   const types = content.map(item => item.type);
 
   return types.every(value => value === "article")

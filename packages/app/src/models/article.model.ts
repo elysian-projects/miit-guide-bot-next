@@ -1,11 +1,11 @@
 import { store } from "@/bootstrap";
+import { ContentNode } from "@/common";
 import { getArticleType } from "@/components/content";
 import { Pagination, Separation } from "@/components/control-flow";
-import { UserDataContent } from "@/types/user";
 import { getChatId } from "@/utils/common";
 import { Context } from "grammy";
 
-export const articleModel = async (ctx: Context, data: UserDataContent[]) => {
+export const articleModel = async (ctx: Context, data: ContentNode[]) => {
   const type = getArticleType(data);
   const chatId = getChatId(ctx);
 

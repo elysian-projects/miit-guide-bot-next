@@ -1,4 +1,4 @@
-import { ContentNode } from "../../../common/src"
+import { ContentNode } from "@/common"
 
 export type Data = {
   status: number,

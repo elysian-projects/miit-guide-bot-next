@@ -1,5 +1,5 @@
+import { ContentNode, IResponse } from "@/common";
 import axios from "axios";
-import { ContentNode, IResponse } from "../../../common/src";
 import { Data } from "../types";
 
 type SearchOptions = {

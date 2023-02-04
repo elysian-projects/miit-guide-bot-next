@@ -2,10 +2,10 @@
   "name": "miit-guide-bot-app",
   "version": "2.0.0",
   "description": "",
-  "main": "./dist/bootstrap.js",
+  "main": "./dist/app/src/bootstrap.js",
   "scripts": {
     "build": "npm run clean && tsc && tsc-alias",
-    "start": "npm run build && node ./dist/bootstrap.js",
+    "start": "npm run build && node ./dist/app/src/bootstrap.js",
     "migrate": "node ./scripts/migrate.mjs",
     "test": "jest",
     "clean": "rm -rf ./dist"

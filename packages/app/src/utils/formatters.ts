@@ -1,5 +1,6 @@
+import { ContentNode, FlatContent } from "@/common";
 import { EXTRA_LINKS } from "@/constants/messages";
-import { FlatContent, StepInformation, UserDataContent } from "@/types/user";
+import { StepInformation } from "@/types/user";
 import { MessageBuilder } from "@/utils/messageBuilder";
 
 /**
@@ -14,7 +15,7 @@ export const formatCountLabel = (currentStep: number, maxSteps: number): string 
  * Takes content node and returns string with well-formatted message to be sent to the user.
  * The message will contain bold title, main content info, and extra links part, if links are provided.
  */
-export const formatMessage = (content: UserDataContent<FlatContent>, options: StepInformation): string => {
+export const formatMessage = (content: ContentNode<FlatContent>, options: StepInformation): string => {
   const messageBuilder = new MessageBuilder();
 
   messageBuilder
@@ -36,6 +37,6 @@ export const formatMessage = (content: UserDataContent<FlatContent>, options: St
     .message;
 };
 
-const shouldAddLinks = (content: UserDataContent<FlatContent>, options: StepInformation): content is UserDataContent<FlatContent> & {links: string[]} & boolean => {
+const shouldAddLinks = (content: ContentNode<FlatContent>, options: StepInformation): content is ContentNode<FlatContent> & {links: string[]} & boolean => {
   return (content.links && content.links.length !== 0 && (options.currentStep === options.maxSteps - 1)) ?? false;
 };

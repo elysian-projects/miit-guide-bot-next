@@ -4,6 +4,8 @@ services:
   app:
     container_name: app
     build: ./packages/app
+    volumes:
+      - ./packages/common:/packages/common
     depends_on:
       - server
     configs:
@@ -30,6 +32,8 @@ services:
   server:
     container_name: server
     build: ./packages/server
+    volumes:
+      - ./packages/common:/packages/common
     configs:
       - source: base_tsconfig
         target: /tsconfig.options.json

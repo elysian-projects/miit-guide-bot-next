@@ -1,4 +1,4 @@
-export type ArticleType = "articles" | "locations";
+export type ArticleType = "article" | "location";
 
 export type RichContent = string[];
 export type FlatContent = string;
@@ -15,11 +15,22 @@ export interface ContentNode<T extends RichContent | FlatContent = RichContent> 
   content: T,
   /** Type of the record */
   type: ArticleType
+
+  picture: string,
+  links?: string[]
 }
 
-export interface IResponse {
+export interface IResponse<T extends object = object> {
   status: number;
   ok: boolean;
-  message: string;
-  data: object[];
+  message?: string;
+  data?: T[];
 }
+
+/** Given type is maybe promise or a value */
+export type MaybePromise<T> = T | Promise<T>;
+
+/** Type is either a value or a function that returns the given value */
+export type ValueOrGetValue<T> = T | (() => T);
+
+export type EventHandler = () => void;
