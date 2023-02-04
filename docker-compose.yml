@@ -25,6 +25,11 @@ services:
     configs:
       - source: base_tsconfig
         target: /tsconfig.options.json
+    environment:
+        HTTPS: $HTTPS
+        SERVER_HOST: $SERVER_HOST
+        SERVER_PORT: $SERVER_PORT
+        API_KEY: $API_KEY
     env_file:
       - .env
     restart: unless-stopped

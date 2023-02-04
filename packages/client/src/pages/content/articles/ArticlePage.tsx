@@ -2,7 +2,7 @@ import { Alert, Typography } from "@mui/material";
 import { FC } from "react";
 import { useQuery } from "react-query";
 import { getArticles } from "../../../api/articles";
-import { Wrapper } from "../../../components/wrapper";
+import { Separator } from "../../../components/separator";
 
 export const ArticlePage: FC = () => {
   const query = useQuery("articles", getArticles);
@@ -10,8 +10,10 @@ export const ArticlePage: FC = () => {
   console.log(query);
 
   return (
-    <Wrapper>
+    <>
       <Typography variant="h4">Статьи</Typography>
+
+      <Separator />
 
       {query.status === "loading" && (
         <Alert severity="info">Загрузка данных...</Alert>
@@ -25,6 +27,6 @@ export const ArticlePage: FC = () => {
           <div>{item.label}</div>
         ))}
       </div>
-    </Wrapper>
+    </>
   )
 }

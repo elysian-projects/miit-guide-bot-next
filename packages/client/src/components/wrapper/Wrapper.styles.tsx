@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-interface IWrapperProps {
+export interface IWrapperProps {
   maxWidth?: string;
 }
 
@@ -10,4 +10,8 @@ export const Wrapper = styled.div`
   padding: 15px;
   margin: 0 auto;
   max-width: ${(props: IWrapperProps) => props.maxWidth || "100%"};
+`
+
+export const MainWrapper = styled(Wrapper)`
+  max-width: 1000px;
 `
