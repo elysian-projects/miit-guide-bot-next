@@ -36,9 +36,9 @@ function getAdditionalModulePaths(options = {}) {
   // not transpiled outside of `src`. We do allow importing them with the
   // absolute path (e.g. `src/Components/Button.js`) but we set that up with
   // an alias.
-  // if (path.relative(paths.appPath, baseUrlResolved) === '') {
-  //   return null;
-  // }
+  if (path.relative(paths.appPath, baseUrlResolved) === '') {
+    return null;
+  }
 
   throw new Error(
     chalk.red.bold(

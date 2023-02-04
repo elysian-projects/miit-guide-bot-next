@@ -1,7 +1,7 @@
-import { getArticles } from "@/api/articles";
 import { Alert, Typography } from "@mui/material";
 import { FC } from "react";
 import { useQuery } from "react-query";
+import { getArticles } from "../../../api/articles";
 import { Wrapper } from "../../../components/wrapper";
 
 export const ArticlePage: FC = () => {
