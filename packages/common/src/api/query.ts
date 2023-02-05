@@ -1,22 +1,22 @@
 import axios from "axios";
 import { ContentNode, IResponse } from "../types";
+import { Data, SearchOptions } from "./types";
+import { getOptionsString, getSelectString, getServerURL } from "./utils";
 
-type SearchOptions = {
-  [key in keyof ContentNode]: string
-}
-
-type Data = {
-  status: number,
-  content?: ContentNode[]
-}
 
 type ApiData = "articles" | "locations";
 
-export const getData = async (type: ApiData, options?: SearchOptions): Promise<Data> => {
-  let query = getServerURL().concat("/api/").concat(type);
+export const getData = async (type: ApiData, options?: Partial<SearchOptions>): Promise<Data> => {
+  const {select, ...searchProps} = options ?? {};
 
-  if(options) {
-    query += getOptionsString(options);
+  let query = getServerURL().concat("/api/").concat(type).concat("?");
+
+  if(searchProps) {
+    query = query.concat(getOptionsString(searchProps));
+  }
+
+  if(select) {
+    query = query.concat(getSelectString(select));
   }
 
   const {data: response} = await axios.get<IResponse<ContentNode>>(query, {headers: {
@@ -28,28 +28,4 @@ export const getData = async (type: ApiData, options?: SearchOptions): Promise<D
     status: response.status,
     content: response.data ?? []
   };
-};
-
-export const getServerURL = (): string => {
-  const PROTOCOL = (process.env.HTTPS === "true") ? "https" : "http";
-  const HOST = process.env.SERVER_HOST;
-  const PORT = process.env.SERVER_PORT;
-
-  console.log(process.env);
-
-  if(!PROTOCOL || !HOST || !PORT) {
-    throw new Error("Couldn't load `.env` config!");
-  }
-
-  return `${PROTOCOL}://${HOST}:${PORT}`;
-};
-
-export const getOptionsString = (options: SearchOptions): string => {
-  if(Object.keys(options).length === 0) {
-    return "";
-  }
-
-  return Object.keys(options).reduce((previousValue, currentKey) => {
-    return previousValue + currentKey + options[currentKey as keyof typeof options];
-  }, "");
 };

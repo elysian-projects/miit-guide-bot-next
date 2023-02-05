@@ -1,4 +1,5 @@
 import bodyParser from "body-parser";
+import cors from "cors";
 import express, { Router } from "express";
 import { join } from "path";
 import { DBSource } from "./database/data-source";
@@ -43,6 +44,7 @@ router.delete("/api/articles", articleService.deleteArticle);
 router.get("*", baseService.notFound);
 
 // Middlewares
+server.use(cors({origin: "http://localhost:3000"}));
 server.use(bodyParser.json());
 server.use(invalidSyntaxError);
 server.use("/assets", express.static(join(__dirname, "../assets")));
