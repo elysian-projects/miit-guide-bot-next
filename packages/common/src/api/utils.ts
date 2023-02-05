@@ -30,6 +30,6 @@ export const getOptionsString = (options: Partial<SearchOptions>): string => {
   }
 
   return Object.keys(options).reduce((previousValue, currentKey) => (
-    previousValue + currentKey + options[currentKey as keyof typeof options]
+    previousValue + currentKey + "=" + options[currentKey as keyof typeof options]
   ), "");
 };
