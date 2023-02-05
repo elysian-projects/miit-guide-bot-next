@@ -1,12 +1,9 @@
 import { Button, Typography } from "@mui/material";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import { Separator } from "../../components/separator";
-import { SidebarContext } from "../../contexts/sidebar";
 
 export const IndexPage: FC = () => {
-  const {toggleSidebar} = useContext(SidebarContext);
-
   return (
     <div >
       <Typography variant="h3">Добро пожаловать!</Typography>
@@ -27,9 +24,6 @@ export const IndexPage: FC = () => {
               Вкладки
             </Button>
           </Link>
-        </p>
-        <p>
-          <Button variant="contained" color="error" onClick={toggleSidebar}>Выключить sidebar</Button>
         </p>
         <Separator />
       </section>
