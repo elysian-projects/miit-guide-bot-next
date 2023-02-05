@@ -1,48 +1,46 @@
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import { KeyboardArrowLeft } from "@mui/icons-material";
 import { FC, useCallback, useContext, useEffect } from "react";
 import { SidebarContext } from "../../contexts/sidebar";
 import { sidebarContent } from "./content";
 import {
   SidebarBlock,
+  SidebarDarkBackground,
   SidebarDivider,
   SidebarFrame,
   SidebarItem,
-  SidebarLogo,
-  SidebarToggleButton,
-  SidebarWrapper
+  SidebarLogo, SidebarWrapper
 } from "./Sidebar.styles";
-import { shouldSwitchMobileModeOff, shouldSwitchMobileModeOn } from "./utils";
 
 
 export const Sidebar: FC = () => {
-  const {open, view, setSidebarView, toggleSidebar} = useContext(SidebarContext);
-
-  const handleWindowResize = useCallback(() => {
-    if(shouldSwitchMobileModeOn(view)) {
-      setSidebarView("curtain");
-      toggleSidebar();
-    } else if (shouldSwitchMobileModeOff(view)) {
-      setSidebarView("fixed")
-      !open && toggleSidebar();
-    }
-  }, [setSidebarView, view, open, toggleSidebar])
-
-  useEffect(() => {
-    window.addEventListener("resize", handleWindowResize);
-    return () => window.removeEventListener("resize", handleWindowResize);
-  }, [handleWindowResize])
+  const {open, toggleSidebar} = useContext(SidebarContext);
 
   const isAuth = true;
 
+  const getSecondaryElementShowClass = (): string => {
+    return (open && window.innerWidth <= 1170) ? "show" : "";
+  }
+
+  const handleClick = () => {
+    if(window.innerWidth < 1170) {
+      toggleSidebar();
+    }
+  }
+
+  const resizeHandler = useCallback(() => {
+    if(window.innerWidth <= 1170 && open) {
+      toggleSidebar();
+    }
+  }, [open, toggleSidebar])
+
+  useEffect(() => {
+    window.addEventListener("resize", resizeHandler);
+    return () => window.removeEventListener("resize", resizeHandler);
+  }, [open, toggleSidebar, resizeHandler])
+
   return (
-    <SidebarFrame onResize={handleWindowResize} className={`${open ? "open" : "closed"} ${view}`}>
-      <SidebarToggleButton onClick={toggleSidebar} aria-label="toggleSidebar" size="large">
-        {open ? (
-          <KeyboardArrowLeft fontSize="large" />
-        ) : (
-          <KeyboardArrowRight fontSize="large" />
-        )}
-      </SidebarToggleButton>
+    <SidebarFrame className={`${(!open && window.innerWidth <= 1170) ? "closed" : ""}`}>
+      <SidebarDarkBackground onClick={toggleSidebar} className={getSecondaryElementShowClass()} />
       <SidebarWrapper>
         <SidebarBlock>
           <SidebarLogo>
@@ -52,13 +50,23 @@ export const Sidebar: FC = () => {
         <SidebarBlock>
           <SidebarDivider />
         </SidebarBlock>
-        <SidebarBlock>
-          {sidebarContent.map(item => item.auth === isAuth && (
-            <SidebarItem key={item.label} to={item.link}>
-              {item.icon}
-              {item.label}
-            </SidebarItem>
-          ))}
+        <SidebarBlock style={{height: "100%", justifyContent: "space-between"}}>
+          <SidebarBlock>
+            {sidebarContent.map(item => item.auth === isAuth && (
+              <SidebarItem onClick={handleClick} key={item.label} to={item.link}>
+                {item.icon}
+                {item.label}
+              </SidebarItem>
+            ))}
+          </SidebarBlock>
+          <SidebarBlock>
+            {(open && window.innerWidth <= 1170) && (
+              <SidebarItem to="" onClick={toggleSidebar}>
+                <KeyboardArrowLeft />
+                Закрыть
+              </SidebarItem>
+            )}
+          </SidebarBlock>
         </SidebarBlock>
       </SidebarWrapper>
     </SidebarFrame>

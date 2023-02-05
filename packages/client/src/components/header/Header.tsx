@@ -1,5 +1,6 @@
 import { FC } from "react";
-import { HeaderContainer, HeaderItem, HeaderLogo, HeaderSection, HeaderWrapper } from "./Header.styles";
+import { HeaderContainer, HeaderItem, HeaderSection, HeaderWrapper } from "./Header.styles";
+import { HeaderSidebarToggler } from "./HeaderSidebarToggler";
 import { HeaderUserMenu } from "./HeaderUserMenu";
 
 export const Header: FC = () => {
@@ -7,7 +8,7 @@ export const Header: FC = () => {
     <HeaderContainer>
       <HeaderWrapper>
         <HeaderSection>
-          <HeaderLogo>MIIT Guide Bot</HeaderLogo>
+          <HeaderSidebarToggler />
         </HeaderSection>
         <HeaderSection>
           <HeaderItem>

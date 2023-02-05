@@ -1,16 +1,13 @@
 import { createContext, FC, ReactElement } from "react";
-import { SidebarState, SidebarView } from "../components/sidebar/types";
 import { useSidebar } from "../components/sidebar/useSidebar";
 
-type SidebarContextValueType = SidebarState & {
-  setSidebarView: (view: SidebarView) => void,
+type SidebarContextValueType = {
+  open: boolean,
   toggleSidebar: () => void
 }
 
 export const SidebarContext = createContext<SidebarContextValueType>({
   open: true,
-  view: "fixed",
-  setSidebarView: () => {},
   toggleSidebar: () => {}
 });
 
@@ -19,10 +16,10 @@ interface ISidebarContextProviderProps {
 }
 
 export const SidebarContextProvider: FC<ISidebarContextProviderProps> = ({children}) => {
-  const {state, setSidebarView, toggleSidebar} = useSidebar();
+  const {open, toggleSidebar} = useSidebar();
 
   return (
-    <SidebarContext.Provider value={{...state, setSidebarView, toggleSidebar}}>
+    <SidebarContext.Provider value={{open, toggleSidebar}}>
       {children}
     </SidebarContext.Provider>
   )

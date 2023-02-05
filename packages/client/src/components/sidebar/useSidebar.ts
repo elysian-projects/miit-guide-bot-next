@@ -1,22 +1,14 @@
 import { useState } from "react";
-import { SidebarState, SidebarView } from "./types";
 
 export const useSidebar = () => {
-  const [state, setState] = useState<SidebarState>({open: true, view: "fixed"});
+  const [open, setOpen] = useState<boolean>((window.innerWidth > 1170));
 
   const toggleSidebar = (): void => {
-    setState({...state, open: !state.open});
-  }
-
-  const setSidebarView = (view: SidebarView): void => {
-    if(state.view !== view) {
-      setState({...state, view});
-    }
+    setOpen(!open);
   }
 
   return {
-    state,
+    open,
     toggleSidebar,
-    setSidebarView
   }
 }
