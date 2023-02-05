@@ -1,4 +1,4 @@
-import { CHANGE, columnNamesDict } from "../constants/table";
+import { CHANGE, columnNamesDict, DELETE } from "../constants/table";
 
 type AdditionalColumns = {
   addChange?: boolean,
@@ -8,14 +8,14 @@ type AdditionalColumns = {
 export const getTableColumnNames = (data: object, options?: AdditionalColumns): string[] => {
   const columnNames: string[] = [];
 
-  Object.keys(data).forEach(key => {
+  Object.keys(data ?? []).forEach(key => {
     columnNames.push(formatLabelForUI(key));
   });
 
   const {addChange, addDelete} = options ?? {};
 
   addChange && columnNames.push(CHANGE);
-  addDelete && columnNames.push(CHANGE);
+  addDelete && columnNames.push(DELETE);
 
   return columnNames;
 }
