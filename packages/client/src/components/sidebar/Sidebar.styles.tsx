@@ -9,7 +9,7 @@ export const SidebarFrame = styled.nav`
   min-width: 400px;
   max-width: 400px;
 
-  transition: margin 0.2s;
+  transition: margin 0.2s ease-in-out;
   margin-left: 0px;
 
   /* Making it not connected to the content layout floating on the left side */
@@ -23,11 +23,6 @@ export const SidebarFrame = styled.nav`
     &.closed {
       margin-left: -400px;
     }
-  }
-
-  @media(max-width: 400px) {
-    min-width: 100vw;
-    max-width: 100vw;
   }
 `
 
@@ -45,6 +40,13 @@ export const SidebarWrapper = styled.div`
   overflow-y: scroll;
   z-index: 6000;
   overflow-x: visible;
+  width: 400px;
+  position: fixed;
+
+  @media(max-width: 400px) {
+    min-width: 100vw;
+    max-width: 100vw;
+  }
 `
 
 export const SidebarDarkBackground = styled.div`
@@ -52,17 +54,20 @@ export const SidebarDarkBackground = styled.div`
   z-index: 5000;
   background-color: #000;
   opacity: 0;
-  display: none;
-  width: 100vw;
-  height: 100vh;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
 
+  width: 1px;
+  height: 1px;
+
+  transition: opacity 0.2s ease-in-out;
+
   @media(max-width: 1170px) {
     &.show {
-      display: block;
+      width: 100vw;
+      height: 100vh;
       opacity: 0.4;
     }
   }
