@@ -5,11 +5,15 @@ import { SidebarContextProvider } from "./contexts/sidebar";
 import { NotFoundPage } from "./pages/404";
 import { LoginPage } from "./pages/auth/login";
 import { ArticlePage } from "./pages/content/articles";
+import { AddArticlePage } from "./pages/content/articles/AddArticlePage";
 import { DeleteArticlePage } from "./pages/content/articles/DeleteArticlePage";
 import { EditArticlePage } from "./pages/content/articles/EditArticlePage";
 import { IndexPage } from "./pages/index";
 
-const articleClient = new QueryClient();
+const articlesGetClient = new QueryClient();
+const articleGetClient = new QueryClient();
+const articleEditClient = new QueryClient();
+const articleDeleteClient = new QueryClient();
 
 const App = () => {
   return (
@@ -20,22 +24,22 @@ const App = () => {
             <Route path="/" element={<IndexPage />} />
             <Route path="/auth/login" element={<LoginPage />} />
             <Route path="/content/articles" element={
-              <QueryClientProvider client={articleClient}>
+              <QueryClientProvider client={articlesGetClient}>
                 <ArticlePage />
               </QueryClientProvider>
             } />
             <Route path="/content/articles/add" element={
-              <QueryClientProvider client={articleClient}>
-                <ArticlePage />
+              <QueryClientProvider client={articleGetClient}>
+                <AddArticlePage />
               </QueryClientProvider>
             } />
             <Route path="/content/articles/edit" element={
-              <QueryClientProvider client={articleClient}>
+              <QueryClientProvider client={articleEditClient}>
                 <EditArticlePage />
               </QueryClientProvider>
             } />
             <Route path="/content/articles/delete" element={
-              <QueryClientProvider client={articleClient}>
+              <QueryClientProvider client={articleDeleteClient}>
                 <DeleteArticlePage />
               </QueryClientProvider>
             } />

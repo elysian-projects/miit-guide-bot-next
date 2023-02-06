@@ -5,7 +5,7 @@ import { getOptionsString, getSelectString, getServerURL } from "./utils";
 
 type ApiData = "articles" | "locations";
 
-export const getData = async (type: ApiData, options?: Partial<SearchOptions>): Promise<Data> => {
+export const getData = async <T extends object>(type: ApiData, options?: Partial<SearchOptions>): Promise<IResponse<T>> => {
   const {select, ...searchProps} = options ?? {};
 
   let query = getServerURL().concat("/api/").concat(type).concat("?");
@@ -18,15 +18,12 @@ export const getData = async (type: ApiData, options?: Partial<SearchOptions>): 
     query = query.concat(getSelectString(select));
   }
 
-  const {data: response} = await axios.get<IResponse<ContentNode>>(query, {headers: {
+  const {data: response} = await axios.get<IResponse<T>>(query, {headers: {
     "Access-Control-Allow-Origin": getServerURL(),
     "Content-Type": "application/json"
   }});
 
-  return {
-    status: response.status,
-    content: response.data ?? []
-  };
+  return response;
 };
 
 export const deleteData = async (type: ApiData, id: string | number): Promise<Data> => {
