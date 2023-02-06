@@ -23,13 +23,3 @@ export const hasNonEmpty = (...args: unknown[]): boolean => {
 
   return false;
 };
-
-export const isValidURL = (url: string): boolean => {
-  try {
-    new URL(url);
-
-    return true;
-  } catch (e) {
-    return false;
-  }
-};

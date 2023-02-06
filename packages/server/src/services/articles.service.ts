@@ -1,3 +1,4 @@
+import { isValidURL } from "@/../../common/src";
 import { DBSource } from "@/database/data-source";
 import { Article } from "@/entity/articles";
 import { Tab } from "@/entity/tabs";
@@ -6,7 +7,7 @@ import { useOrderBy } from "@/utils/orderBy";
 import { createResponse } from "@/utils/response";
 import { getValidSelectArray } from "@/utils/selectValidation";
 import { serializeTabLabel as serializeLabel } from "@/utils/serializer";
-import { hasNonEmpty, isValidArticleBody, isValidId, isValidURL } from "@/utils/validations";
+import { hasNonEmpty, isValidArticleBody, isValidId } from "@/utils/validations";
 import { Handler } from "express";
 
 // sorting: ?orderBy=id.asc
