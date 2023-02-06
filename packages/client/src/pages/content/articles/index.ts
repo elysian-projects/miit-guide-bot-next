@@ -1,1 +1,1 @@
-export { ArticlePage } from "./ArticlePage";
+export { AllArticlesPage } from "./articles/AllArticlesPage";

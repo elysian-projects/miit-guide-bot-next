@@ -1,6 +1,6 @@
 import { FormControl, TextField } from "@mui/material";
 import { FC, useState } from "react";
-import { ContentNode } from "../../../../../common/src";
+import { ContentNode } from "../../../../../../common/src";
 
 interface IArticleForm {
   data?: ContentNode | null

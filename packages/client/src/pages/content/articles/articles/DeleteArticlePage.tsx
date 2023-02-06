@@ -1,11 +1,11 @@
 import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from "react";
-import { ContentNode } from '../../../../../common/src';
-import { deleteArticle, getOneArticle } from '../../../api/articles';
-import { MainWrapper } from '../../../components/wrapper';
-import { useHttp } from '../../../hooks/useHttp';
-import { useRedirect } from '../../../hooks/useRedirect';
-import { useSearchQuery } from '../../../hooks/useSearchQuery';
+import { ContentNode } from '../../../../../../common/src';
+import { deleteArticle, getOneArticle } from '../../../../api/articles';
+import { MainWrapper } from '../../../../components/wrapper';
+import { useHttp } from '../../../../hooks/useHttp';
+import { useRedirect } from '../../../../hooks/useRedirect';
+import { useSearchQuery } from '../../../../hooks/useSearchQuery';
 
 export const DeleteArticlePage: FC = () => {
   // Move modal window logic somewhere
