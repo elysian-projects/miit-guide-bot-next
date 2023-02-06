@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const SidebarFrame = styled.nav`
   margin: 0;
@@ -77,6 +77,10 @@ export const SidebarBlock = styled.div`
   gap: 10px;
   position: relative;
 
+  >* {
+    width: 100%;
+  }
+
   >a {
     color: black;
     text-decoration: none;
@@ -93,6 +97,7 @@ export const SidebarLogo = styled.div`
   font-size: 28px;
   font-weight: 600;
   padding: 5px;
+  justify-content: center;
 `
 
 export const SidebarDivider = styled.hr`
@@ -102,7 +107,7 @@ export const SidebarDivider = styled.hr`
   color: #8a8a8a;
 `
 
-export const SidebarItem = styled(NavLink)`
+const baseSidebarItemStyles = css`
   display: flex;
   width: 100%;
   align-items: center;
@@ -124,4 +129,12 @@ export const SidebarItem = styled(NavLink)`
     outline: none;
     box-shadow: 0 0 1px 1px #16a17a;
   }
+`
+
+export const SidebarItem = styled.div`
+  ${baseSidebarItemStyles}
+`
+
+export const SidebarLinkItem = styled(NavLink)`
+  ${baseSidebarItemStyles}
 `

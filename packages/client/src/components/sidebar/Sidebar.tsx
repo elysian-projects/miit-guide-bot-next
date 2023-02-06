@@ -8,6 +8,7 @@ import {
   SidebarDivider,
   SidebarFrame,
   SidebarItem,
+  SidebarLinkItem,
   SidebarLogo, SidebarWrapper
 } from "./Sidebar.styles";
 
@@ -53,15 +54,15 @@ export const Sidebar: FC = () => {
         <SidebarBlock style={{height: "100%", justifyContent: "space-between"}}>
           <SidebarBlock>
             {sidebarContent.map(item => item.auth === isAuth && (
-              <SidebarItem onClick={handleClick} key={item.label} to={item.link}>
+              <SidebarLinkItem to={item.link} onClick={handleClick} key={item.label}>
                 {item.icon}
                 {item.label}
-              </SidebarItem>
+              </SidebarLinkItem>
             ))}
           </SidebarBlock>
           <SidebarBlock>
             {(open && window.innerWidth <= 1170) && (
-              <SidebarItem to="" onClick={toggleSidebar}>
+              <SidebarItem onClick={toggleSidebar}>
                 <KeyboardArrowLeft />
                 Закрыть
               </SidebarItem>
