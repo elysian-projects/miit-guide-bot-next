@@ -58,8 +58,14 @@ export const serializeContent = (node: any): string => {
 export const deserializeContent = (element: any, markAttributes = {}) => {
   if (element.nodeType === Node.TEXT_NODE) {
     return jsx("text", markAttributes, element.textContent);
-  } else if (element.nodeType !== Node.ELEMENT_NODE) {
-    return null;
+  }
+
+  // This case basically means that the given value has no parent HTML element, so it's just a plain text node.
+  // This is definitely an invalid value since all of the nodes must have at least one parent HTML element, but
+  // if this case works out, we have to process it properly and show what a user might want to see on the page instead
+  // of an error message, so here we just manually create a new element valid for the editor container and return it
+  else if (element.nodeType !== Node.ELEMENT_NODE) {
+    return [jsx("element", {}, element)];
   }
 
   const nodeAttributes = { ...markAttributes, bold: false };
@@ -74,7 +80,7 @@ export const deserializeContent = (element: any, markAttributes = {}) => {
     .map(node => deserializeContent(node, nodeAttributes))
     .flat();
 
-  if (children.length === 0) {
+  if(children.length === 0) {
     children.push(jsx("text", nodeAttributes, ""));
   }
 
