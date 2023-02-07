@@ -2,13 +2,15 @@ import { DBSource } from "@/database/data-source";
 import { Tab } from "@/entity/tabs";
 import { useOrderBy } from "@/utils/orderBy";
 import { createResponse } from "@/utils/response";
+import { getValidSelectArray } from "@/utils/selectValidation";
 import { serializeTabLabel } from "@/utils/serializer";
 import { isValidId, isValidTabBody } from "@/utils/validations";
 import { Handler } from "express";
 
 export const getTabs: Handler = async (req, res) => {
-  const {orderBy, ...query} = req.query;
+  const {select, orderBy, ...query} = req.query;
 
+  const selectList = getValidSelectArray(select, new Tab());
   const order = useOrderBy(orderBy, new Tab());
 
   if(orderBy && !order) {
@@ -23,6 +25,7 @@ export const getTabs: Handler = async (req, res) => {
 
   const tabs = await DBSource.getRepository(Tab).find({
     where: query,
+    select: selectList,
     order: order ?? {}
   });
 
