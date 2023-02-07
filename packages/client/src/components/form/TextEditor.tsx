@@ -2,10 +2,10 @@ import { styled as MUIStyled } from "@mui/material";
 import { FC, useState } from "react";
 import { createEditor, Descendant } from "slate";
 import { Editable, Slate, withReact } from "slate-react";
-import { serializeContent } from "../../../../common/src";
+import { deserializeContent, serializeContent } from "../../../../common/src";
 
 interface ITextEditorProps {
-  initialValue?: Descendant[],
+  initialValue?: string,
   onChangeCallback?: (value: string) => void
 }
 
@@ -32,8 +32,16 @@ export const TextEditor: FC<ITextEditorProps> = (props) => {
     onChangeCallback(serializeContent(value))
   }
 
+  const getInitialValue = (): Descendant[] => {
+    if(!initialValue) {
+      return defaultValue;
+    }
+
+    return deserializeContent(initialValue) ?? defaultValue;
+  }
+
   return (
-    <Slate onChange={handleChange} editor={editor} value={initialValue ?? defaultValue}>
+    <Slate onChange={handleChange} editor={editor} value={getInitialValue()}>
       <EditableStyled
         onKeyDown={event => {
           if(event.key === "&") {

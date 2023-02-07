@@ -5,6 +5,7 @@ import { NotFoundPage } from "./pages/404";
 import { IndexPage } from "./pages/index";
 import { articlesRoutes } from "./routes/ArticlesRoutes";
 import { authRoutes } from "./routes/AuthRoutes";
+import { tabsRoutes } from "./routes/TabsRoutes";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
             <Route path="/" element={<IndexPage />} />
             {authRoutes}
             {articlesRoutes}
+            {tabsRoutes}
             <Route path="*" element={<NotFoundPage />} />
           </Switch>
         </Page>

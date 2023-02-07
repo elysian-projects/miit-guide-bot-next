@@ -20,7 +20,7 @@ export const EditArticlePage: FC = () => {
   return (
     <>
       <PageTitleBlock
-        title="Редактироваться статью"
+        title="Редактировать статью"
         linkTitle="Назад"
         href="/content/articles"
       />

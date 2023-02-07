@@ -7,6 +7,6 @@ export const columnNamesDict: Record<string, string> = {
   "content": "Контент",
   "tabValue": "Вкладка",
   "picture": "Фото",
-  "type": "Тип статьи",
+  "type": "Тип",
   "links": "Ссылки"
 }

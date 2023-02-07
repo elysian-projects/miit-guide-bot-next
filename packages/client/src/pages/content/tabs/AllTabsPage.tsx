@@ -1,24 +1,23 @@
 import { Alert } from "@mui/material";
 import { FC } from "react";
-import { ContentNode } from "../../../../../common/src";
-import { getAllArticles } from "../../../api/articles";
+import { TabNode } from "../../../../../common/src";
+import { getAllTabs } from "../../../api/tabs";
 import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
 import { DataTable } from "../../../components/table/DataTable";
 import { useHttp } from "../../../hooks/useHttp";
 import { getTableColumnNames } from "../../../utils/tableColumn";
 
-export const AllArticlesPage: FC = () => {
-  const {response, status, error} = useHttp<ContentNode[]>("articlesPage", getAllArticles);
+export const AllTabsPage: FC = () => {
+  const {error, response, status} = useHttp<TabNode[]>("getAllTabs", getAllTabs);
   const columnNames = getTableColumnNames(response?.data ? response.data[0] : {}, {addChange: true, addDelete: true});
 
   return (
     <>
       <PageTitleBlock
-        title="Статьи"
-        linkTitle="Добавить статью"
-        href="/content/articles/add"
+        title="Вкладки"
+        linkTitle="Добавить вкладку"
+        href="/content/tabs/add"
       />
-
       {status === "loading" && (
         <Alert severity="info">Загрузка данных...</Alert>
       )}
@@ -30,8 +29,8 @@ export const AllArticlesPage: FC = () => {
           columnNames={columnNames}
           data={response.data ?? []}
           serviceColumns={{
-            editLink: "/content/articles/edit?id=$id",
-            deleteLink: "/content/articles/delete?id=$id"
+            editLink: "/content/tabs/edit?id=$id",
+            deleteLink: "/content/tabs/delete?id=$id"
           }}
         />
       )}

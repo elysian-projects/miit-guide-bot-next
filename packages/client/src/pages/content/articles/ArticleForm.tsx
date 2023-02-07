@@ -29,9 +29,7 @@ export const ArticleForm: FC<IArticleForm> = ({data}) => {
   const [formData, setFormData] = useState<ArticleFormContentNode>({...defaultFormState, ...data});
   const [articleType, setArticleType] = useState<ArticleType>(formData.type);
 
-  const textFieldHandleChange = (data: string): void => {
-    console.log(data);
-  }
+  const textFieldHandleChange = (_data: string): void => {}
 
   return (
     <Container component="main" sx={{
@@ -66,7 +64,7 @@ export const ArticleForm: FC<IArticleForm> = ({data}) => {
             autoFocus
           />
 
-          <TextEditor onChangeCallback={textFieldHandleChange} />
+          <TextEditor initialValue={formData.content} onChangeCallback={textFieldHandleChange} />
 
           <Select
             labelId="article-type-selector"

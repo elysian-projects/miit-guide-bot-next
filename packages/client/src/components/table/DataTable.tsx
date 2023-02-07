@@ -1,17 +1,21 @@
 import { Delete, Edit } from "@mui/icons-material";
-import { IconButton, Link as MUILink, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { FC, Fragment, ReactNode } from "react";
-import { Link } from "react-router-dom";
-import { isValidURL } from "../../../../common/src";
-import { CHANGE, DELETE } from "../../constants/table";
+import { Link as MUILink, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { FC, Fragment } from "react";
+import { getRandomId, isValidURL } from "../../../../common/src";
+import { ServiceTableCell } from "./ServiceTableCell";
+import { interpolateString } from "./utils";
 
 interface IDataTableProps {
   columnNames: string[]
   data: ({id: string | number})[]
+  serviceColumns?: {
+    editLink?: string,
+    deleteLink?: string
+  }
 }
 
 export const DataTable: FC<IDataTableProps> = (props) => {
-  const {columnNames, data} = props;
+  const {columnNames, data, serviceColumns} = props;
 
   return (
     <TableContainer style={{maxHeight: "80vh"}}>
@@ -32,7 +36,7 @@ export const DataTable: FC<IDataTableProps> = (props) => {
           {data.map((row) => ((
             <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
               {Object.values(row).map((column) => (
-                <TableCell key={column}>
+                <TableCell key={getRandomId()}>
                   {column && isValidURL(String(column)) ? (
                     <>
                       {Array.isArray(column) ? column.map(value => (
@@ -51,12 +55,20 @@ export const DataTable: FC<IDataTableProps> = (props) => {
                   )}
                 </TableCell>
               ))}
-              {columnNames.includes(CHANGE) && (
+              <>
+                {serviceColumns?.editLink && (
+                  <ServiceTableCell href={interpolateString(serviceColumns.editLink, row.id, "$id")} icon={<Edit />}  />
+                )}
+                {serviceColumns?.deleteLink && (
+                  <ServiceTableCell href={interpolateString(serviceColumns.deleteLink, row.id, "$id")} icon={<Delete />}  />
+                )}
+              </>
+              {/* {columnNames.includes(CHANGE) && (
                 <ServiceTableCell href={`/content/articles/edit?id=${row.id}`} icon={<Edit />} />
               )}
               {columnNames.includes(DELETE) && (
                 <ServiceTableCell href={`/content/articles/delete?id=${row.id}`} icon={<Delete />} />
-              )}
+              )} */}
             </TableRow>
           )))}
         </TableBody>
@@ -64,21 +76,6 @@ export const DataTable: FC<IDataTableProps> = (props) => {
     </TableContainer>
   )
 }
-
-interface IServiceTableCellProps {
-  icon: ReactNode,
-  href: string
-}
-
-const ServiceTableCell: FC<IServiceTableCellProps> = ({href, icon}) => (
-  <TableCell style={{textAlign: "center"}}>
-    <Link to={href}>
-      <IconButton>
-        {icon}
-      </IconButton>
-    </Link>
-  </TableCell>
-)
 
 interface IOuterLinkProps {
   value: string
