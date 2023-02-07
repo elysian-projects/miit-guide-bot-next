@@ -1,9 +1,6 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Route } from "react-router-dom";
-import { AllArticlesPage } from "../pages/content/articles";
-import { AddArticlePage } from "../pages/content/articles/articles/AddArticlePage";
-import { DeleteArticlePage } from "../pages/content/articles/articles/DeleteArticlePage";
-import { EditArticlePage } from "../pages/content/articles/articles/EditArticlePage";
+import { AddArticlePage, AllArticlesPage, DeleteArticlePage, EditArticlePage } from "../pages/content/articles";
 
 const articlesGetClient = new QueryClient();
 const articleGetClient = new QueryClient();

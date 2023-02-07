@@ -14,12 +14,12 @@ import {
 } from "@mui/material";
 import { FC, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ContentNode, isValidURL } from "../../../../../../common/src";
-import { getAllArticles } from "../../../../api/articles";
-import { Separator } from "../../../../components/separator";
-import { CHANGE, DELETE } from "../../../../constants/table";
-import { useHttp } from "../../../../hooks/useHttp";
-import { getTableColumnNames } from "../../../../utils/tableColumn";
+import { ContentNode, isValidURL } from "../../../../../common/src";
+import { getAllArticles } from "../../../api/articles";
+import { Separator } from "../../../components/separator";
+import { CHANGE, DELETE } from "../../../constants/table";
+import { useHttp } from "../../../hooks/useHttp";
+import { getTableColumnNames } from "../../../utils/tableColumn";
 import { ArticlesPageTitle } from "./Articles.styles";
 
 export const AllArticlesPage: FC = () => {

@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
-import { ContentNode } from "../../../../../../common/src";
-import { getOneArticle } from "../../../../api/articles";
-import { useHttp } from "../../../../hooks/useHttp";
+import { ContentNode } from "../../../../../common/src";
+import { getOneArticle } from "../../../api/articles";
+import { useHttp } from "../../../hooks/useHttp";
 import { ArticleForm } from "./ArticleForm";
 
 export const EditArticlePage: FC = () => {
