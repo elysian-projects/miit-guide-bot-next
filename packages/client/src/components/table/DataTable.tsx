@@ -63,12 +63,6 @@ export const DataTable: FC<IDataTableProps> = (props) => {
                   <ServiceTableCell href={interpolateString(serviceColumns.deleteLink, row.id, "$id")} icon={<Delete />}  />
                 )}
               </>
-              {/* {columnNames.includes(CHANGE) && (
-                <ServiceTableCell href={`/content/articles/edit?id=${row.id}`} icon={<Edit />} />
-              )}
-              {columnNames.includes(DELETE) && (
-                <ServiceTableCell href={`/content/articles/delete?id=${row.id}`} icon={<Delete />} />
-              )} */}
             </TableRow>
           )))}
         </TableBody>
