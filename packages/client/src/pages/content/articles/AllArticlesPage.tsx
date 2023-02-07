@@ -66,9 +66,16 @@ export const AllArticlesPage: FC = () => {
                   {Object.values(row)?.map((column) => (
                     <TableCell key={column}>
                       {isValidURL(column) ? (
-                        <MUILink href={column} target="_blank" rel="noreferrer">
-                          {column}
-                        </MUILink>
+                        <>
+                          {Array.isArray(column) ? column.map(value => (
+                            <>
+                              [<OuterLink value={value} />]
+                            </>
+                          ))
+                          : (
+                            <OuterLink value={column} />
+                          )}
+                        </>
                       ) : (
                         <>
                           {column}
@@ -106,3 +113,15 @@ const ServiceTableCell: FC<IServiceTableCellProps> = ({href, icon}) => (
     </Link>
   </TableCell>
 )
+
+interface IOuterLinkProps {
+  value: string
+}
+
+const OuterLink: FC<IOuterLinkProps> = ({value}) => {
+  return (
+    <MUILink href={value} target="_blank" rel="noreferrer">
+      {value}
+    </MUILink>
+  )
+}
