@@ -4,7 +4,6 @@ import { createReplyMarkup, removeInlineReplyMarkup } from "@/components/reply-m
 import { keyboardControls } from "@/constants/controls";
 import { EXCURSION_REPLY } from "@/constants/messages";
 import { onStart } from "@/controllers/commands.controller";
-import { Image } from "@/types/lib";
 import { getChatId } from "@/utils/common";
 import { getApiURL } from "@/utils/server";
 import { sendMessage } from "@/views/general.view";
@@ -35,7 +34,7 @@ export const controlButtonModel = async (ctx: Context, clickData: string): Promi
 export const excursionButtonModel = async (ctx: Context): Promise<void> => {
   removeInlineReplyMarkup(ctx);
 
-  const {data} = await axios.get<IResponse<Image>>(`${getApiURL()}/tabs?type=location`);
+  const {data} = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/tabs?type=location`);
   const replyMarkup = createReplyMarkup("inline", data.data ?? []);
 
   await sendMessage(ctx, {
@@ -62,7 +61,7 @@ export const articleButtonModel = async (ctx: Context, clickData: string): Promi
 
 const fetchData = async (clickData: string, articleType: ArticleType): Promise<object[]> => {
   try {
-    const { data: response } = await axios.get<IResponse>(`${getApiURL()}/articles?tabValue=${clickData}&type=${articleType}`);
+    const { data: response } = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/articles?tabValue=${clickData}&type=${articleType}`);
     return (response.ok && response.data)
       ? response.data
       : [];

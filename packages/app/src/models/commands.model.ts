@@ -1,5 +1,5 @@
 import { isValidImage } from "@/adapters/images";
-import { IResponse } from "@/common";
+import { ContentNode, IResponse } from "@/common";
 import { createReplyMarkup, removeMenuReplyMarkup } from "@/components/reply-markup";
 import { locationButton } from "@/constants/controls";
 import { GREETINGS, MAIN_HUB_PHOTO, UNKNOWN_COMMAND } from "@/constants/messages";
@@ -15,7 +15,7 @@ export const startCommandModel = async (ctx: Context, chatId: ChatId) => {
   // with concurrent existence in the menu and in the article-reading state
   removeUserFromStores(chatId);
 
-  const {data: response} = await axios.get<IResponse>(`${getApiURL()}/tabs?type=article`);
+  const {data: response} = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/tabs?type=article`);
 
   if(!isValidImage(response.data)) {
     throw new Error("Invalid data!");
