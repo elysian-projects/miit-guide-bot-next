@@ -20,6 +20,13 @@ export interface ContentNode<T extends RichContent | FlatContent = RichContent> 
   links?: string[]
 }
 
+export interface TabNode {
+  id: number,
+  label: string,
+  value: string,
+  type: string
+}
+
 export interface IResponse<T extends object = object> {
   status: number;
   ok: boolean;

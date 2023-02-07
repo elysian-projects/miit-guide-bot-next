@@ -3,7 +3,7 @@ import { ContentNode, IResponse } from "../types";
 import { Data, SearchOptions } from "./types";
 import { getOptionsString, getSelectString, getServerURL } from "./utils";
 
-type ApiData = "articles" | "locations";
+type ApiData = "articles" | "tabs";
 
 export const getData = async <T extends object>(type: ApiData, options?: Partial<SearchOptions>): Promise<IResponse<T>> => {
   const {select, ...searchProps} = options ?? {};
