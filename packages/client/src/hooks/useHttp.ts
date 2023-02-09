@@ -14,11 +14,12 @@ export const useHttp = <K extends object, T extends string = string>(queryKey: T
 
   useEffect(() => {
     setIsFetching(query?.status === "loading");
-
     setStatus(query?.status)
 
-    if(query.data?.message) {
-      setError(query.data?.message);
+    if(query.data?.message || (query.error as any)?.response.status > 299) {
+      // TODO: get rid of this `any` statement (find library module typing?)
+      // TODO: move concat to an external function
+      setError(query.data?.message || `(${(query.error as any)?.response.status}) ` + (query.error as any)?.response.statusText);
     }
     if(query.data) {
       setResponse(query.data);

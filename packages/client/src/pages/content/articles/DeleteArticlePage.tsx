@@ -13,6 +13,7 @@ export const DeleteArticlePage: FC = () => {
 
   const {getQueryProp} = useSearchQuery();
   const [id] = useState<string | null>(getQueryProp("id"));
+
   const {error, isFetching, response, status} = useHttp<ContentNode>("articles", async () => getOneArticle({id: id ?? ""}));
 
   const {redirect} = useRedirect();
