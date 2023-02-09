@@ -4,10 +4,10 @@ import express, { Router } from "express";
 import { join } from "path";
 import { DBSource } from "./database/data-source";
 import * as articleService from "./services/articles.service";
+import * as authService from "./services/auth.service";
 import * as baseService from "./services/base.service";
 import { invalidSyntaxError } from "./services/error.service";
 import * as tabService from "./services/tabs.service";
-import * as userService from "./services/users.service";
 
 // Initialize database connection and make migrations
 DBSource
@@ -25,8 +25,11 @@ const router = Router();
 // Router handlers
 router.get("/", baseService.index);
 
-// User routes
-router.get("/api/users", userService.getUser);
+// Auth routes
+router.post("/api/auth/login", authService.loginUser);
+router.post("/api/auth/logout", authService.logoutUser);
+
+router.post("/api/auth/signup", authService.signUpUser);
 
 // Tab routes
 router.post("/api/tabs", tabService.insertTab);

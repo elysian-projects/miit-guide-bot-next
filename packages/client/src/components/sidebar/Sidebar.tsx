@@ -1,6 +1,7 @@
 import { KeyboardArrowLeft } from "@mui/icons-material";
-import { FC, useCallback, useContext, useEffect } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { SidebarContext } from "../../contexts/sidebar";
+import { useAuth } from "../../hooks/useAuth";
 import { sidebarContent } from "./content";
 import {
   SidebarBlock,
@@ -15,8 +16,12 @@ import {
 
 export const Sidebar: FC = () => {
   const {open, toggleSidebar} = useContext(SidebarContext);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const {isAuthenticated} = useAuth();
 
-  const isAuth = true;
+  useEffect(() => {
+    setIsAuth(isAuthenticated());
+  }, [isAuthenticated])
 
   const getSecondaryElementShowClass = (): string => {
     return (open && window.innerWidth <= 1170) ? "show" : "";

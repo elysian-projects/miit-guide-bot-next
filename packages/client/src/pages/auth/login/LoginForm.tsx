@@ -1,9 +1,51 @@
 import { LockOutlined } from "@mui/icons-material";
-import { Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
-import { FC } from "react";
+import { Alert, Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
+import { FC, FormEventHandler, useEffect, useState } from "react";
+import { loginUser } from "../../../api/auth";
+import { useAuth } from "../../../hooks/useAuth";
+import { useRedirect } from "../../../hooks/useRedirect";
 import { ForgotPasswordDialog } from "./ForgotPasswordDialog";
 
+type FormState = {
+  login: string,
+  password: string
+}
+
+const initialState: FormState = {
+  login: "",
+  password: "",
+}
+
 export const LoginForm: FC = () => {
+  const [formState, setFormState] = useState<FormState>(initialState);
+  const {isAuthenticated, startSession} = useAuth();
+  const {redirect} = useRedirect();
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if(isAuthenticated()) {
+      redirect("/");
+    }
+  }, [isAuthenticated, redirect])
+
+  const handleLogin: FormEventHandler = async (event) => {
+    event.preventDefault();
+
+    await loginUser(formState.login, formState.password)
+    .then(response => {
+      if((response.data as any).data?.token) {
+        startSession((response.data as any).data?.token);
+        redirect("/", {refresh: true});
+        return;
+      }
+
+      setError("Неизвестная ошибка!");
+    })
+    .catch(err => {
+      setError(err.response.data.message);
+    });
+  }
+
   return (
     <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -19,7 +61,7 @@ export const LoginForm: FC = () => {
             <LockOutlined />
           </Avatar>
           <Typography component="h1" variant="h4">Вход</Typography>
-          <Box component="form" noValidate={false} sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleLogin} noValidate={false} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -29,6 +71,8 @@ export const LoginForm: FC = () => {
               name="login"
               autoComplete="login"
               autoFocus
+              value={formState.login}
+              onChange={event => setFormState({...formState, login: event.target.value})}
             />
             <TextField
               margin="normal"
@@ -39,15 +83,22 @@ export const LoginForm: FC = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={formState.password}
+              onChange={event => setFormState({...formState, password: event.target.value})}
             />
             <Button
-              type="button"
+              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
               Войти
             </Button>
+            {error && (
+              <Alert severity="error">
+                {error}
+              </Alert>
+            )}
             <ForgotPasswordDialog />
           </Box>
         </Box>

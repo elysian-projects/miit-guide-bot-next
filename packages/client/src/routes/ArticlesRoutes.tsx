@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import { AddArticlePage, AllArticlesPage, DeleteArticlePage, EditArticlePage } from "../pages/content/articles";
 
 const articlesGetClient = new QueryClient();
@@ -9,30 +10,37 @@ const articleDeleteClient = new QueryClient();
 
 const baseUrl = "/content/articles";
 
-// TODO: all of these routes can only be available for logged in users
 export const articlesRoutes = (() => {
+  const {isAuthenticated} = useAuth();
+
   return (
     <>
-      <Route path={baseUrl} element={
-        <QueryClientProvider client={articlesGetClient}>
-          <AllArticlesPage />
-        </QueryClientProvider>
-      } />
-      <Route path={baseUrl + "/add"} element={
-        <QueryClientProvider client={articleGetClient}>
-          <AddArticlePage />
-        </QueryClientProvider>
-      } />
-      <Route path={baseUrl + "/edit"} element={
-        <QueryClientProvider client={articleEditClient}>
-          <EditArticlePage />
-        </QueryClientProvider>
-      } />
-      <Route path={baseUrl + "/delete"} element={
-        <QueryClientProvider client={articleDeleteClient}>
-          <DeleteArticlePage />
-        </QueryClientProvider>
-      } />
+      {!isAuthenticated() ? (
+        <Route path="*" element={<Navigate to={"/auth/login"} />} />
+      ) : (
+        <>
+          <Route path={baseUrl} element={
+            <QueryClientProvider client={articlesGetClient}>
+              <AllArticlesPage />
+            </QueryClientProvider>
+          } />
+          <Route path={baseUrl + "/add"} element={
+            <QueryClientProvider client={articleGetClient}>
+              <AddArticlePage />
+            </QueryClientProvider>
+          } />
+          <Route path={baseUrl + "/edit"} element={
+            <QueryClientProvider client={articleEditClient}>
+              <EditArticlePage />
+            </QueryClientProvider>
+          } />
+          <Route path={baseUrl + "/delete"} element={
+            <QueryClientProvider client={articleDeleteClient}>
+              <DeleteArticlePage />
+            </QueryClientProvider>
+          } />
+        </>
+      )}
     </>
   )
 })();

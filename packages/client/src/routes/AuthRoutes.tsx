@@ -1,14 +1,17 @@
-import { Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import { LoginPage } from "../pages/auth/login";
+import { LogoutPage } from "../pages/auth/logout";
 
 const baseUrl = "/auth";
 
-// TODO: this component must also check if the below routes are available for the user.
-// Here we check if the user is logged in and if so redirect to the home page
 export const authRoutes = (() => {
+  const {isAuthenticated} = useAuth();
+
   return (
     <>
-      <Route path={baseUrl + "/login"} element={<LoginPage />} />
+      <Route path={baseUrl + "/login"} element={isAuthenticated() ? <Navigate to={"/"} /> : <LoginPage />} />
+      <Route path={baseUrl + "/logout"} element={isAuthenticated() ? <LogoutPage /> : <Navigate to={"/"} />} />
     </>
   )
 })();
