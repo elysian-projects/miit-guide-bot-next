@@ -13,19 +13,31 @@ import { Handler } from "express";
 // sorting: ?orderBy=id.asc
 // selecting: ?select[]=id&select[]=label
 export const getArticles: Handler = async (req, res) => {
-  const {select, orderBy, ...query} = req.query;
+  const {select, tabValue, orderBy, ...query} = req.query;
 
   const selectList = getValidSelectArray(select, new Article());
   const order = useOrderBy(orderBy, new Article());
 
   if(orderBy && !order) {
-    res.json(createResponse({
+    return res.json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid query parameters passed!"
+      message: "Неверный запрос!"
     }));
+  }
 
-    return;
+  if(tabValue) {
+    const tabWithValue = await DBSource.getRepository(Tab).findOneBy({value: String(tabValue)});
+
+    if(!tabWithValue) {
+      return res.status(404).json(createResponse({
+        status: 404,
+        ok: false,
+        message: "Статьи не найдены!"
+      }));
+    }
+
+    query.tabId = String(tabWithValue.id);
   }
 
   const articles = await DBSource.getRepository(Article).find({
@@ -35,16 +47,14 @@ export const getArticles: Handler = async (req, res) => {
   });
 
   if(articles.length === 0) {
-    res.status(404).json(createResponse({
+    return res.status(404).json(createResponse({
       status: 404,
       ok: false,
-      message: "No articles found"
+      message: "Статьи не найдены!"
     }));
-
-    return;
   }
 
-  res.status(200).json(createResponse({
+  return res.status(200).json(createResponse({
     status: 200,
     ok: true,
     data: articles
@@ -55,40 +65,34 @@ export const insertArticle: Handler = async (req, res) => {
   const body = req.body;
 
   if(!isValidArticleBody(body)) {
-    res.status(400).json(createResponse({
+    return res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid data!"
+      message: "Неверный запрос!"
     }));
-
-    return;
   }
 
-  const {tabValue, label, content, type, picture, links} = body;
+  const {tabId, label, content, type, picture, links} = body;
   const articleValue = serializeLabel(label);
 
-  const existingTab = await DBSource.getRepository(Tab).countBy({value: tabValue});
+  const existingTab = await DBSource.getRepository(Tab).countBy({id: tabId});
 
   if(existingTab === 0) {
-    res.status(400).json(createResponse({
+    return res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Tab with given value was not found!"
+      message: "Вкладка с такими данными не найдена!"
     }));
-
-    return;
   }
 
   const existingArticle = await DBSource.getRepository(Article).countBy({label});
 
   if(existingArticle !== 0) {
-    res.status(409).json(createResponse({
+    return res.status(409).json(createResponse({
       status: 409,
       ok: false,
-      message: "An article with given name already exists!"
+      message: "Статья с таким названием уже существует!"
     }));
-
-    return;
   }
 
   if(links && Array.isArray(links)) {
@@ -97,7 +101,7 @@ export const insertArticle: Handler = async (req, res) => {
         res.status(400).json(createResponse({
           status: 400,
           ok: false,
-          message: "Invalid URL links were given!"
+          message: "Невалидные ссылки!"
         }));
 
         return;
@@ -106,17 +110,15 @@ export const insertArticle: Handler = async (req, res) => {
   }
 
   if(!isValidURL(picture)) {
-    res.status(400).json(createResponse({
+    return res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid picture link was given!"
+      message: "Ссылка на фотографию некорректна!"
     }));
-
-    return;
   }
 
   const article = new Article();
-  article.tabValue = String(tabValue);
+  article.tabId = Number(tabId);
   article.label = String(label);
   article.value = articleValue;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -131,7 +133,7 @@ export const insertArticle: Handler = async (req, res) => {
 
   await DBSource.getRepository(Article).save(article);
 
-  res.status(201).json(createResponse({
+  return res.status(201).json(createResponse({
     status: 201,
     ok: true
   }));
@@ -140,26 +142,22 @@ export const insertArticle: Handler = async (req, res) => {
 export const updateArticle: Handler = async (req, res) => {
   const body = req.body;
 
-  const {id, tabId: tabValue, label, content, type, picture, links} = body;
+  const {id, tabId, label, content, type, picture, links} = body;
 
   if(!isValidId(id)) {
-    res.status(400).json(createResponse({
+    return res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid id!"
+      message: "Неверный ID!"
     }));
-
-    return;
   }
 
-  if(!hasNonEmpty(tabValue, label, content, type, picture, links) || (links && !Array.isArray(links))) {
-    res.status(400).json(createResponse({
+  if(!hasNonEmpty(tabId, label, content, type, picture, links) || (links && !Array.isArray(links))) {
+    return res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid data!"
+      message: "Неверные данные!"
     }));
-
-    return;
   }
 
   const articleRepo = DBSource.getRepository(Article);
@@ -169,20 +167,18 @@ export const updateArticle: Handler = async (req, res) => {
   });
 
   if(!foundArticle) {
-    res.status(404).json(createResponse({
+    return res.status(404).json(createResponse({
       status: 404,
       ok: false,
-      message: "No article found!"
+      message: "Статьи не найдены!"
     }));
-
-    return;
   }
 
   const articleValue = (label)
     ? serializeLabel(label)
     : null;
 
-  tabValue && (foundArticle.tabValue = tabValue);
+  tabId && (foundArticle.tabId = Number(tabId));
   label && (foundArticle.label = label);
   content && (foundArticle.content = content);
   articleValue && (foundArticle.value = articleValue);
@@ -192,7 +188,7 @@ export const updateArticle: Handler = async (req, res) => {
 
   articleRepo.save(foundArticle);
 
-  res.json(createResponse({
+  return res.json(createResponse({
     status: 200,
     ok: true
   }));
@@ -203,13 +199,11 @@ export const deleteArticle: Handler = async (req, res) => {
   const {id: queryId} = req.query;
 
   if(!isValidId(bodyId) && !isValidId(queryId)) {
-    res.status(400).json(createResponse({
+    return res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Article id was not provided!"
+      message: "Запрос не содержит ID статьи!"
     }));
-
-    return;
   }
 
   const id = Number(bodyId ?? queryId);
@@ -218,18 +212,16 @@ export const deleteArticle: Handler = async (req, res) => {
   const foundArticle = await articleRepo.findOneBy({id});
 
   if(!foundArticle) {
-    res.status(404).json(createResponse({
+    return res.status(404).json(createResponse({
       status: 404,
       ok: false,
-      message: "No article found!"
+      message: "Статьи не найдены!"
     }));
-
-    return;
   }
 
   await articleRepo.delete(foundArticle);
 
-  res.json(createResponse({
+  return res.json(createResponse({
     status: 200,
     ok: true
   }));
