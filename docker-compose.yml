@@ -8,6 +8,7 @@ services:
       - ./packages/common:/packages/common
     depends_on:
       - server
+    network_mode: "host"
     configs:
       - source: base_tsconfig
         target: /tsconfig.options.json
@@ -20,6 +21,7 @@ services:
     build: ./packages/client
     volumes:
       - ./packages/common:/packages/common
+    network_mode: "host"
     ports:
       - 3000:3000
     configs:
@@ -29,7 +31,6 @@ services:
         HTTPS: $HTTPS
         SERVER_HOST: $SERVER_HOST
         SERVER_PORT: $SERVER_PORT
-        API_KEY: $API_KEY
     env_file:
       - .env
     restart: unless-stopped
@@ -39,6 +40,7 @@ services:
     build: ./packages/server
     volumes:
       - ./packages/common:/packages/common
+    network_mode: "host"
     configs:
       - source: base_tsconfig
         target: /tsconfig.options.json
@@ -58,6 +60,7 @@ services:
       POSTGRES_USER: $PGUSER
       POSTGRES_DB: $PGDATABASE
       POSTGRES_PASSWORD: $PGPASSWORD
+    network_mode: "host"
     ports:
       - $PGPORT:$PGPORT
     volumes:
