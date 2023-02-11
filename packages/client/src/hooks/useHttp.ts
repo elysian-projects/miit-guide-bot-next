@@ -10,21 +10,18 @@ export const useHttp = <K extends object, T extends string = string>(queryKey: T
   const [response, setResponse] = useState<HttpResponseType<K>>(null);
   const [status, setStatus] = useState<"error" | "idle" | "loading" | "success">("idle");
 
-  const query = useQuery(queryKey, queryFunction);
+  const query = useQuery(queryKey, queryFunction, {
+    onError: (err: any) => {
+      setError(err.response?.data?.message);
+    },
+    onSuccess: (response) => {
+      setResponse(response);
+    }
+  });
 
   useEffect(() => {
     setIsFetching(query?.status === "loading");
     setStatus(query?.status)
-
-    if(query.data?.message || (query.error as any)?.response.status > 299) {
-      // TODO: get rid of this `any` statement (find library module typing?)
-      // TODO: move concat to an external function
-      setError(query.data?.message || `(${(query.error as any)?.response.status}) ` + (query.error as any)?.response.statusText);
-    }
-    if(query.data) {
-      setResponse(query.data);
-    }
-
   }, [query]);
 
   return {
