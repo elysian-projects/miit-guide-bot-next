@@ -85,9 +85,9 @@ export const insertArticle: Handler = async (req, res) => {
     }));
   }
 
-  const existingArticle = await DBSource.getRepository(Article).countBy({label});
+  const existingArticle = await DBSource.getRepository(Article).findOneBy({label});
 
-  if(existingArticle !== 0) {
+  if(existingArticle && existingArticle.content === content) {
     return res.status(409).json(createResponse({
       status: 409,
       ok: false,
