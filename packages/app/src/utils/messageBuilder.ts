@@ -1,3 +1,5 @@
+import { ParseMode } from "grammy/out/types";
+
 /**
  * Helps to create a complex message and work with it in a declarative way
  */
@@ -86,5 +88,49 @@ export class MessageBuilder {
   public appendEmptyLine = (): this => {
     this._message += "\n";
     return this;
+  };
+}
+
+export class TextDecorator {
+  public static getBoldText = (text: string, parseMode: ParseMode): string => {
+    return (parseMode === "Markdown")
+      ? `*${text}*`
+      : `<b>${text}</b>`;
+  };
+
+  public static getItalicText = (text: string, parseMode: ParseMode): string => {
+    return (parseMode === "Markdown")
+      ? `*${text}*`
+      : `<i>${text}</i>`;
+  };
+
+  public static getStrikeText = (text: string, parseMode: ParseMode): string => {
+    return (parseMode === "Markdown")
+      ? `~~${text}~~`
+      : `<s>${text}</s>`;
+  };
+
+  /**
+   * @note - `underline` doesn't work in Markdown
+   */
+  public static getUnderlineText = (text: string, parseMode: ParseMode): string => {
+    return (parseMode === "Markdown")
+      ? text
+      : `<u>${text}</u>`;
+  };
+
+  public static getCodeText = (text: string, parseMode: ParseMode): string => {
+    return (parseMode === "Markdown")
+      ? `\`${text}\``
+      : `<code>${text}</code>`;
+  };
+
+  /**
+   * @note - `pre` doesn't work in Markdown
+   */
+  public static getPreText = (text: string, parseMode: ParseMode): string => {
+    return (parseMode === "Markdown")
+      ? TextDecorator.getCodeText(text, "Markdown")
+      : `<pre>${text}</pre>`;
   };
 }

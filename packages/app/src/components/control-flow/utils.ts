@@ -8,6 +8,7 @@ import { formatMessage } from "@/utils/formatters";
 
 /**
  * Throws an error if user is not added
+ * // TODO: remove error throwing, add user instead
  */
 export const checkUserExists = (chatId: ChatId): void => {
   if (!store.userExists(chatId)) {
@@ -30,9 +31,10 @@ export function useMessageController<T extends KeyboardType>(replyMarkupType: T,
   };
 
   const content = user.getCurrentContent();
+  const props = getMessageProps(replyMarkupType, options);
 
   return {
-    message: formatMessage(content, options),
+    message: formatMessage(content, {...options, parseMode: props.parse_mode}),
     props: getMessageProps(replyMarkupType, options),
     content,
     isFirstStep: user.isFirstStep(),
