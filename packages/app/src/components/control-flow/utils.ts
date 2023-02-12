@@ -35,7 +35,7 @@ export function useMessageController<T extends KeyboardType>(replyMarkupType: T,
 
   return {
     message: formatMessage(content, {...options, parseMode: props.parse_mode}),
-    props: getMessageProps(replyMarkupType, options),
+    props,
     content,
     isFirstStep: user.isFirstStep(),
     isLastStep: user.isLastStep(),
