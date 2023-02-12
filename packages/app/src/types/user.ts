@@ -17,7 +17,8 @@ export interface UserState {
 
 export type StepInformation = {
   currentStep: number,
-  maxSteps: number
+  maxSteps: number,
+  isLastArticleNode: boolean
 }
 
 /** A decorator used to add interfaces to the static classes */

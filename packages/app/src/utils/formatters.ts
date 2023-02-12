@@ -39,5 +39,5 @@ const formatCountLabel = (currentStep: number, maxSteps: number): string => {
 };
 
 const shouldAddLinks = (content: ContentNode<FlatContent>, options: StepInformation): content is ContentNode<FlatContent> & {links: string[]} & boolean => {
-  return (content.links && content.links.length !== 0 && (options.currentStep === options.maxSteps - 1)) ?? false;
+  return (content.links && content.links.length !== 0 && options.isLastArticleNode) ?? false;
 };

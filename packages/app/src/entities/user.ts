@@ -74,6 +74,10 @@ export class User {
     return (this.state.step === this.state.content.getAmountOfContent() - 1);
   };
 
+  public isLastArticleNode = (): boolean => {
+    return this.state.content.isLastArticleNode(this.state.step);
+  };
+
   private callChangeStepHandlers = (): void => {
     this.changeStepHandlers.forEach(handler => handler());
   };

@@ -27,7 +27,8 @@ export function useMessageController<T extends KeyboardType>(replyMarkupType: T,
 
   const options: StepInformation = {
     currentStep: user.getCurrentStep(),
-    maxSteps: user.getAmountOfContent()
+    maxSteps: user.getAmountOfContent(),
+    isLastArticleNode: user.isLastArticleNode()
   };
 
   const content = user.getCurrentContent();
