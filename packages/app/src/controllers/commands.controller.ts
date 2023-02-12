@@ -10,7 +10,7 @@ export const onStart = async (ctx: Context) => {
   removeUserFromStores(getChatId(ctx));
 
   const {message, tabs} = await getIntroData();
-  const replyMarkup = createReplyMarkup("inline", [locationButton, ...tabs]);
+  const replyMarkup = createReplyMarkup("inline", [locationButton, ...tabs], {columns: 1});
 
   await sendPhoto(ctx, {
     photo: MAIN_HUB_PHOTO,
