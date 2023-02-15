@@ -1,17 +1,13 @@
-import { styled as MUIStyled } from "@mui/material";
 import { FC, useState } from "react";
 import { createEditor, Descendant } from "slate";
-import { Editable, Slate, withReact } from "slate-react";
+import { Slate, withReact } from "slate-react";
 import { deserializeContent, serializeContent } from "../../../../common/src";
+import { EditableStyled } from "./TextEditor.styles";
 
 interface ITextEditorProps {
   initialValue?: string,
   onChangeCallback?: (value: string) => void
 }
-
-const EditableStyled = MUIStyled(Editable)`
-  border: 1px solid black;
-`
 
 const defaultValue = [
   {
@@ -42,14 +38,7 @@ export const TextEditor: FC<ITextEditorProps> = (props) => {
 
   return (
     <Slate onChange={handleChange} editor={editor} value={getInitialValue()}>
-      <EditableStyled
-        onKeyDown={event => {
-          if(event.key === "&") {
-            event.preventDefault();
-            editor.insertText("и");
-          }
-        }}
-      />
+      <EditableStyled />
     </Slate>
   )
 }
