@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 export const EditableStyled = styled(Editable)`
   padding: 10px 15px;
-  margin-bottom: 8px;
+  margin: 8px 0;
   border: 1px solid rgba(0, 0, 0, 0.23);
   border-radius: 4px;
-  max-height: 40vh;
+  height: 40vh;
   overflow-y: scroll;
   overflow-x: hidden;
   line-height: 1.45em;
