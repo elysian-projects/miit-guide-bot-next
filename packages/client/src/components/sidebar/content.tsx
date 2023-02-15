@@ -10,8 +10,8 @@ export type SidebarContentType = {
 
 export const sidebarContent: SidebarContentType[] = [
   {label: "Главная", link: "/", auth: true, icon: (<Home />)},
-  {label: "Вкладки", link: "/content/tabs", auth: true, icon: (<Storage />)},
   {label: "Статьи", link: "/content/articles", auth: true, icon: (<Article />)},
+  {label: "Вкладки", link: "/content/tabs", auth: true, icon: (<Storage />)},
   {label: "Вход", link: "/auth/login", auth: false, icon: (<Login />)},
   {label: "Выход", link: "/auth/logout", auth: true, icon: (<Logout />)},
 ];
