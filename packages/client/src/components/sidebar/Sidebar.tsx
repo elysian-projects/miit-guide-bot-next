@@ -1,7 +1,8 @@
 import { KeyboardArrowLeft } from "@mui/icons-material";
-import { FC, useCallback, useContext, useEffect, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { SidebarContext } from "../../contexts/sidebar";
 import { useAuth } from "../../hooks/useAuth";
+import { useWindowResizeHandler } from "../../hooks/useWindowResizeHandler";
 import { sidebarContent } from "./content";
 import {
   SidebarBlock,
@@ -12,41 +13,33 @@ import {
   SidebarLinkItem,
   SidebarLogo, SidebarWrapper
 } from "./Sidebar.styles";
-
+import {
+  getSecondaryElementShowClass,
+  getSidebarFrameClass,
+  isMobileWindow
+} from "./utils";
 
 export const Sidebar: FC = () => {
-  const {open, toggleSidebar} = useContext(SidebarContext);
-  const [isAuth, setIsAuth] = useState<boolean>(false);
   const {isAuthenticated} = useAuth();
+  const [isAuth] = useState<boolean>(isAuthenticated());
 
-  useEffect(() => {
-    setIsAuth(isAuthenticated());
-  }, [isAuthenticated])
+  const {open, toggleSidebar} = useContext(SidebarContext);
 
-  const getSecondaryElementShowClass = (): string => {
-    return (open && window.innerWidth <= 1170) ? "show" : "";
-  }
-
-  const handleClick = () => {
-    if(window.innerWidth < 1170) {
+  /**
+   * This function toggled the sidebar if the given condition is true
+   * @param {boolean} condition - the condition to check before toggling
+   */
+  const toggleSidebarOnCondition = (condition: boolean): void => {
+    if(condition) {
       toggleSidebar();
     }
   }
 
-  const resizeHandler = useCallback(() => {
-    if(window.innerWidth <= 1170 && open) {
-      toggleSidebar();
-    }
-  }, [open, toggleSidebar])
-
-  useEffect(() => {
-    window.addEventListener("resize", resizeHandler);
-    return () => window.removeEventListener("resize", resizeHandler);
-  }, [open, toggleSidebar, resizeHandler])
+  useWindowResizeHandler(() => toggleSidebarOnCondition(open && isMobileWindow()));
 
   return (
-    <SidebarFrame className={`${(!open && window.innerWidth <= 1170) ? "closed" : ""}`}>
-      <SidebarDarkBackground onClick={toggleSidebar} className={getSecondaryElementShowClass()} />
+    <SidebarFrame className={getSidebarFrameClass(open)}>
+      <SidebarDarkBackground onClick={toggleSidebar} className={getSecondaryElementShowClass(open)} />
       <SidebarWrapper>
         <SidebarBlock>
           <SidebarLogo>
@@ -59,14 +52,14 @@ export const Sidebar: FC = () => {
         <SidebarBlock style={{height: "100%", justifyContent: "space-between"}}>
           <SidebarBlock>
             {sidebarContent.map(item => item.auth === isAuth && (
-              <SidebarLinkItem to={item.link} onClick={handleClick} key={item.label}>
+              <SidebarLinkItem to={item.link} onClick={() => toggleSidebarOnCondition(isMobileWindow())} key={item.label}>
                 {item.icon}
                 {item.label}
               </SidebarLinkItem>
             ))}
           </SidebarBlock>
           <SidebarBlock>
-            {(open && window.innerWidth <= 1170) && (
+            {(open && isMobileWindow()) && (
               <SidebarItem onClick={toggleSidebar}>
                 <KeyboardArrowLeft />
                 Закрыть

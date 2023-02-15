@@ -1,19 +1,26 @@
 import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
+const SIDEBAR_WIDTH = "300px";
+const SIDEBAR_MOBILE_MODE_WIDTH = "1170px";
+const SIDEBAR_FULL_SCREEN_MAX_WIDTH = "450px";
+
 export const SidebarFrame = styled.nav`
+  position: relative;
   margin: 0;
   padding: 0;
   color: white;
   height: 100vh;
-  min-width: 400px;
-  max-width: 400px;
+
+  /* Somehow this is the only way to make it adjust with the right width */
+  width: ${SIDEBAR_WIDTH};
+  min-width: ${SIDEBAR_WIDTH};
+  max-width: ${SIDEBAR_WIDTH};
 
   transition: margin 0.2s ease-in-out;
   margin-left: 0px;
 
-  /* Making it not connected to the content layout floating on the left side */
-  @media(max-width: 1170px) {
+  @media(max-width: ${SIDEBAR_MOBILE_MODE_WIDTH}) {
     z-index: 9000;
     position: fixed;
     top: 0;
@@ -21,32 +28,35 @@ export const SidebarFrame = styled.nav`
 
     /* Sidebar can only be toggled when the screen size is low and the sidebar is in mobile mode */
     &.closed {
-      margin-left: -400px;
+      margin-left: -${SIDEBAR_WIDTH};
+    }
+  }
+
+  @media(max-width: ${SIDEBAR_FULL_SCREEN_MAX_WIDTH}) {
+    &.closed {
+      margin-left: -100vw;
+    }
+
+    &:not(.closed) {
+      width: 100vw;
     }
   }
 `
 
 export const SidebarWrapper = styled.div`
   background-color: #101827;
+  width: inherit;
   height: 100%;
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   margin: 0 auto;
   padding: 10px 15px;
-  max-width: 1170px;
   overflow-y: scroll;
-  z-index: 6000;
   overflow-x: visible;
-  width: 400px;
+  z-index: 6000;
   position: fixed;
-
-  @media(max-width: 400px) {
-    min-width: 100vw;
-    max-width: 100vw;
-  }
 `
 
 export const SidebarDarkBackground = styled.div`
@@ -87,7 +97,7 @@ export const SidebarBlock = styled.div`
   }
 
   >a {
-    color: black;
+    color: #000;
     text-decoration: none;
     transition-duration: .2s;
 
