@@ -17,6 +17,7 @@ export const AllTabsPage: FC = () => {
         title="Вкладки"
         linkTitle="Добавить вкладку"
         href="/content/tabs/add"
+        badgeContent={response?.data?.length}
       />
       {status === "loading" && (
         <Alert severity="info">Загрузка данных...</Alert>

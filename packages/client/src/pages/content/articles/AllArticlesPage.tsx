@@ -17,6 +17,7 @@ export const AllArticlesPage: FC = () => {
         title="Статьи"
         linkTitle="Добавить статью"
         href="/content/articles/add"
+        badgeContent={response?.data?.length}
       />
 
       {status === "loading" && (
