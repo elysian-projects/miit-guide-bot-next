@@ -37,21 +37,12 @@ export const DataTable: FC<IDataTableProps> = (props) => {
             <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
               {Object.values(row).map((column) => (
                 <TableCell key={getRandomId()}>
-                  {column && isValidURL(String(column)) ? (
-                    <>
-                      {Array.isArray(column) ? column.map(value => (
-                        <Fragment key={value}>
-                          [<OuterLink value={value} />]
-                        </Fragment>
-                      ))
-                      : (
-                        <OuterLink value={String(column)} />
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {column}
-                    </>
+                  {isValidURL(String(column)) ? (
+                      <TableLink column={column} />
+                    ) : (
+                      <>
+                        {column}
+                      </>
                   )}
                 </TableCell>
               ))}
@@ -71,6 +62,23 @@ export const DataTable: FC<IDataTableProps> = (props) => {
   )
 }
 
+interface ITableLink {
+  column: string | number | string[]
+}
+
+const TableLink: FC<ITableLink> = ({column}) => {
+  return <>
+    {Array.isArray(column) ? column.map(value => (
+      <Fragment key={value}>
+        [<OuterLink value={value} />]
+      </Fragment>
+    ))
+    : (
+      <OuterLink value={String(column)} />
+    )}
+  </>
+}
+
 interface IOuterLinkProps {
   value: string
 }
@@ -78,7 +86,7 @@ interface IOuterLinkProps {
 const OuterLink: FC<IOuterLinkProps> = ({value}) => {
   return (
     <MUILink href={value} target="_blank" rel="noreferrer">
-      {value}
+      {value.substring(0, 40)}...
     </MUILink>
   )
 }
