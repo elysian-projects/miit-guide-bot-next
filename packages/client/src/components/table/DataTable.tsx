@@ -1,13 +1,13 @@
 import { Delete, Edit } from "@mui/icons-material";
 import { Link as MUILink, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { FC, Fragment } from "react";
-import { getRandomId, isValidURL } from "../../../../common/src";
+import { ContentNode, getRandomId, isValidURL, TabNode } from "../../../../common/src";
 import { ServiceTableCell } from "./ServiceTableCell";
 import { interpolateString } from "./utils";
 
 interface IDataTableProps {
   columnNames: string[]
-  data: ({id: string | number})[]
+  data: (ContentNode | TabNode)[]
   serviceColumns?: {
     editLink?: string,
     deleteLink?: string
@@ -35,14 +35,22 @@ export const DataTable: FC<IDataTableProps> = (props) => {
         <TableBody>
           {data.map((row) => ((
             <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-              {Object.values(row).map((column) => (
+              {Object.keys(row).map((column) => (
                 <TableCell key={getRandomId()}>
-                  {isValidURL(String(column)) ? (
-                      <TableLink column={column} />
-                    ) : (
-                      <>
-                        {column}
-                      </>
+                  {column === "tabId" ? (
+                    <MUILink href={`/content/tabs/edit?id=${row[column as keyof typeof row]}`}>
+                      Открыть вкладку
+                    </MUILink>
+                  ) : (
+                    <>
+                      {isValidURL(String(row[column as keyof typeof row])) ? (
+                        <TableLink column={row[column as keyof typeof row] as string} />
+                      ) : (
+                        <>
+                          {row[column as keyof typeof row]}
+                        </>
+                      )}
+                    </>
                   )}
                 </TableCell>
               ))}

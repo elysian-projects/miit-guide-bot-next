@@ -6,7 +6,7 @@ export type FlatContent = string;
 export interface ContentNode<T extends RichContent | FlatContent = RichContent> {
   id: number,
   /** Value of the parent record */
-  tabValue: string,
+  tabId: number,
   /** Public label of the current node */
   label: string,
   /** Value for tracking state in the system */

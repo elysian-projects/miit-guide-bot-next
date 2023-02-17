@@ -3,7 +3,7 @@ import { SearchOptions } from "../../../common/src/api/types";
 
 export const getAllArticles = async (): Promise<IResponse<ContentNode[]>> => {
   return (await getData("articles", {
-    select: ["id", "tabValue", "label", "type", "picture", "links"]
+    select: ["id", "tabId", "label", "type", "picture", "links"]
   })) || [];
 }
 
