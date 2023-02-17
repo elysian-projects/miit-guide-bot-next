@@ -1,15 +1,15 @@
-import { Alert } from "@mui/material";
+import { Alert, Card, CardContent } from "@mui/material";
 import { FC } from "react";
 import { TabNode } from "../../../../../common/src";
 import { getAllTabs } from "../../../api/tabs";
+import { CardWrapper } from "../../../components/card/Card.styles";
+import { CardActionBar } from "../../../components/card/CardActions";
+import { CardTitle } from "../../../components/card/CardTitle";
 import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
-import { DataTable } from "../../../components/table/DataTable";
 import { useHttp } from "../../../hooks/useHttp";
-import { getTableColumnNames } from "../../../utils/tableColumn";
 
 export const AllTabsPage: FC = () => {
   const {error, response, status} = useHttp<TabNode[]>("getAllTabs", getAllTabs);
-  const columnNames = getTableColumnNames(response?.data ? response.data[0] : {}, {addChange: true, addDelete: true});
 
   return (
     <>
@@ -26,14 +26,23 @@ export const AllTabsPage: FC = () => {
         <Alert severity="error">{error}</Alert>
       )}
       {(status === "success" && response) && (
-        <DataTable
-          columnNames={columnNames}
-          data={response.data ?? []}
-          serviceColumns={{
-            editLink: "/content/tabs/edit?id=$id",
-            deleteLink: "/content/tabs/delete?id=$id"
-          }}
-        />
+        <CardWrapper>
+          {response.data?.map(item => (
+            <Card key={item.id}>
+              <CardContent>
+                <CardTitle
+                  value={item.label}
+                  variant="body1"
+                  noWrap={true}
+                />
+              </CardContent>
+              <CardActionBar
+                editLink={`/content/tabs/edit?id=${item.id}`}
+                deleteLink={`/content/tabs/delete?id=${item.id}`}
+              />
+            </Card>
+          ))}
+        </CardWrapper>
       )}
     </>
   )

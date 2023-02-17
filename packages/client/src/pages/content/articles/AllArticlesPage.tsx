@@ -1,15 +1,16 @@
-import { Alert } from "@mui/material";
+import { Link as LinkIcon } from "@mui/icons-material";
+import { Alert, Card, CardContent, CardMedia } from "@mui/material";
 import { FC } from "react";
 import { ContentNode } from "../../../../../common/src";
 import { getAllArticles } from "../../../api/articles";
+import { CardWrapper } from "../../../components/card";
+import { CardActionBar } from "../../../components/card/CardActions";
+import { CardTitle } from "../../../components/card/CardTitle";
 import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
-import { DataTable } from "../../../components/table/DataTable";
 import { useHttp } from "../../../hooks/useHttp";
-import { getTableColumnNames } from "../../../utils/tableColumn";
 
 export const AllArticlesPage: FC = () => {
   const {response, status, error} = useHttp<ContentNode[]>("articlesPage", getAllArticles);
-  const columnNames = getTableColumnNames(response?.data ? response.data[0] : {}, {addChange: true, addDelete: true});
 
   return (
     <>
@@ -27,14 +28,29 @@ export const AllArticlesPage: FC = () => {
         <Alert severity="error">{error}</Alert>
       )}
       {(status === "success" && response) && (
-        <DataTable
-          columnNames={columnNames}
-          data={response.data ?? []}
-          serviceColumns={{
-            editLink: "/content/articles/edit?id=$id",
-            deleteLink: "/content/articles/delete?id=$id"
-          }}
-        />
+        <CardWrapper>
+          {response.data?.map(item => (
+            <Card key={item.id}>
+              <CardMedia
+                component="img"
+                height="194"
+                image={item.picture}
+              />
+              <CardContent>
+                <CardTitle
+                  value={item.label}
+                  variant="body1"
+                  noWrap={true}
+                />
+              </CardContent>
+              <CardActionBar
+                additionalLinks={[{value: `/content/tabs/edit?id=${item.tabId}`, icon: <LinkIcon />}]}
+                editLink={`/content/articles/edit?id=${item.id}`}
+                deleteLink={`/content/articles/delete?id=${item.id}`}
+              />
+            </Card>
+          ))}
+        </CardWrapper>
       )}
     </>
   )
