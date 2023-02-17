@@ -1,10 +1,11 @@
 import { Link as LinkIcon } from "@mui/icons-material";
-import { Alert, Card, CardContent, CardMedia } from "@mui/material";
+import { Alert, Card, CardContent } from "@mui/material";
 import { FC } from "react";
 import { ContentNode } from "../../../../../common/src";
 import { getAllArticles } from "../../../api/articles";
 import { CardWrapper } from "../../../components/card";
 import { CardActionBar } from "../../../components/card/CardActions";
+import { CardMediaCustom } from "../../../components/card/CardMediaCustom";
 import { CardTitle } from "../../../components/card/CardTitle";
 import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
 import { useHttp } from "../../../hooks/useHttp";
@@ -20,7 +21,6 @@ export const AllArticlesPage: FC = () => {
         href="/content/articles/add"
         badgeContent={response?.data?.length}
       />
-
       {status === "loading" && (
         <Alert severity="info">Загрузка данных...</Alert>
       )}
@@ -31,9 +31,8 @@ export const AllArticlesPage: FC = () => {
         <CardWrapper>
           {response.data?.map(item => (
             <Card key={item.id}>
-              <CardMedia
-                component="img"
-                height="194"
+              <CardMediaCustom
+                height="250"
                 image={item.picture}
               />
               <CardContent>
