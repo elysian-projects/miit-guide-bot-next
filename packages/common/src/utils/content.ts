@@ -103,3 +103,12 @@ export const deserializeContent = (element: any, markAttributes = {}) => {
       return children;
   }
 };
+
+
+export const shrinkValueLength = (value: string, maxChars = 20): string => {
+  if(value.length <= maxChars) {
+    return value;
+  }
+
+  return value.substring(0, maxChars);
+};

@@ -1,6 +1,6 @@
 import { Clear } from "@mui/icons-material";
 import { FC } from "react";
-import { isValidURL } from "../../../../common/src";
+import { isValidURL, shrinkValueLength } from "../../../../common/src";
 import { DeleteIcon, TagLink, TagStyled } from "./Tags.styles";
 
 interface ITagProps {
@@ -17,22 +17,14 @@ export const Tag: FC<ITagProps> = ({value, handlerRemove = () => {}}) => {
     <TagStyled>
       {isValidURL(value) ? (
         <TagLink href={value} target="_blank">
-          {normalizeValue(value)}
+          {shrinkValueLength(value)}
         </TagLink>
       ) : (
-        normalizeValue(value)
+        shrinkValueLength(value)
       )}
       <DeleteIcon onClick={removeThis}>
         <Clear />
       </DeleteIcon>
     </TagStyled>
   )
-}
-
-const normalizeValue = (value: string): string => {
-  if(value.length <= 20) {
-    return value;
-  }
-
-  return value.substring(0, 20);
 }
