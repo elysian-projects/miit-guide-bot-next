@@ -1,8 +1,9 @@
 import { ContentNode } from "../types";
 
-export type SearchOptions = {
-  [key in keyof ContentNode]: string
+export type SearchOptions<T extends object> = {
+  [key in keyof T]: string
 } & {
+  where?: Partial<T>,
   select?: string[],
 }
 

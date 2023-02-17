@@ -9,7 +9,7 @@ import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
 import { useHttp } from "../../../hooks/useHttp";
 
 export const AllTabsPage: FC = () => {
-  const {error, response, status} = useHttp<TabNode[]>("getAllTabs", getAllTabs);
+  const {error, response, status} = useHttp<TabNode[]>("getAllTabs", () => getAllTabs());
 
   return (
     <>

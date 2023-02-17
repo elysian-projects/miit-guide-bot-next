@@ -11,7 +11,7 @@ import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
 import { useHttp } from "../../../hooks/useHttp";
 
 export const AllArticlesPage: FC = () => {
-  const {response, status, error} = useHttp<ContentNode[]>("articlesPage", getAllArticles);
+  const {response, status, error} = useHttp<ContentNode[]>("articlesPage", () => getAllArticles());
 
   return (
     <>

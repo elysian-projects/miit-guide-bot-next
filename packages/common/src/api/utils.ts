@@ -1,4 +1,3 @@
-import { SearchOptions } from "./types";
 
 export const getServerURL = (): string => {
   const PROTOCOL = (process.env.HTTPS === "true") ? "https" : "http";
@@ -24,7 +23,7 @@ export const getSelectString = (select: string[]): string => {
   }, "");
 };
 
-export const getOptionsString = (options: Partial<SearchOptions>): string => {
+export const getOptionsString = (options: Partial<object>): string => {
   if(!options || Object.keys(options).length === 0) {
     return "";
   }
