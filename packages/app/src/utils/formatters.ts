@@ -1,4 +1,4 @@
-import { ContentNode, FlatContent } from "@/common";
+import { ContentNode, FlatContent, shrinkValueLength } from "@/common";
 import { EXTRA_LINKS } from "@/constants/messages";
 import { StepInformation } from "@/types/user";
 import { MessageBuilder, TextDecorator } from "@/utils/messageBuilder";
@@ -21,13 +21,25 @@ export const formatMessage = (content: ContentNode<FlatContent>, options: StepIn
       .appendEmptyLine()
       .appendLine(EXTRA_LINKS)
       .append(" ")
-      .append(content.links.join(", "));
+      .append(formatLinks(content.links));
   }
 
   return messageBuilder
     .appendEmptyLine()
     .appendLine(TextDecorator.getBoldText(formatCountLabel(options.currentStep, options.maxSteps), options.parseMode))
     .message;
+};
+
+const formatLinks = (links: string[]): string => {
+  return links.map(link => `[${shrinkLink(link, 30)}](${link})`).join(", ");
+};
+
+const shrinkLink = (link: string, maxChars: number): string => {
+  if(link.length <= maxChars) {
+    return link;
+  }
+
+  return `${shrinkValueLength(link, maxChars)}...`;
 };
 
 /**
