@@ -8,8 +8,6 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
-      "@/common": ["../../common/src"],
-      "@/common/*": ["../../common/src/*"],
       "@/database/*": ["./database/*"],
       "@/entity/*": ["./entity/*"],
       "@/services/*": ["./services/*"],

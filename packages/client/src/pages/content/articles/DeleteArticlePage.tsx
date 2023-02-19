@@ -1,6 +1,6 @@
 import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { ContentNode } from 'common/dist';
 import { FC, useCallback, useEffect, useState } from "react";
-import { ContentNode } from '../../../../../common/src';
 import { deleteArticle, getOneArticle } from '../../../api/articles';
 import { MainWrapper } from '../../../components/wrapper';
 import { useHttp } from '../../../hooks/useHttp';

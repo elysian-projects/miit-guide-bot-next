@@ -1,6 +1,6 @@
-import { ContentNode, FlatContent } from "@/common";
 import { Content } from "@/components/content";
 import { ChatId, UserState } from "@/types/user";
+import { ContentNode, FlatContent } from "common/dist";
 
 export class User {
   private state: UserState;

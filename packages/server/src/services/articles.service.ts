@@ -1,4 +1,3 @@
-import { isValidURL } from "@/../../common/src";
 import { DBSource } from "@/database/data-source";
 import { Article } from "@/entity/articles";
 import { Tab } from "@/entity/tabs";
@@ -8,6 +7,7 @@ import { createResponse } from "@/utils/response";
 import { getValidSelectArray } from "@/utils/selectValidation";
 import { serializeTabLabel as serializeLabel } from "@/utils/serializer";
 import { hasNonEmpty, isValidArticleBody, isValidId } from "@/utils/validations";
+import { isValidURL } from "common/dist";
 import { Handler } from "express";
 
 // sorting: ?orderBy=id.asc

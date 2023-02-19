@@ -2,9 +2,9 @@
   "name": "miit-guide-bot-server",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/server/src/index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "start": "npm run build && node ./dist/server/src/index.js",
+    "start": "npm run build && node ./dist/index.js",
     "build": "tsc && tsc-alias"
   },
   "keywords": [],
@@ -34,6 +34,7 @@
     "reflect-metadata": "^0.1.13",
     "slate": "^0.90.0",
     "slate-hyperscript": "^0.77.0",
-    "typeorm": "^0.3.11"
+    "typeorm": "^0.3.11",
+    "common": "*"
   }
 }

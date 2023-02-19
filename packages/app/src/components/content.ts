@@ -1,4 +1,4 @@
-import { ArticleType, ContentNode, FlatContent } from "@/common";
+import { ArticleType, ContentNode, FlatContent } from "common/dist";
 
 export class Content {
   private content!: ContentNode<FlatContent>[];

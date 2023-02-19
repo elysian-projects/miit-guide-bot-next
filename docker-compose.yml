@@ -1,58 +1,5 @@
 version: '3.8'
 services:
-  # Packages
-  app:
-    container_name: app
-    build: ./packages/app
-    volumes:
-      - ./packages/common:/packages/common
-    depends_on:
-      - server
-    network_mode: "host"
-    configs:
-      - source: base_tsconfig
-        target: /tsconfig.options.json
-    env_file:
-      - .env
-    restart: unless-stopped
-
-  client:
-    container_name: client
-    build: ./packages/client
-    volumes:
-      - ./packages/common:/packages/common
-    network_mode: "host"
-    ports:
-      - 3000:3000
-    configs:
-      - source: base_tsconfig
-        target: /tsconfig.options.json
-    environment:
-        HTTPS: $HTTPS
-        SERVER_HOST: $SERVER_HOST
-        SERVER_PORT: $SERVER_PORT
-    env_file:
-      - .env
-    restart: unless-stopped
-
-  server:
-    container_name: server
-    build: ./packages/server
-    volumes:
-      - ./packages/common:/packages/common
-    network_mode: "host"
-    configs:
-      - source: base_tsconfig
-        target: /tsconfig.options.json
-    env_file:
-      - .env
-    ports:
-      - $SERVER_PORT:$SERVER_PORT
-    expose:
-      - $SERVER_PORT
-    restart: unless-stopped
-
-  # Database
   postgresql:
     container_name: database
     image: "postgres"
@@ -61,19 +8,9 @@ services:
       POSTGRES_DB: $PGDATABASE
       POSTGRES_PASSWORD: $PGPASSWORD
     network_mode: "host"
-    ports:
-      - $PGPORT:$PGPORT
     volumes:
       - postgres:/data/postgres
     restart: unless-stopped
-
-networks:
-  postgres:
-    driver: bridge
-
-configs:
-  base_tsconfig:
-    file: ./tsconfig.options.json
 
 volumes:
   postgres:

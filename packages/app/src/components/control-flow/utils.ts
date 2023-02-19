@@ -1,10 +1,10 @@
 import { store } from "@/bootstrap";
-import { ContentNode, FlatContent } from "@/common";
 import { createReplyMarkup } from "@/components/reply-markup";
 import { keyboardControls } from "@/constants/controls";
 import { Image, KeyboardType, MessageProps, ReplyMarkupType } from "@/types/lib";
 import { ChatId, StepInformation } from "@/types/user";
 import { formatMessage } from "@/utils/formatters";
+import { ContentNode, FlatContent } from "common/dist";
 
 /**
  * Throws an error if user is not added

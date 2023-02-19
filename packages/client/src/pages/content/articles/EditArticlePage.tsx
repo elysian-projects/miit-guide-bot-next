@@ -1,7 +1,7 @@
 import { Box, CircularProgress } from "@mui/material";
+import { ContentNode, flattenContent } from "common/dist";
 import { FC, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { ContentNode, flattenContent } from "../../../../../common/src";
 import { getOneArticle } from "../../../api/articles";
 import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
 import { useHttp } from "../../../hooks/useHttp";
@@ -29,7 +29,9 @@ export const EditArticlePage: FC = () => {
         href="/content/articles"
       />
       {response ? (
-        <ArticleForm data={{...response?.data, content: flattenContent(response?.data?.content)}} />
+        <ArticleForm
+          data={{...response?.data, content: flattenContent(response?.data?.content)}}
+        />
       ) : (
         <Box sx={{ display: "flex", width: "100%", justifyContent: "center" }}>
           <CircularProgress />

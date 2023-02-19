@@ -1,5 +1,5 @@
+import { ContentNode, FlatContent } from "common/dist";
 import { FC, FormEventHandler, useState } from "react";
-import { ContentNode, FlatContent } from "../../../../../common/src";
 import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
 import { ArticleForm } from "./ArticleForm";
 import { defaultFormState } from "./constants";

@@ -1,5 +1,5 @@
-import { deleteData, getData, IResponse, TabNode } from "../../../common/src";
-import { SearchOptions } from "../../../common/src/api/types";
+import { deleteData, getData, IResponse, TabNode } from "common/dist";
+import { SearchOptions } from "common/dist/api/types";
 
 export const getAllTabs = async (where?: Partial<TabNode>): Promise<IResponse<TabNode[]>> => {
   return (await getData("tabs", {

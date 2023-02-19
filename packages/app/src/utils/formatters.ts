@@ -1,7 +1,7 @@
-import { ContentNode, FlatContent, shrinkValueLength } from "@/common";
 import { EXTRA_LINKS } from "@/constants/messages";
 import { StepInformation } from "@/types/user";
 import { MessageBuilder, TextDecorator } from "@/utils/messageBuilder";
+import { ContentNode, FlatContent, shrinkValueLength } from "common/dist";
 import { ParseMode } from "grammy/out/types.node";
 
 /**

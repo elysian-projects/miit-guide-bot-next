@@ -1,4 +1,3 @@
-import { ArticleType, ContentNode, IResponse } from "@/common";
 import { IControlFlow } from "@/components/control-flow/types";
 import { createReplyMarkup } from "@/components/reply-markup";
 import { keyboardControls } from "@/constants/controls";
@@ -8,6 +7,7 @@ import { User } from "@/entities/user";
 import { AvailableKeyboardTypes } from "@/types/lib";
 import { getApiURL } from "@/utils/server";
 import axios, { AxiosError } from "axios";
+import { ArticleType, ContentNode, IResponse } from "common/dist";
 import { Context } from "grammy";
 import { getChatControlFlow } from "./article.model";
 

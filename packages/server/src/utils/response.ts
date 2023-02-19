@@ -1,4 +1,4 @@
-import { IResponse } from "@/common";
+import { IResponse } from "common/dist";
 
 export const createResponse = (params: IResponse): IResponse => {
   return {

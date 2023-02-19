@@ -8,8 +8,6 @@
       "@/adapters/*": ["./adapters/*"],
       "@/chat/*": ["./chat/*"],
       "@/components/*": ["./components/*"],
-      "@/common": ["../../common/src"],
-      "@/common/*": ["../common/src/*"],
       "@/controllers/*": ["./controllers/*"],
       "@/entities/*": ["./entities/*"],
       "@/handlers/*": ["./handlers/*"],
