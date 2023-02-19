@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 export const EditableStyled = styled(Editable)`
   padding: 10px 15px;
-  margin: 8px 0;
   border: 1px solid rgba(0, 0, 0, 0.23);
   border-radius: 4px;
   height: 40vh;
