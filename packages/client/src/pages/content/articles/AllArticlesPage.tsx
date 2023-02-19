@@ -1,6 +1,6 @@
 import { Link as LinkIcon } from "@mui/icons-material";
 import { Alert, Card, CardContent } from "@mui/material";
-import { ContentNode } from "common/dist";
+import { ContentNode } from "common/src";
 import { FC } from "react";
 import { getAllArticles } from "../../../api/articles";
 import { CardWrapper } from "../../../components/card";

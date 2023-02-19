@@ -1,5 +1,5 @@
 import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { ContentNode } from 'common/dist';
+import { ContentNode } from 'common/src';
 import { FC, useCallback, useEffect, useState } from "react";
 import { deleteArticle, getOneArticle } from '../../../api/articles';
 import { MainWrapper } from '../../../components/wrapper';

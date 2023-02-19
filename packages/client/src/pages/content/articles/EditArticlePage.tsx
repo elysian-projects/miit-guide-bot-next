@@ -1,5 +1,5 @@
 import { Box, CircularProgress } from "@mui/material";
-import { ContentNode, flattenContent } from "common/dist";
+import { ContentNode, flattenContent } from "common/src";
 import { FC, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getOneArticle } from "../../../api/articles";

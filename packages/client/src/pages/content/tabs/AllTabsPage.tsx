@@ -1,5 +1,5 @@
 import { Alert, Card, CardContent } from "@mui/material";
-import { TabNode } from "common/dist";
+import { TabNode } from "common/src";
 import { FC } from "react";
 import { getAllTabs } from "../../../api/tabs";
 import { CardWrapper } from "../../../components/card/Card.styles";

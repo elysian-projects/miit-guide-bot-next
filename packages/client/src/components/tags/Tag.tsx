@@ -1,5 +1,5 @@
 import { Clear } from "@mui/icons-material";
-import { isValidURL, shrinkValueLength } from "common/dist";
+import { isValidURL, shrinkValueLength } from "common/src";
 import { FC } from "react";
 import { DeleteIcon, TagLink, TagStyled } from "./Tags.styles";
 

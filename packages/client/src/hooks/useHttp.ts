@@ -1,4 +1,4 @@
-import { IResponse } from "common/dist";
+import { IResponse } from "common/src";
 import { useEffect, useState } from "react";
 import { QueryFunction, useQuery } from "react-query";
 

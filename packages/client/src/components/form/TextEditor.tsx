@@ -1,4 +1,4 @@
-import { deserializeContent, serializeContent } from "common/dist";
+import { deserializeContent, serializeContent } from "common/src";
 import { FC, useState } from "react";
 import { createEditor, Descendant } from "slate";
 import { Slate, withReact } from "slate-react";

@@ -1,5 +1,5 @@
-import { ContentNode, deleteData, getData, IResponse } from "common/dist";
-import { SearchOptions } from "common/dist/api/types";
+import { ContentNode, deleteData, getData, IResponse } from "common/src";
+import { SearchOptions } from "common/src/api/types";
 
 export const getAllArticles = async (where?: Partial<ContentNode>): Promise<IResponse<ContentNode[]>> => {
   return (await getData("articles", {

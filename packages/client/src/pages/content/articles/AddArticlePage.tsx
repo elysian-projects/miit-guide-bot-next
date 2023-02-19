@@ -1,4 +1,4 @@
-import { ContentNode, FlatContent } from "common/dist";
+import { ContentNode, FlatContent } from "common/src";
 import { FC, FormEventHandler, useState } from "react";
 import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
 import { ArticleForm } from "./ArticleForm";
