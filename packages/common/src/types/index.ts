@@ -24,7 +24,7 @@ export interface TabNode {
   id: number,
   label: string,
   value: string,
-  type: string
+  type: ArticleType
 }
 
 export interface IResponse<T extends object = object> {
