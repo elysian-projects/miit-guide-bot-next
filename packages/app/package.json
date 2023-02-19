@@ -26,8 +26,11 @@
   "dependencies": {
     "axios": "^1.2.6",
     "dotenv": "^16.0.3",
+    "escape-html": "^1.0.3",
     "grammy": "^1.13.0",
     "pg": "^8.8.0",
-    "postgres-migrations": "^5.3.0"
+    "postgres-migrations": "^5.3.0",
+    "slate": "^0.91.1",
+    "slate-hyperscript": "^0.77.0"
   }
 }
