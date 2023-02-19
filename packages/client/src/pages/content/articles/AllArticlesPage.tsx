@@ -43,7 +43,7 @@ export const AllArticlesPage: FC = () => {
                 />
               </CardContent>
               <CardActionBar
-                additionalLinks={[{value: `/content/tabs/edit?id=${item.tabId}`, icon: <LinkIcon />}]}
+                additionalLinks={[{value: `/content/tabs/edit?id=${item.tabId}`, icon: <LinkIcon />, tip: "К вкладке"}]}
                 editLink={`/content/articles/edit?id=${item.id}`}
                 deleteLink={`/content/articles/delete?id=${item.id}`}
               />
