@@ -34,6 +34,7 @@ export const useHttp = <
     isFetching,
     response,
     status,
-    error
+    error,
+    refetch: query.refetch
   }
 }
