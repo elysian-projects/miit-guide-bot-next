@@ -31,6 +31,6 @@ const App = () => {
       </SidebarContextProvider>
     </Router>
   );
-}
+};
 
 export default App;

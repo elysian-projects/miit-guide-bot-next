@@ -16,5 +16,5 @@ export const LogoutPage: FC = () => {
 
   return (
     <div>Загрузка...</div>
-  )
-}
+  );
+};

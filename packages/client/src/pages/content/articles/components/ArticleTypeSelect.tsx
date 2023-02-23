@@ -5,7 +5,7 @@ import { FC } from "react";
 const articleTypes: {value: ArticleType, label: string}[] = [
   {label: "Статья", value: "article"},
   {label: "Локация", value: "location"},
-]
+];
 
 interface IArticleTypeSelectProps {
   value: ArticleType,
@@ -33,5 +33,5 @@ export const ArticleTypeSelect: FC<IArticleTypeSelectProps> = ({
         </MenuItem>
       ))}
     </Select>
-  )
-}
+  );
+};

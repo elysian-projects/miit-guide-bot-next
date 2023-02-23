@@ -18,5 +18,5 @@ export const NotFoundPage: FC = () => {
         </Button>
       </Link>
     </NotFoundWrapper>
-  )
-}
+  );
+};

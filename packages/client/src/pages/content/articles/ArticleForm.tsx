@@ -10,8 +10,8 @@ import { PhotoLink } from "./components/PhotoLink";
 import { defaultFormState } from "./constants";
 
 const aligningStyles = {
-  display: 'flex',
-  flexDirection: 'column',
+  display: "flex",
+  flexDirection: "column",
 } as CSSProperties;
 
 interface IArticleForm {
@@ -23,8 +23,8 @@ interface IArticleForm {
 export const ArticleForm: FC<IArticleForm> = (props) => {
   const {
     data,
-    onUpdate = () => {},
-    onSubmit = () => {}
+    onUpdate = () => 0,
+    onSubmit = () => 0
   } = props;
 
   const [formData, setFormData] = useState<ArticleFormContentNode>({...defaultFormState, ...data});
@@ -33,19 +33,18 @@ export const ArticleForm: FC<IArticleForm> = (props) => {
   const handleFormSubmit: FormEventHandler = (event) => {
     event.preventDefault();
     onSubmit(event);
-  }
+  };
 
   useEffect(() => {
     onUpdate(formData);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData])
+  }, [formData]);
 
   return (
     <Container component="div" sx={{maxWidth: "100%"}}>
       <CssBaseline />
       <Box sx={{...aligningStyles, alignItems: "center"}}>
 
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <Article />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -113,5 +112,5 @@ export const ArticleForm: FC<IArticleForm> = (props) => {
         </Box>
       </Box>
     </Container>
-  )
-}
+  );
+};

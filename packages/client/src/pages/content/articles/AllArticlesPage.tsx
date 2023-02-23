@@ -52,5 +52,5 @@ export const AllArticlesPage: FC = () => {
         </CardWrapper>
       )}
     </>
-  )
-}
+  );
+};

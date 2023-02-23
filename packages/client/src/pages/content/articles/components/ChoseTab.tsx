@@ -9,7 +9,7 @@ const defaultTab: TabNode = {
   label: "Выберите вкладку",
   value: "chooseTab",
   type: "article"
-}
+};
 
 interface IChooseTabProps {
   tabIdValue: number,
@@ -30,25 +30,23 @@ export const ChooseTab: FC<IChooseTabProps> = ({
 
   useEffect(() => {
     refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type])
+  }, [type]);
 
   useEffect(() => {
     if(response?.ok && response.data) {
       setTabsList([defaultTab, ...response.data]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
 
   const getChosenTab = (): TabNode => {
     return tabsList.find(tab => tab.id === tabIdValue) || defaultTab;
-  }
+  };
 
   const handleTabChange = (updatedValue: string | null | undefined): void => {
     if(updatedValue !== defaultTab.label) {
-      onUpdate(tabsList.find(tab => tab.label === updatedValue) || defaultTab)
+      onUpdate(tabsList.find(tab => tab.label === updatedValue) || defaultTab);
     }
-  }
+  };
 
   return (
     <Autocomplete
@@ -66,5 +64,5 @@ export const ChooseTab: FC<IChooseTabProps> = ({
         />
       )}
     />
-  )
-}
+  );
+};

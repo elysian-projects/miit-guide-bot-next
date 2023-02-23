@@ -14,7 +14,7 @@ type FormState = {
 const initialState: FormState = {
   login: "",
   password: "",
-}
+};
 
 export const LoginForm: FC = () => {
   const [formState, setFormState] = useState<FormState>(initialState);
@@ -26,7 +26,7 @@ export const LoginForm: FC = () => {
     if(isAuthenticated()) {
       redirect("/");
     }
-  }, [isAuthenticated, redirect])
+  }, [isAuthenticated, redirect]);
 
   const handleLogin: FormEventHandler = async (event) => {
     event.preventDefault();
@@ -44,7 +44,7 @@ export const LoginForm: FC = () => {
     .catch(err => {
       setError(err.response.data.message);
     });
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -52,12 +52,12 @@ export const LoginForm: FC = () => {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlined />
           </Avatar>
           <Typography component="h1" variant="h4">Вход</Typography>
@@ -103,5 +103,5 @@ export const LoginForm: FC = () => {
           </Box>
         </Box>
       </Container>
-  )
-}
+  );
+};

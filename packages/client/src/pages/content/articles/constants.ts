@@ -8,4 +8,4 @@ export const defaultFormState: ArticleFormContentNode = {
   type: "article",
   links: [],
   value: ""
-}
+};

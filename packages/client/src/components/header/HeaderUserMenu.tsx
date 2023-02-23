@@ -17,7 +17,7 @@ export const HeaderUserMenu: FC = () => {
   const handleClose = () => {
     setAnchorEl(null);
     setOpen(false);
-  }
+  };
 
   return (
     <>
@@ -25,9 +25,9 @@ export const HeaderUserMenu: FC = () => {
         onClick={handleClick}
         size="medium"
         sx={{ ml: 2 }}
-        aria-controls={open ? 'account-menu' : undefined}
+        aria-controls={open ? "account-menu" : undefined}
         aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
+        aria-expanded={open ? "true" : undefined}
       >
         <Avatar sx={{ width: 35, height: 35 }}></Avatar>
       </IconButton>
@@ -36,8 +36,8 @@ export const HeaderUserMenu: FC = () => {
         open={open}
         onClick={handleClick}
         onClose={handleClose}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         {(isAuthenticated() && getUserLogin()) && (
           <MenuItem>
@@ -70,5 +70,5 @@ export const HeaderUserMenu: FC = () => {
         </HeaderLink>
       </Menu>
     </>
-  )
-}
+  );
+};

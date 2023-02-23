@@ -6,5 +6,5 @@ export const LoginPage: FC = () => {
     <div style={{height: "50vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
       <LoginForm />
     </div>
-  )
-}
+  );
+};

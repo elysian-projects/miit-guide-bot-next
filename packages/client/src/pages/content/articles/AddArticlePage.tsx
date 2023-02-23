@@ -11,7 +11,7 @@ export const AddArticlePage: FC = () => {
 
   const onSubmit: FormEventHandler = () => {
     console.log(formState);
-  }
+  };
 
   return (
     <div>
@@ -25,5 +25,5 @@ export const AddArticlePage: FC = () => {
         onSubmit={onSubmit}
       />
     </div>
-  )
-}
+  );
+};

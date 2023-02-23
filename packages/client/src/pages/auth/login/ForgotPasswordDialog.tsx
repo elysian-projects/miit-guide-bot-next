@@ -6,11 +6,11 @@ export const ForgotPasswordDialog: FC = () => {
 
   const toggleOpen = () => {
     setOpen(!open);
-  }
+  };
 
   const handleClose = () => {
     setOpen(false);
-  }
+  };
 
   return (
     <>
@@ -38,5 +38,5 @@ export const ForgotPasswordDialog: FC = () => {
         </DialogActions>
       </Dialog>
     </>
-  )
-}
+  );
+};

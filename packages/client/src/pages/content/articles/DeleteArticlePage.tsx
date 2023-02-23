@@ -1,11 +1,11 @@
-import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { ContentNode } from 'common/src';
+import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { ContentNode } from "common/src";
 import { FC, useCallback, useEffect, useState } from "react";
-import { deleteArticle, getOneArticle } from '../../../api/articles';
-import { MainWrapper } from '../../../components/wrapper';
-import { useHttp } from '../../../hooks/useHttp';
-import { useRedirect } from '../../../hooks/useRedirect';
-import { useSearchQuery } from '../../../hooks/useSearchQuery';
+import { deleteArticle, getOneArticle } from "../../../api/articles";
+import { MainWrapper } from "../../../components/wrapper";
+import { useHttp } from "../../../hooks/useHttp";
+import { useRedirect } from "../../../hooks/useRedirect";
+import { useSearchQuery } from "../../../hooks/useSearchQuery";
 
 export const DeleteArticlePage: FC = () => {
   // Move modal window logic somewhere
@@ -21,18 +21,18 @@ export const DeleteArticlePage: FC = () => {
   const closePage = useCallback(() => {
     setOpen(false);
     redirect("/content/articles");
-  }, [redirect])
+  }, [redirect]);
 
   useEffect(() => {
     if(!id || error || status === "error") {
       closePage();
     }
-  }, [closePage, error, id, status])
+  }, [closePage, error, id, status]);
 
   const handleDelete = async () => {
     await deleteArticle(id || "");
     closePage();
-  }
+  };
 
   return (
     <MainWrapper>
@@ -65,5 +65,5 @@ export const DeleteArticlePage: FC = () => {
         </Alert>
       )}
     </MainWrapper>
-  )
-}
+  );
+};

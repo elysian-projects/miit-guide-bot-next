@@ -19,5 +19,5 @@ export const AddLinks: FC<IAddLinksProps> = ({
       maps={[isValidURL]}
       placeholder="Добавить ссылки"
     />
-  )
-}
+  );
+};

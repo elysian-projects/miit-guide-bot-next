@@ -15,5 +15,5 @@ export const tabsRoutes = (() => {
         <Route path={baseUrl} element={<AllTabsPage />} />
       )}
     </>
-  )
+  );
 })();

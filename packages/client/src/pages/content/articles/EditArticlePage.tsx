@@ -19,7 +19,7 @@ export const EditArticlePage: FC = () => {
     if(!queryProps.get("id") || error || status === "error") {
       redirect("/content/articles/");
     }
-  }, [error, queryProps, redirect, status])
+  }, [error, queryProps, redirect, status]);
 
   return (
     <>
@@ -38,5 +38,5 @@ export const EditArticlePage: FC = () => {
         </Box>
       )}
     </>
-  )
-}
+  );
+};

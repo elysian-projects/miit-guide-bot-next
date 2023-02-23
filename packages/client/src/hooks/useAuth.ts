@@ -4,7 +4,7 @@ const SESSION_USER_LOGIN_KEY = "login";
 export const useAuth = () => {
   const isAuthenticated = (): boolean => {
     return Boolean(sessionStorage.getItem(SESSION_TOKEN_KEY));
-  }
+  };
 
   const getUserLogin = (): string | null => {
     if(!isAuthenticated()) {
@@ -12,12 +12,12 @@ export const useAuth = () => {
     }
 
     return sessionStorage.getItem(SESSION_USER_LOGIN_KEY);
-  }
+  };
 
   const startSession = (token: string, login: string): void => {
     sessionStorage.setItem(SESSION_TOKEN_KEY, token);
     sessionStorage.setItem(SESSION_USER_LOGIN_KEY, login);
-  }
+  };
 
   const stopSession = (): boolean => {
     if(!isAuthenticated()) {
@@ -28,12 +28,12 @@ export const useAuth = () => {
     sessionStorage.removeItem(SESSION_USER_LOGIN_KEY);
 
     return true;
-  }
+  };
 
   return {
     isAuthenticated,
     getUserLogin,
     startSession,
     stopSession
-  }
-}
+  };
+};

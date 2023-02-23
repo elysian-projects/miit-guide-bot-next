@@ -3,9 +3,9 @@ import { Divider, IconButton, InputBase, Link as MUILink, Paper, Tooltip } from 
 import { CSSProperties, FC } from "react";
 
 const paperStyles = {
-  padding: '2px 4px',
-  display: 'flex',
-  alignItems: 'center'
+  padding: "2px 4px",
+  display: "flex",
+  alignItems: "center"
 } as CSSProperties;
 
 interface IPhotoLinkProps {
@@ -27,12 +27,12 @@ export const PhotoLink: FC<IPhotoLinkProps> = ({
       />
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <Tooltip title="Предпросмотр">
-        <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
+        <IconButton color="primary" sx={{ p: "10px" }} aria-label="directions">
           <MUILink href={value} target="_black">
             <PhotoCamera />
           </MUILink>
         </IconButton>
       </Tooltip>
     </Paper>
-  )
-}
+  );
+};

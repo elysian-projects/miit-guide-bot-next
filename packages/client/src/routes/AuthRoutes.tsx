@@ -13,5 +13,5 @@ export const authRoutes = (() => {
       <Route path={baseUrl + "/login"} element={isAuthenticated() ? <Navigate to={"/"} /> : <LoginPage />} />
       <Route path={baseUrl + "/logout"} element={isAuthenticated() ? <LogoutPage /> : <Navigate to={"/"} />} />
     </>
-  )
+  );
 })();

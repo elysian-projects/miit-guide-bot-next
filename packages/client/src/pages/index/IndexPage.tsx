@@ -28,5 +28,5 @@ export const IndexPage: FC = () => {
         <Separator />
       </section>
     </div>
-  )
-}
+  );
+};
