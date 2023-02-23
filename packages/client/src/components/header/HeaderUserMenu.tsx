@@ -1,11 +1,13 @@
-import { Logout } from "@mui/icons-material";
+import { Login, Logout, Person } from "@mui/icons-material";
 import { Avatar, IconButton, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { FC, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 import { HeaderLink } from "./Header.styles";
 
 export const HeaderUserMenu: FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState<boolean>(Boolean(anchorEl));
+  const {isAuthenticated, getUserLogin} = useAuth();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -21,13 +23,13 @@ export const HeaderUserMenu: FC = () => {
     <>
       <IconButton
         onClick={handleClick}
-        size="small"
+        size="medium"
         sx={{ ml: 2 }}
         aria-controls={open ? 'account-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
-        <Avatar sx={{ width: 32, height: 32 }}></Avatar>
+        <Avatar sx={{ width: 35, height: 35 }}></Avatar>
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -37,12 +39,33 @@ export const HeaderUserMenu: FC = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <HeaderLink to="/auth/logout">
+        {(isAuthenticated() && getUserLogin()) && (
           <MenuItem>
             <ListItemIcon>
-              <Logout fontSize="small" />
+              <Person fontSize="small" />
             </ListItemIcon>
-              Выход
+            {getUserLogin()}
+          </MenuItem>
+        )}
+
+        <HeaderLink to={isAuthenticated() ? "/auth/logout" : "/auth/login"}>
+          <MenuItem>
+            <ListItemIcon>
+              {isAuthenticated() ? (
+                <Logout fontSize="small" />
+              ) : (
+                <Login fontSize="small" />
+              )}
+            </ListItemIcon>
+            {isAuthenticated() ? (
+              <>
+                Выход
+              </>
+            ) : (
+              <>
+                Вход
+              </>
+            )}
           </MenuItem>
         </HeaderLink>
       </Menu>
