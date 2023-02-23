@@ -1,17 +1,14 @@
-import { IconButton } from "@mui/material";
+import { AppBar, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { MainWrapper } from "../wrapper";
 
-export const HeaderContainer = styled.header`
-  width: 100%;
+export const HeaderContainer = styled(AppBar)`
   height: 50px;
   margin-bottom: 10px;
 `;
 
 export const HeaderWrapper = styled(MainWrapper)`
-  margin: 0 auto;
-  padding: 5px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,7 +35,7 @@ export const HeaderLink = styled(Link)`
   color: black;
   text-decoration: none;
   position: relative;
-`
+`;
 
 export const SidebarToggleButton = styled(IconButton)`
   display: none !important;
@@ -48,4 +45,4 @@ export const SidebarToggleButton = styled(IconButton)`
       display: block !important;
     }
   }
-`
+`;

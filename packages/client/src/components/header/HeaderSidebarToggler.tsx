@@ -8,11 +8,11 @@ export const HeaderSidebarToggler: FC = () => {
 
   const getToggleButtonClass = (): string => {
     return (!open && window.innerWidth < 1170) ? "show" : "";
-  }
+  };
 
   return (
     <SidebarToggleButton className={getToggleButtonClass()} size="medium" onClick={toggleSidebar} aria-label="toggleSidebar">
       <Menu fontSize="large" />
     </SidebarToggleButton>
-  )
-}
+  );
+};

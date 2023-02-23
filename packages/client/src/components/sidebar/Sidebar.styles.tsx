@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
-const SIDEBAR_WIDTH = "300px";
+export const SIDEBAR_WIDTH = "300px";
+
 const SIDEBAR_MOBILE_MODE_WIDTH = "1170px";
 const SIDEBAR_FULL_SCREEN_MAX_WIDTH = "450px";
 
@@ -41,7 +42,7 @@ export const SidebarFrame = styled.nav`
       width: 100vw;
     }
   }
-`
+`;
 
 export const SidebarWrapper = styled.div`
   background-color: #101827;
@@ -57,7 +58,7 @@ export const SidebarWrapper = styled.div`
   overflow-x: visible;
   z-index: 6000;
   position: fixed;
-`
+`;
 
 export const SidebarDarkBackground = styled.div`
   position: fixed;
@@ -81,7 +82,7 @@ export const SidebarDarkBackground = styled.div`
       opacity: 0.4;
     }
   }
-`
+`;
 
 export const SidebarBlock = styled.div`
   width: 100%;
@@ -105,7 +106,7 @@ export const SidebarBlock = styled.div`
       color: #2f71ff;
     }
   }
-`
+`;
 
 export const SidebarLogo = styled.div`
   display: flex;
@@ -113,14 +114,14 @@ export const SidebarLogo = styled.div`
   font-weight: 600;
   padding: 5px;
   justify-content: center;
-`
+`;
 
 export const SidebarDivider = styled.hr`
   width: 100%;
   height: 1px;
   border-radius: 2px;
   color: #8a8a8a;
-`
+`;
 
 const baseSidebarItemStyles = css`
   display: flex;
@@ -144,12 +145,12 @@ const baseSidebarItemStyles = css`
     outline: none;
     box-shadow: 0 0 1px 1px #16a17a;
   }
-`
+`;
 
 export const SidebarItem = styled.div`
   ${baseSidebarItemStyles}
-`
+`;
 
 export const SidebarLinkItem = styled(NavLink)`
   ${baseSidebarItemStyles}
-`
+`;

@@ -12,12 +12,12 @@ export const Page: FC<IPageProps> = ({children}) => {
   return (
     <PageStyled>
       <Sidebar />
-      <main style={{position: "relative", width: "100%"}}>
+      <main style={{position: "relative", width: "100%", marginTop: "60px"}}>
         <Header />
         <MainWrapper>
           {children}
         </MainWrapper>
       </main>
     </PageStyled>
-  )
-}
+  );
+};
