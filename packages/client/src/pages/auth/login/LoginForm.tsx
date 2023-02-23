@@ -34,7 +34,7 @@ export const LoginForm: FC = () => {
     await loginUser(formState.login, formState.password)
     .then(response => {
       if((response.data as any).data?.token) {
-        startSession((response.data as any).data?.token);
+        startSession((response.data as any).data?.token, formState.login);
         redirect("/", {refresh: true});
         return;
       }
