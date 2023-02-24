@@ -72,7 +72,8 @@ export const handleArticleButtonClick = async (clickData: string): Promise<{cont
 
 const fetchData = async (clickData: string, articleType: ArticleType): Promise<object[]> => {
   try {
-    const { data: response } = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/articles?tabValue=${clickData}&type=${articleType}`);
+    // TODO: replace with `getData` call
+    const { data: response } = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/articles?tabValue=${clickData}&type=${articleType}&orderBy=id.asc`);
     return (response.ok && response.data)
       ? response.data
       : [];

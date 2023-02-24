@@ -5,6 +5,7 @@ export type SearchOptions<T extends object> = {
 } & {
   where?: Partial<T>,
   select?: string[],
+  orderBy?: string
 }
 
 export type Data = {
