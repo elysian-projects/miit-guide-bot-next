@@ -6,6 +6,7 @@ import { MainWrapper } from "../wrapper";
 export const HeaderContainer = styled(AppBar)`
   height: 50px;
   margin-bottom: 10px;
+  box-shadow: 0 0 3px 2px #e2e2e2 !important;
 `;
 
 export const HeaderWrapper = styled(MainWrapper)`
