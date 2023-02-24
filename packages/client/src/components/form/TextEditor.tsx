@@ -1,44 +1,26 @@
-import { deserializeContent, serializeContent } from "common/src";
 import { FC, useState } from "react";
-import { createEditor, Descendant } from "slate";
-import { Slate, withReact } from "slate-react";
-import { EditableStyled } from "./TextEditor.styles";
+import { TextareaStyled } from "./TextEditor.styles";
 
 interface ITextEditorProps {
   initialValue?: string,
   onChangeCallback?: (value: string) => void
 }
 
-const defaultValue = [
-  {
-    type: "paragraph",
-    children: [{ text: "" }],
-  }
-]
-
 export const TextEditor: FC<ITextEditorProps> = (props) => {
   const {
     initialValue,
-    onChangeCallback = () => {}
+    onChangeCallback = () => 0
   } = props;
 
-  const [editor] = useState(() => withReact(createEditor()))
-
-  const handleChange = (value: Descendant[]) => {
-    onChangeCallback(serializeContent(value))
-  }
-
-  const getInitialValue = (): Descendant[] => {
-    if(!initialValue) {
-      return defaultValue;
-    }
-
-    return deserializeContent(initialValue) ?? defaultValue;
-  }
+  const [value, setValue] = useState<string>(initialValue || "");
 
   return (
-    <Slate onChange={handleChange} editor={editor} value={getInitialValue()}>
-      <EditableStyled />
-    </Slate>
-  )
-}
+    <TextareaStyled
+      onChange={event => {
+        setValue(event.target.value);
+        onChangeCallback(event.target.value);
+      }}
+      value={value}
+    />
+  );
+};

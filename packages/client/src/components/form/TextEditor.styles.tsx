@@ -1,7 +1,6 @@
-import { Editable } from "slate-react";
 import styled from "styled-components";
 
-export const EditableStyled = styled(Editable)`
+export const TextareaStyled = styled.textarea`
   padding: 10px 15px;
   border: 1px solid rgba(0, 0, 0, 0.23);
   border-radius: 4px;
@@ -9,15 +8,16 @@ export const EditableStyled = styled(Editable)`
   overflow-y: scroll;
   overflow-x: hidden;
   line-height: 1.45em;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+  box-sizing: content-box;
+  max-width: inherit;
+  resize: none;
 
   :hover {
     border: 1px solid black;
   }
 
   :active, :focus {
+    outline: none;
     border-color: #1975d2;
     border-width: 2px;
     padding: 9px 14px;
@@ -27,4 +27,4 @@ export const EditableStyled = styled(Editable)`
     font-family: "Roboto", sans-serif !important;
     font-size: 15px;
   }
-`
+`;
