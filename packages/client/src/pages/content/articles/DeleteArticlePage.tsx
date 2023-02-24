@@ -1,5 +1,5 @@
 import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { ContentNode } from "common/src";
+import { ContentNode, FlatContent } from "common/src";
 import { FC, useCallback, useEffect, useState } from "react";
 import { deleteArticle, getOneArticle } from "../../../api/articles";
 import { MainWrapper } from "../../../components/wrapper";
@@ -14,7 +14,7 @@ export const DeleteArticlePage: FC = () => {
   const {getQueryProp} = useSearchQuery();
   const [id] = useState<string | null>(getQueryProp("id"));
 
-  const {error, isFetching, response, status} = useHttp<ContentNode>("articles", async () => getOneArticle({id: id ?? ""}));
+  const {error, isFetching, response, status} = useHttp<ContentNode<FlatContent>>("articles", async () => getOneArticle({id: id ?? ""}));
 
   const {redirect} = useRedirect();
 

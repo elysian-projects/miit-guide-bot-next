@@ -180,7 +180,9 @@ export const updateArticle: Handler = async (req, res) => {
 
   tabId && (foundArticle.tabId = Number(tabId));
   label && (foundArticle.label = label);
-  content && (foundArticle.content = content);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  content && (foundArticle.content = normalizeContent(content));
   articleValue && (foundArticle.value = articleValue);
   type && (foundArticle.type = type);
   picture && (foundArticle.picture = picture);

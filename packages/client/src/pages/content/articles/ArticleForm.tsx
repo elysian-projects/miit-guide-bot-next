@@ -1,8 +1,8 @@
 import { Article } from "@mui/icons-material";
 import { Alert, Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
+import { ContentNode, FlatContent } from "common/src";
 import { CSSProperties, FC, FormEventHandler, useEffect, useState } from "react";
 import { TextEditor } from "../../../components/form/TextEditor";
-import { ArticleFormContentNode } from "./AddArticlePage";
 import { AddLinks } from "./components/AddLinks";
 import { ArticleTypeSelect } from "./components/ArticleTypeSelect";
 import { ChooseTab } from "./components/ChoseTab";
@@ -15,8 +15,8 @@ const aligningStyles = {
 } as CSSProperties;
 
 interface IArticleForm {
-  data?: Partial<ArticleFormContentNode> | null,
-  onUpdate?: (data: ArticleFormContentNode) => void,
+  data?: Partial<ContentNode<FlatContent>> | null,
+  onUpdate?: (data: ContentNode<FlatContent>) => void,
   onSubmit?: FormEventHandler
 }
 
@@ -27,7 +27,7 @@ export const ArticleForm: FC<IArticleForm> = (props) => {
     onSubmit = () => 0
   } = props;
 
-  const [formData, setFormData] = useState<ArticleFormContentNode>({...defaultFormState, ...data});
+  const [formData, setFormData] = useState<ContentNode<FlatContent>>({...defaultFormState, ...data});
   const [error] = useState<string | null>(null);
 
   const handleFormSubmit: FormEventHandler = (event) => {

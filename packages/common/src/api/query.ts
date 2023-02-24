@@ -1,19 +1,17 @@
 import axios from "axios";
-import { ContentNode, IResponse, TabNode } from "../types";
+import { ContentNode, IResponse } from "../types";
 import { Data, SearchOptions } from "./types";
 import { getOptionsString, getSelectString, getServerURL } from "./utils";
 
 type ApiData = "articles" | "tabs";
 
-export async function getData<T extends ApiData = "articles", K extends ContentNode = ContentNode>(type: T, options?: Partial<SearchOptions<K>>): Promise<IResponse<K[]>>;
-export async function getData<T extends ApiData = "tabs", K extends TabNode = TabNode>(type: T, options?: Partial<SearchOptions<K>>): Promise<IResponse<K[]>>;
-export async function getData<T extends ApiData, K extends ContentNode | TabNode>(type: T, options?: Partial<SearchOptions<K>>): Promise<IResponse<K[]>> {
+export async function getData<T extends ApiData>(type: T, options?: Partial<SearchOptions<object>>): Promise<IResponse<object[]>> {
   const {select, where, ...searchProps} = options ?? {};
 
   let query = getServerURL().concat("/api/").concat(type).concat("?");
 
   if(searchProps) {
-    query = query.concat(getOptionsString(searchProps as Partial<SearchOptions<K>>)).concat("&");
+    query = query.concat(getOptionsString(searchProps as Partial<SearchOptions<object>>)).concat("&");
   }
 
   if(where) {
@@ -24,10 +22,18 @@ export async function getData<T extends ApiData, K extends ContentNode | TabNode
     query = query.concat(getSelectString(select));
   }
 
-  const {data: response} = await axios.get<IResponse<K[]>>(query, {headers: getDefaultHeaders()});
+  const {data: response} = await axios.get<IResponse<object[]>>(query, {headers: getDefaultHeaders()});
 
   return response;
 }
+
+export const updateData = async (type: ApiData, data: object): Promise<boolean> => {
+  const query = getServerURL().concat("/api/").concat(type);
+
+  const {data: responseData} = await axios.put<IResponse<object[]>>(query, data);
+
+  return responseData.ok;
+};
 
 export const deleteData = async (type: ApiData, id: string | number): Promise<Data> => {
   const query = getServerURL().concat("/api/").concat(type).concat("?id=").concat(`${id}`);
