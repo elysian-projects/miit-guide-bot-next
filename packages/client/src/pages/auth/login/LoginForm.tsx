@@ -33,8 +33,8 @@ export const LoginForm: FC = () => {
 
     await loginUser(formState.login, formState.password)
     .then(response => {
-      if((response.data as any).data?.token) {
-        startSession((response.data as any).data?.token, formState.login);
+      if((response?.data as any).data?.token) {
+        startSession((response?.data as any).data?.token, formState.login);
         redirect("/", {refresh: true});
         return;
       }
@@ -42,7 +42,7 @@ export const LoginForm: FC = () => {
       setError("Неизвестная ошибка!");
     })
     .catch(err => {
-      setError(err.response.data.message);
+      setError(err?.response.data.message);
     });
   };
 
