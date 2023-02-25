@@ -1,5 +1,6 @@
 import { ContentNode, deleteData, FlatContent, getData, IResponse, updateData } from "common/src";
 import { SearchOptions } from "common/src/api/types";
+import { useAuth } from "../hooks/useAuth";
 
 export const getAllArticles = async (where?: Partial<ContentNode>): Promise<IResponse<ContentNode[]>> => {
   return (await getData("articles", {
@@ -23,19 +24,29 @@ export const getOneArticle = async (search: Partial<SearchOptions<ContentNode>>)
 };
 
 export const updateArticle = async (updatedData: ContentNode<FlatContent>): Promise<{ok: boolean, message: string}> => {
-  const response = await updateData("articles", updatedData);
+  const {getUserToken} = useAuth();
 
-  if(response) {
+  try {
+    const response = await updateData("articles", {...updatedData, token: getUserToken()});
+
+    if(response) {
+      return {
+        ok: response,
+        message: "Статья успешно обновлена!"
+      };
+    }
+
     return {
       ok: response,
-      message: "Статья успешно обновлена!"
+      message: "Не удалось обновить статью!"
+    };
+  } catch (e: any) {
+    return {
+      ok: false,
+      message: e.response.data.message
     };
   }
 
-  return {
-    ok: response,
-    message: "Не удалось обновить статью!"
-  };
 };
 
 export const deleteArticle = async (id: number | string): Promise<boolean> => {
