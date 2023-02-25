@@ -8,7 +8,7 @@ type SidebarContextValueType = {
 
 export const SidebarContext = createContext<SidebarContextValueType>({
   open: true,
-  toggleSidebar: () => {}
+  toggleSidebar: () => 0
 });
 
 interface ISidebarContextProviderProps {
@@ -22,5 +22,5 @@ export const SidebarContextProvider: FC<ISidebarContextProviderProps> = ({childr
     <SidebarContext.Provider value={{open, toggleSidebar}}>
       {children}
     </SidebarContext.Provider>
-  )
-}
+  );
+};

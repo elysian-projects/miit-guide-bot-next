@@ -9,6 +9,6 @@ export const loginUser = async (login: string, password: string): Promise<IRespo
     login,
     password
   });
-}
+};
 
-export const logoutUser = async () => {}
+export const logoutUser = async () => 0;

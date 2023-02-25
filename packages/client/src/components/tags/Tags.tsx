@@ -22,18 +22,15 @@ export const Tags: FC<ITagsProps> = ({values, onUpdate, maps = [], maxValues = 1
     if(shouldAddTags(tag, maps) && !tags.includes(tag) && tags.length < maxValues) {
       setTags([...tags, tag]);
     }
-  }
+  };
 
   const removeTag = (tag: string): void => {
     setTags(tags.filter(existingTag => existingTag !== tag));
-  }
+  };
 
   useEffect(() => {
     onUpdate(tags);
-
-  // Giving `onUpdate` as a dependency here results in endless invokes of `onUpdate`
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tags])
+  }, [tags]);
 
   return (
     <div>
@@ -44,8 +41,8 @@ export const Tags: FC<ITagsProps> = ({values, onUpdate, maps = [], maxValues = 1
       </TagsStyled>
       <AddTag placeholder={placeholder} handler={addTag} />
     </div>
-  )
-}
+  );
+};
 
 const shouldAddTags = (tag: string, maps: MapFunction[]): boolean => {
   for(const map of maps) {
@@ -55,4 +52,4 @@ const shouldAddTags = (tag: string, maps: MapFunction[]): boolean => {
   }
 
   return true;
-}
+};

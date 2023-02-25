@@ -8,10 +8,10 @@ interface ITagProps {
   handlerRemove?: (tag: string) => void
 }
 
-export const Tag: FC<ITagProps> = ({value, handlerRemove = () => {}}) => {
+export const Tag: FC<ITagProps> = ({value, handlerRemove = () => 0}) => {
   const removeThis = () => {
     handlerRemove(value);
-  }
+  };
 
   return (
     <TagStyled>
@@ -26,5 +26,5 @@ export const Tag: FC<ITagProps> = ({value, handlerRemove = () => {}}) => {
         <Clear />
       </DeleteIcon>
     </TagStyled>
-  )
-}
+  );
+};
