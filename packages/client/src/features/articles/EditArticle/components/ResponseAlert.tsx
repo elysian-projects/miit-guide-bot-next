@@ -1,17 +1,13 @@
 import { Alert } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 
 interface IResponseAlertProps {
+  open: boolean,
+  handleClose: () => void,
   submitResult: {message: string, ok: boolean} | null
 }
 
-export const ResponseAlert: FC<IResponseAlertProps> = ({submitResult}) => {
-  const [open, setOpen] = useState<boolean>(Boolean(submitResult));
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+export const ResponseAlert: FC<IResponseAlertProps> = ({open, handleClose, submitResult}) => {
   useEffect(() => {
     if(submitResult) {
       setTimeout(() => {
@@ -21,12 +17,12 @@ export const ResponseAlert: FC<IResponseAlertProps> = ({submitResult}) => {
   }, [submitResult]);
 
   return <>
-    {open && submitResult && (
+    {open && (
       <Alert
         onClose={handleClose}
-        severity={submitResult.ok ? "success" : "error"}
+        severity={submitResult?.ok ? "success" : "error"}
       >
-        {submitResult.message}
+        {submitResult?.message}
       </Alert>
     )}
   </>;

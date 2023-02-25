@@ -1,5 +1,5 @@
 import { Article } from "@mui/icons-material";
-import { Alert, Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
 import { ContentNode, FlatContent } from "common/src";
 import { CSSProperties, FC, FormEventHandler, useEffect, useState } from "react";
 import { TextEditor } from "../../components/textEditor/TextEditor";
@@ -28,7 +28,6 @@ export const ArticleForm: FC<IArticleForm> = (props) => {
   } = props;
 
   const [formData, setFormData] = useState<ContentNode<FlatContent>>({...defaultFormState, ...data});
-  const [error] = useState<string | null>(null);
 
   const handleFormSubmit: FormEventHandler = (event) => {
     event.preventDefault();
@@ -94,12 +93,6 @@ export const ArticleForm: FC<IArticleForm> = (props) => {
             values={formData.links || []}
             onUpdate={links => setFormData({...formData, links})}
           />
-
-          {error && (
-            <Alert severity="error">
-              {error}
-            </Alert>
-          )}
 
           <Button
             type="submit"

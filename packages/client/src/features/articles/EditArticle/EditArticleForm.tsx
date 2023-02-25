@@ -6,6 +6,7 @@ import { useSearchQuery } from "../../../hooks/useSearchQuery";
 import { ArticleForm } from "../../../widgets/ArticleForm/ArticleForm";
 import { defaultFormState } from "../../../widgets/ArticleForm/constants";
 import { getOneArticle, updateArticle } from "../api";
+import { ConfirmEditDialog } from "./components/ConfirmEditAlert";
 import { Loader } from "./components/Loader";
 import { ResponseAlert } from "./components/ResponseAlert";
 
@@ -16,6 +17,7 @@ export const EditArticleForm: FC = () => {
   const {error, response, status} = useHttp<ContentNode<FlatContent>>("articles", async () => getOneArticle({id: id ?? ""}));
   const [formData, setFormData] = useState<ContentNode<FlatContent>>(response?.data || defaultFormState);
   const [submitResult, setSubmitResult] = useState<{ok: boolean, message: string} | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
     (!id || error || status === "error") && redirect("/content/articles");
@@ -25,15 +27,32 @@ export const EditArticleForm: FC = () => {
     setFormData(updatedContent);
   };
 
-  const onSubmit = async () => {
-    setSubmitResult(await updateArticle(formData));
+  const onSubmit = (): void => {
+    setEditDialogOpen(true);
+  };
+
+  const applyChanges = async (shouldEdit: boolean): Promise<void> => {
+    if(shouldEdit) {
+      setSubmitResult(await updateArticle(formData));
+    }
+    setEditDialogOpen(false);
   };
 
   return (
     <>
       {response ? (
         <>
-          <ResponseAlert submitResult={submitResult} />
+          <ConfirmEditDialog
+            open={editDialogOpen}
+            returnDialogResult={applyChanges}
+          />
+          {submitResult && (
+            <ResponseAlert
+              open={Boolean(submitResult)}
+              handleClose={() => setSubmitResult(null)}
+              submitResult={submitResult}
+            />
+          )}
           <ArticleForm
             onUpdate={onUpdate}
             onSubmit={onSubmit}
