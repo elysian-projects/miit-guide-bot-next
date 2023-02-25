@@ -31,5 +31,5 @@ export const CardMediaCustom: FC<ICardMediaCustomProps> = (props) => {
       }}
       {...restProps}
     />
-  )
-}
+  );
+};

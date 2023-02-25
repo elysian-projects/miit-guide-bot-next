@@ -1,5 +1,5 @@
 import { CSSProperties, FC, useEffect, useState } from "react";
-import { SIDEBAR_WIDTH } from "../sidebar/Sidebar.styles";
+import { SIDEBAR_WIDTH } from "../Sidebar/Sidebar.styles";
 import { HeaderContainer, HeaderItem, HeaderSection, HeaderWrapper } from "./Header.styles";
 import { HeaderSidebarToggler } from "./HeaderSidebarToggler";
 import { HeaderUserMenu } from "./HeaderUserMenu";

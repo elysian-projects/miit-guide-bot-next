@@ -33,7 +33,7 @@ export const Sidebar: FC = () => {
     if(condition) {
       toggleSidebar();
     }
-  }
+  };
 
   useWindowResizeHandler(() => toggleSidebarOnCondition(open && isMobileWindow()));
 
@@ -69,5 +69,5 @@ export const Sidebar: FC = () => {
         </SidebarBlock>
       </SidebarWrapper>
     </SidebarFrame>
-  )
-}
+  );
+};

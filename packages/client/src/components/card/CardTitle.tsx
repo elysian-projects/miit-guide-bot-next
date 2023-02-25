@@ -28,5 +28,5 @@ export const CardTitle: FC<ICardTitleProps> = (props) => {
     <Typography variant={variant} title={value} style={styles} color="text.secondary">
       {value}
     </Typography>
-  )
-}
+  );
+};

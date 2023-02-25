@@ -1,7 +1,7 @@
 import { PhotoCamera } from "@mui/icons-material";
 import { Divider, IconButton, InputBase, Paper, Tooltip } from "@mui/material";
 import { CSSProperties, FC, useState } from "react";
-import { PhotoPreviewModal } from "../../../../widgets/PhotoPreviewModal";
+import { PhotoPreviewModal } from "../../PhotoPreviewModal";
 
 const paperStyles = {
   padding: "2px 4px",

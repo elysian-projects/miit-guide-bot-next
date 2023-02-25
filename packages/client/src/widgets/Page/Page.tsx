@@ -1,7 +1,7 @@
 import { FC, ReactElement } from "react";
-import { Header } from "../header";
-import { Sidebar } from "../sidebar";
-import { MainWrapper } from "../wrapper";
+import { MainWrapper } from "../../components/wrapper";
+import { Header } from "../Header";
+import { Sidebar } from "../Sidebar";
 import { PageStyled } from "./Page.styles";
 
 interface IPageProps {

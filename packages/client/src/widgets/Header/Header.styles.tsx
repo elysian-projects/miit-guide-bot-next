@@ -1,7 +1,7 @@
 import { AppBar, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { MainWrapper } from "../wrapper";
+import { MainWrapper } from "../../components/wrapper";
 
 export const HeaderContainer = styled(AppBar)`
   height: 50px;

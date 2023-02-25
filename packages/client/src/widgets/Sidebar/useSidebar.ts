@@ -5,10 +5,10 @@ export const useSidebar = () => {
 
   const toggleSidebar = (): void => {
     setOpen(!open);
-  }
+  };
 
   return {
     open,
     toggleSidebar,
-  }
-}
+  };
+};

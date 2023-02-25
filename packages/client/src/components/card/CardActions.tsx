@@ -7,7 +7,7 @@ import { useRedirect } from "../../hooks/useRedirect";
 const tooltipProps: Omit<TooltipProps, "children" | "title"> = {
   placement: "top",
   enterNextDelay: 500
-}
+};
 
 interface ICardActionBar {
   editLink?: string,
@@ -46,11 +46,11 @@ export const CardActionBar: FC<ICardActionBar> = ({deleteLink, editLink, additio
         </Tooltip>
       )}
     </CardActions>
-  )
-}
+  );
+};
 
 const AdditionalLinksStyled = styled.div`
   width: 100%;
   display: flex;
   gap: 5px;
-`
+`;

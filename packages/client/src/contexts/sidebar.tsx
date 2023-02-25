@@ -1,5 +1,5 @@
 import { createContext, FC, ReactElement } from "react";
-import { useSidebar } from "../components/sidebar/useSidebar";
+import { useSidebar } from "../widgets/Sidebar/useSidebar";
 
 type SidebarContextValueType = {
   open: boolean,

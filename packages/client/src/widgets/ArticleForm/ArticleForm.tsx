@@ -2,7 +2,7 @@ import { Article } from "@mui/icons-material";
 import { Alert, Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
 import { ContentNode, FlatContent } from "common/src";
 import { CSSProperties, FC, FormEventHandler, useEffect, useState } from "react";
-import { TextEditor } from "../../../components/form/TextEditor";
+import { TextEditor } from "../../components/textEditor/TextEditor";
 import { AddLinks } from "./components/AddLinks";
 import { ArticleTypeSelect } from "./components/ArticleTypeSelect";
 import { ChooseTab } from "./components/ChoseTab";

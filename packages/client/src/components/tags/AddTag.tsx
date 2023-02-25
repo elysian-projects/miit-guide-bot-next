@@ -15,7 +15,7 @@ export const AddTag: FC<IAddTagProps> = ({handler, placeholder}) => {
       handler(value);
       setValue("");
     }
-  }
+  };
 
   return (
     <AddTagStyled
@@ -25,5 +25,5 @@ export const AddTag: FC<IAddTagProps> = ({handler, placeholder}) => {
       onKeyDown={handleKeydown}
       onChange={event => setValue(event.target.value)}
     />
-  )
-}
+  );
+};

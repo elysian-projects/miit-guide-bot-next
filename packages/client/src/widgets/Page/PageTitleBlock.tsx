@@ -1,7 +1,7 @@
 import { Badge, Button, Typography } from "@mui/material";
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { Separator } from "../separator";
+import { Separator } from "../../components/separator";
 import { PageTitleStyledBlock } from "./Page.styles";
 
 interface IPageTitleBlockProps {
@@ -31,4 +31,4 @@ export const PageTitleBlock: FC<IPageTitleBlockProps> = ({title, linkTitle, href
     </PageTitleStyledBlock>
     <Separator />
   </>
-)
+);

@@ -10,7 +10,7 @@ export const TagsStyled = styled.div`
   margin-bottom: 8px;
   border-radius: 4px;
   background-color: #f1f1f1;
-`
+`;
 
 export const TagStyled = styled.span`
   display: flex;
@@ -20,7 +20,7 @@ export const TagStyled = styled.span`
   border-radius: 4px;
   color: #fff;
   padding: 4px 8px;
-`
+`;
 
 export const TagLink = styled.a`
   color: #fff;
@@ -29,7 +29,7 @@ export const TagLink = styled.a`
   :hover {
     text-decoration: underline;
   }
-`
+`;
 
 export const DeleteIcon = styled.span`
   display: flex;
@@ -44,8 +44,8 @@ export const DeleteIcon = styled.span`
       cursor: pointer;
     }
   }
-`
+`;
 
 export const AddTagStyled = styled(TextField)`
   width: 100%
-`
+`;

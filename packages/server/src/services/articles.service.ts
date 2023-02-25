@@ -18,14 +18,6 @@ export const getArticles: Handler = async (req, res) => {
   const selectList = getValidSelectArray(select, new Article());
   const order = useOrderBy(orderBy, new Article());
 
-  if(orderBy && !order) {
-    return res.json(createResponse({
-      status: 400,
-      ok: false,
-      message: "Неверный запрос!"
-    }));
-  }
-
   if(tabValue) {
     const tabWithValue = await DBSource.getRepository(Tab).findOneBy({value: String(tabValue)});
 
@@ -40,25 +32,33 @@ export const getArticles: Handler = async (req, res) => {
     query.tabId = String(tabWithValue.id);
   }
 
-  const articles = await DBSource.getRepository(Article).find({
-    select: selectList,
-    where: query,
-    order: order ?? {}
-  });
+  try {
+    const articles = await DBSource.getRepository(Article).find({
+      select: selectList,
+      where: query,
+      order: order ?? {}
+    });
 
-  if(articles.length === 0) {
-    return res.status(404).json(createResponse({
-      status: 404,
+    if(articles.length === 0) {
+      return res.status(404).json(createResponse({
+        status: 404,
+        ok: false,
+        message: "Статьи не найдены!"
+      }));
+    }
+
+    return res.status(200).json(createResponse({
+      status: 200,
+      ok: true,
+      data: articles
+    }));
+  } catch(error) {
+    return res.status(400).json(createResponse({
+      status: 400,
       ok: false,
-      message: "Статьи не найдены!"
+      message: "Невалидный запрос!"
     }));
   }
-
-  return res.status(200).json(createResponse({
-    status: 200,
-    ok: true,
-    data: articles
-  }));
 };
 
 export const insertArticle: Handler = async (req, res) => {

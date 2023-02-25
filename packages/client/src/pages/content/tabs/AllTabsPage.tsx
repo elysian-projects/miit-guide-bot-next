@@ -5,8 +5,8 @@ import { getAllTabs } from "../../../api/tabs";
 import { CardWrapper } from "../../../components/card/Card.styles";
 import { CardActionBar } from "../../../components/card/CardActions";
 import { CardTitle } from "../../../components/card/CardTitle";
-import { PageTitleBlock } from "../../../components/page/PageTitleBlock";
 import { useHttp } from "../../../hooks/useHttp";
+import { PageTitleBlock } from "../../../widgets/Page/PageTitleBlock";
 
 export const AllTabsPage: FC = () => {
   const {error, response, status} = useHttp<TabNode[]>("getAllTabs", () => getAllTabs());

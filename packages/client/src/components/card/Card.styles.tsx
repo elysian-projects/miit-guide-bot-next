@@ -14,4 +14,4 @@ export const CardWrapper = styled.div`
   @media(max-width: 530px) {
     grid-template-columns: repeat(1, 1fr);
   }
-`
+`;

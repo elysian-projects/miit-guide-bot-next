@@ -1,8 +1,9 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { ArticleType, TabNode } from "common/src";
 import { FC, useEffect, useState } from "react";
-import { getAllTabs } from "../../../../api/tabs";
-import { useHttp } from "../../../../hooks/useHttp";
+import { getAllTabs } from "../../../api/tabs";
+import { useHttp } from "../../../hooks/useHttp";
+
 
 const defaultTab: TabNode = {
   id: -1,

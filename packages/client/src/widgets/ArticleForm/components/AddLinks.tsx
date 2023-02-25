@@ -1,6 +1,6 @@
 import { isValidURL } from "common/src";
 import { FC } from "react";
-import { Tags } from "../../../../components/tags/Tags";
+import { Tags } from "../../../components/tags/Tags";
 
 interface IAddLinksProps {
   values: string[],
