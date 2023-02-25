@@ -12,7 +12,7 @@ export const checkUserTokenExpiration: Handler = async (req, res, next) => {
     return res.status(401).json(createResponse({
       status: 401,
       ok: false,
-      message: "Невалидные данные!"
+      message: "Пользователь не авторизован!"
     }));
   }
 
@@ -45,8 +45,6 @@ export const checkUserTokenExpiration: Handler = async (req, res, next) => {
 
 export const loginUser: Handler = async (req, res) => {
   const {login, password} = req.body;
-
-  console.log(login, password);
 
   if(!login?.trim() || !password?.trim()) {
     return res.status(400).json(createResponse({

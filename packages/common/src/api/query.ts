@@ -22,7 +22,11 @@ export async function getData<T extends ApiData>(type: T, options?: Partial<Sear
     query = query.concat(getSelectString(select));
   }
 
-  const {data: response} = await axios.get<IResponse<object[]>>(query, {headers: getDefaultHeaders()});
+  const {data: response} = await axios<IResponse<object[]>>({
+    method: "get",
+    url: query,
+    headers: getDefaultHeaders()
+  });
 
   return response;
 }
