@@ -61,7 +61,7 @@ export const ChooseTab: FC<IChooseTabProps> = ({
       renderInput={props => (
         <TextField
           {...props}
-          placeholder="Выберите вкладку"
+          placeholder="Выберите вкладку*"
         />
       )}
     />

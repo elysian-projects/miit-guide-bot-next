@@ -4,7 +4,6 @@ import { useHttp } from "../../../hooks/useHttp";
 import { useRedirect } from "../../../hooks/useRedirect";
 import { useSearchQuery } from "../../../hooks/useSearchQuery";
 import { ArticleForm } from "../../../widgets/ArticleForm/ArticleForm";
-import { defaultFormState } from "../../../widgets/ArticleForm/constants";
 import { getOneArticle, updateArticle } from "../api";
 import { ConfirmEditDialog } from "./components/ConfirmEditAlert";
 import { Loader } from "./components/Loader";
@@ -15,7 +14,7 @@ export const EditArticleForm: FC = () => {
   const {getQueryProp} = useSearchQuery();
   const [id] = useState<string | null>(getQueryProp("id"));
   const {error, response, status} = useHttp<ContentNode<FlatContent>>("articles", async () => getOneArticle({id: id ?? ""}));
-  const [formData, setFormData] = useState<ContentNode<FlatContent>>(response?.data || defaultFormState);
+  const [formData, setFormData] = useState<ContentNode<FlatContent> | null>(response?.data || null);
   const [submitResult, setSubmitResult] = useState<{ok: boolean, message: string} | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
@@ -32,7 +31,7 @@ export const EditArticleForm: FC = () => {
   };
 
   const applyChanges = async (shouldEdit: boolean): Promise<void> => {
-    if(shouldEdit) {
+    if(formData && shouldEdit) {
       setSubmitResult(await updateArticle(formData));
     }
     setEditDialogOpen(false);

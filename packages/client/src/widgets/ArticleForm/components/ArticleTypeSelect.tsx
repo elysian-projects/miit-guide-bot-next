@@ -27,6 +27,7 @@ export const ArticleTypeSelect: FC<IArticleTypeSelectProps> = ({
         <MenuItem
           key={type.value}
           value={type.value}
+          placeholder="Тип статьи*"
           onClick={() => onUpdate(type.value)}
         >
           {type.label}

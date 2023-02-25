@@ -60,7 +60,7 @@ export const ArticleForm: FC<IArticleForm> = (props) => {
             required
             fullWidth
             id="title"
-            placeholder={"Название " + (formData.type === "article" ? "статьи" : "локации")}
+            placeholder={"Название " + (formData.type === "article" ? "статьи" : "локации") + "*"}
             onChange={event => setFormData({...formData, label: event.target.value})}
             name="title"
             value={formData.label}

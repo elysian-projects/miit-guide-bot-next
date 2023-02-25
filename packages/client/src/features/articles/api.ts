@@ -1,4 +1,4 @@
-import { ContentNode, deleteData, FlatContent, getData, IResponse, updateData } from "common/src";
+import { ContentNode, createData, deleteData, FlatContent, getData, IResponse, updateData } from "common/src";
 import { SearchOptions } from "common/src/api/types";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -33,7 +33,30 @@ export const getOneArticle = async (search: Partial<SearchOptions<ContentNode>>)
   }
 };
 
-export const updateArticle = async (updatedData: ContentNode<FlatContent>): Promise<{ok: boolean, message: string}> => {
+type ServerResponse = {
+  ok: boolean,
+  message: string
+};
+
+export const createArticle = async (articleData: ContentNode<FlatContent>): Promise<ServerResponse> => {
+  const {getUserToken} = useAuth();
+
+  try {
+    const response = await createData("articles", {...articleData, token: getUserToken()});
+
+    return {
+      ok: response.ok,
+      message: response.message
+    };
+  } catch (e: any) {
+    return {
+      ok: false,
+      message: e.response.data.message
+    };
+  }
+};
+
+export const updateArticle = async (updatedData: ContentNode<FlatContent>): Promise<ServerResponse> => {
   const {getUserToken} = useAuth();
 
   try {
@@ -60,6 +83,8 @@ export const updateArticle = async (updatedData: ContentNode<FlatContent>): Prom
 };
 
 export const deleteArticle = async (id: number | string): Promise<boolean> => {
-  const response = await deleteData("articles", id);
+  const {getUserToken} = useAuth();
+
+  const response = await deleteData("articles", id, {token: getUserToken()});
   return response.status === 200;
 };

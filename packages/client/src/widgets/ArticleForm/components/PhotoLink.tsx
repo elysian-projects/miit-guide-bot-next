@@ -34,7 +34,7 @@ export const PhotoLink: FC<IPhotoLinkProps> = ({
       <Paper sx={paperStyles}>
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Фотография"
+          placeholder="Фотография*"
           value={value}
           onChange={event => onUpdate(event.target.value)}
         />

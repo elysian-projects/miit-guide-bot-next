@@ -87,7 +87,7 @@ export const insertArticle: Handler = async (req, res) => {
 
   const existingArticle = await DBSource.getRepository(Article).findOneBy({label});
 
-  if(existingArticle && existingArticle.content === content) {
+  if(existingArticle && existingArticle.label === label) {
     return res.status(409).json(createResponse({
       status: 409,
       ok: false,
