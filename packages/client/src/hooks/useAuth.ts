@@ -14,6 +14,14 @@ export const useAuth = () => {
     return sessionStorage.getItem(SESSION_USER_LOGIN_KEY);
   };
 
+  const getUserToken = (): string | null => {
+    if(!isAuthenticated()) {
+      return null;
+    }
+
+    return sessionStorage.getItem(SESSION_TOKEN_KEY);
+  };
+
   const startSession = (token: string, login: string): void => {
     sessionStorage.setItem(SESSION_TOKEN_KEY, token);
     sessionStorage.setItem(SESSION_USER_LOGIN_KEY, login);
@@ -33,6 +41,7 @@ export const useAuth = () => {
   return {
     isAuthenticated,
     getUserLogin,
+    getUserToken,
     startSession,
     stopSession
   };
