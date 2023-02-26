@@ -1,6 +1,6 @@
 import { Search } from "@mui/icons-material";
-import { FormControl, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
-import { FC, useState } from "react";
+import { Box, FormControl, InputAdornment, OutlinedInput } from "@mui/material";
+import { FC, FormEventHandler, useEffect, useState } from "react";
 
 interface ISearchFieldProps {
   onChange: (value: string) => void
@@ -11,18 +11,32 @@ export const SearchField: FC<ISearchFieldProps> = ({
 }) => {
   const [value, setValue] = useState<string>("");
 
+  const onSubmit: FormEventHandler = (event) => {
+    event.preventDefault();
+    onChange(value);
+  };
+
+  useEffect(() => {
+    if(value.length === 0) {
+      onChange(value);
+    }
+  }, [value]);
+
   return (
-    <>
+    <Box
+      component={"form"}
+      method="post"
+      onSubmit={onSubmit}
+    >
       <FormControl variant="outlined">
-        <InputLabel size="small" htmlFor="search">Поиск</InputLabel>
         <OutlinedInput
           id="search"
           size="small"
+          placeholder="Поиск"
           value={value}
           style={{background: "#fff"}}
           onChange={event => {
             setValue(event.target.value);
-            onChange(event.target.value);
           }}
           endAdornment={
             <InputAdornment position="end">
@@ -31,6 +45,6 @@ export const SearchField: FC<ISearchFieldProps> = ({
           }
         />
       </FormControl>
-    </>
+    </Box>
   );
 };

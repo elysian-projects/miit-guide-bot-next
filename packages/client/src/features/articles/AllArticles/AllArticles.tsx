@@ -8,6 +8,7 @@ import { CardMediaCustom } from "../../../components/card/CardMediaCustom";
 import { CardTitle } from "../../../components/card/CardTitle";
 import { useHttp } from "../../../hooks/useHttp";
 import { ActionBar } from "../../../widgets/ActionBar/ActionBar";
+import { filterSearch } from "../../../widgets/ActionBar/scripts";
 import { getAllArticles } from "../api";
 
 interface IAllArticlesProps {
@@ -23,18 +24,6 @@ export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}
     getArticlesAmount(response?.data?.length || 0);
   }, [response?.data]);
 
-  const handleReorder = () => {
-    if(data) {
-      const updatedData: ContentNode[] = [];
-
-      for(const article of data) {
-        updatedData.push(article);
-      }
-
-      setData(updatedData.reverse());
-    }
-  };
-
   const handleSearch = (value: string) => {
     if(data) {
       if(value.length === 0) {
@@ -42,15 +31,7 @@ export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}
         return;
       }
 
-      const updatedData: ContentNode[] = [];
-
-      for(const article of data) {
-        if(article.label.toLocaleLowerCase().includes(value.toLocaleLowerCase())) {
-          updatedData.push(article);
-        }
-      }
-
-      setData(updatedData);
+      setData(filterSearch(response?.data || [], article => article.label.toLowerCase().includes(value.toLowerCase().trim())));
     }
   };
 
@@ -64,7 +45,7 @@ export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}
     {(status === "success" && data) && (
       <>
         <ActionBar
-          reorderCallback={handleReorder}
+          reorderCallback={() => setData([...data].reverse())}
           searchCallback={handleSearch}
         />
         <CardWrapper>
