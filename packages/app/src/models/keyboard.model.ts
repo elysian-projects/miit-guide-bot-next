@@ -7,7 +7,7 @@ import { User } from "@/entities/user";
 import { AvailableKeyboardTypes } from "@/types/lib";
 import { getApiURL } from "@/utils/server";
 import axios, { AxiosError } from "axios";
-import { ArticleType, ContentNode, IResponse } from "common/dist";
+import { ContentNode, IResponse } from "common/dist";
 import { Context } from "grammy";
 import { getChatControlFlow } from "./article.model";
 
@@ -53,12 +53,9 @@ export const handleArticleButtonClick = async (clickData: string): Promise<{cont
   // In this model we have to check if the given click data satisfies the article button choice as there
   // was no way to validate it on the previous level (controller) without breaking the MVC model
 
-  const dataAsArticle = await fetchData(clickData, "article") as ContentNode[];
-  const dataAsLocation = await fetchData(clickData, "location") as ContentNode[];
+  const data = await fetchData(clickData) as ContentNode[];
 
-  if(dataAsLocation.length !== 0 || dataAsArticle.length !== 0) {
-    const data = [...dataAsArticle, ...dataAsLocation];
-
+  if(data.length !== 0) {
     const controlFlow = getChatControlFlow(data);
 
     return {
@@ -70,10 +67,10 @@ export const handleArticleButtonClick = async (clickData: string): Promise<{cont
   throw new AxiosError("No data found!");
 };
 
-const fetchData = async (clickData: string, articleType: ArticleType): Promise<object[]> => {
+const fetchData = async (clickData: string): Promise<object[]> => {
   try {
     // TODO: replace with `getData` call
-    const { data: response } = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/articles?tabValue=${clickData}&type=${articleType}&orderBy=id.asc`);
+    const { data: response } = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/articles?tabValue=${clickData}&orderBy=id.asc`);
     return (response.ok && response.data)
       ? response.data
       : [];
