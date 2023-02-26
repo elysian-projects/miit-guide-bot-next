@@ -17,7 +17,7 @@ export const getTabs: Handler = async (req, res) => {
     res.json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid query parameters passed!"
+      message: "Невалидные данные!"
     }));
 
     return;
@@ -33,7 +33,7 @@ export const getTabs: Handler = async (req, res) => {
     res.status(404).json(createResponse({
       status: 404,
       ok: false,
-      message: "No tabs found"
+      message: "Вкладка не найдена!"
     }));
 
     return;
@@ -53,7 +53,7 @@ export const insertTab: Handler = async (req, res) => {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid data!"
+      message: "Невалидные данные!"
     }));
 
     return;
@@ -70,7 +70,7 @@ export const insertTab: Handler = async (req, res) => {
     res.status(409).json(createResponse({
       status: 409,
       ok: false,
-      message: "A tab with given name already exists!"
+      message: "Вкладка с таким названием уже существует!"
     }));
 
     return;
@@ -98,7 +98,7 @@ export const updateTab: Handler = async (req, res) => {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid id!"
+      message: "Неверный ID!"
     }));
 
     return;
@@ -108,7 +108,7 @@ export const updateTab: Handler = async (req, res) => {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid data!"
+      message: "Невалидные данные!"
     }));
 
     return;
@@ -124,7 +124,7 @@ export const updateTab: Handler = async (req, res) => {
     res.status(404).json(createResponse({
       status: 404,
       ok: false,
-      message: "No tab found!"
+      message: "Вкладка не найдена!"
     }));
 
     return;
@@ -154,7 +154,7 @@ export const deleteTab: Handler = async (req, res) => {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Tab id was not provided!"
+      message: "ID вкладки отсутствует!"
     }));
 
     return;
@@ -171,7 +171,7 @@ export const deleteTab: Handler = async (req, res) => {
     res.status(404).json(createResponse({
       status: 404,
       ok: false,
-      message: "No tab found!"
+      message: "Вкладка не найдена!"
     }));
 
     return;
