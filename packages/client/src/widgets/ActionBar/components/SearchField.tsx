@@ -1,5 +1,5 @@
 import { Search } from "@mui/icons-material";
-import { Box, FormControl, InputAdornment, OutlinedInput } from "@mui/material";
+import { Box, FormControl, IconButton, InputAdornment, OutlinedInput } from "@mui/material";
 import { FC, FormEventHandler, useEffect, useState } from "react";
 
 interface ISearchFieldProps {
@@ -40,7 +40,9 @@ export const SearchField: FC<ISearchFieldProps> = ({
           }}
           endAdornment={
             <InputAdornment position="end">
-              <Search />
+              <IconButton type="submit">
+                <Search />
+              </IconButton>
             </InputAdornment>
           }
         />
