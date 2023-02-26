@@ -7,8 +7,8 @@ import { CardActionBar } from "../../../components/card/CardActions";
 import { CardMediaCustom } from "../../../components/card/CardMediaCustom";
 import { CardTitle } from "../../../components/card/CardTitle";
 import { useHttp } from "../../../hooks/useHttp";
+import { ActionBar } from "../../../widgets/ActionBar/ActionBar";
 import { getAllArticles } from "../api";
-import { ActionBar } from "./components/ActionBar";
 
 interface IAllArticlesProps {
   getArticlesAmount?: (amount: number) => void

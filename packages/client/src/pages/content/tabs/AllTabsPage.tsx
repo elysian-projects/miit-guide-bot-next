@@ -1,15 +1,13 @@
-import { Alert, Card, CardContent } from "@mui/material";
-import { TabNode } from "common/src";
-import { FC } from "react";
-import { getAllTabs } from "../../../api/tabs";
-import { CardWrapper } from "../../../components/card/Card.styles";
-import { CardActionBar } from "../../../components/card/CardActions";
-import { CardTitle } from "../../../components/card/CardTitle";
-import { useHttp } from "../../../hooks/useHttp";
+import { FC, useState } from "react";
+import { AllTabs } from "../../../features/tabs";
 import { PageTitleBlock } from "../../../widgets/Page/PageTitleBlock";
 
 export const AllTabsPage: FC = () => {
-  const {error, response, status} = useHttp<TabNode[]>("getAllTabs", () => getAllTabs());
+  const [badgeValue, setBadgeValue] = useState<number>(0);
+
+  const getTabsAmount = (amount: number) => {
+    setBadgeValue(amount);
+  };
 
   return (
     <>
@@ -17,33 +15,9 @@ export const AllTabsPage: FC = () => {
         title="Вкладки"
         linkTitle="Добавить вкладку"
         href="/content/tabs/add"
-        badgeContent={response?.data?.length}
+        badgeContent={badgeValue}
       />
-      {status === "loading" && (
-        <Alert severity="info">Загрузка данных...</Alert>
-      )}
-      {status === "error" && (
-        <Alert severity="error">{error}</Alert>
-      )}
-      {(status === "success" && response) && (
-        <CardWrapper>
-          {response.data?.map(item => (
-            <Card key={item.id}>
-              <CardContent>
-                <CardTitle
-                  value={item.label}
-                  variant="body1"
-                  noWrap={true}
-                />
-              </CardContent>
-              <CardActionBar
-                editLink={`/content/tabs/edit?id=${item.id}`}
-                deleteLink={`/content/tabs/delete?id=${item.id}`}
-              />
-            </Card>
-          ))}
-        </CardWrapper>
-      )}
+      <AllTabs getTabsAmount={getTabsAmount} />
     </>
   );
 };

@@ -1,28 +1,28 @@
-import { ContentNode, FlatContent, flattenContent } from "common/src";
+import { TabNode } from "common/src";
 import { FC, useEffect, useState } from "react";
 import { Loader } from "../../../components/Loader";
 import { useHttp } from "../../../hooks/useHttp";
 import { useRedirect } from "../../../hooks/useRedirect";
 import { useSearchQuery } from "../../../hooks/useSearchQuery";
-import { ArticleForm } from "../../../widgets/ArticleForm/ArticleForm";
 import { ConfirmEditDialog } from "../../../widgets/ConfirmEditAlert";
 import { ResponseAlert } from "../../../widgets/ResponseAlert";
-import { getOneArticle, updateArticle } from "../api";
+import { TabForm } from "../../../widgets/TabForm";
+import { getOneTab, updateTab } from "../api";
 
-export const EditArticleForm: FC = () => {
+export const EditTab: FC = () => {
   const {redirect} = useRedirect();
   const {getQueryProp} = useSearchQuery();
   const [id] = useState<string | null>(getQueryProp("id"));
-  const {error, response, status} = useHttp<ContentNode<FlatContent>>("articles", async () => getOneArticle({id: id ?? ""}));
-  const [formData, setFormData] = useState<ContentNode<FlatContent> | null>(response?.data || null);
+  const {error, response, status} = useHttp<TabNode>("tabs", async () => getOneTab({id: id ?? ""}));
+  const [formData, setFormData] = useState<TabNode | null>(response?.data || null);
   const [submitResult, setSubmitResult] = useState<{ok: boolean, message: string} | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    (!id || error || status === "error") && redirect("/content/articles");
+    (!id || error || status === "error") && redirect("/content/tabs");
   }, [error, redirect, status]);
 
-  const onUpdate = (updatedContent: ContentNode<FlatContent>): void => {
+  const onUpdate = (updatedContent: TabNode): void => {
     setFormData(updatedContent);
   };
 
@@ -32,7 +32,7 @@ export const EditArticleForm: FC = () => {
 
   const applyChanges = async (shouldEdit: boolean): Promise<void> => {
     if(formData && shouldEdit) {
-      setSubmitResult(await updateArticle(formData));
+      setSubmitResult(await updateTab(formData));
     }
     setEditDialogOpen(false);
   };
@@ -52,10 +52,10 @@ export const EditArticleForm: FC = () => {
               submitResult={submitResult}
             />
           )}
-          <ArticleForm
+          <TabForm
             onUpdate={onUpdate}
             onSubmit={onSubmit}
-            data={{...response?.data, content: flattenContent(response?.data?.content)}}
+            data={response?.data}
           />
         </>
       ) : (

@@ -14,9 +14,9 @@ export const SearchField: FC<ISearchFieldProps> = ({
   return (
     <>
       <FormControl variant="outlined">
-        <InputLabel size="small" htmlFor="outlined-adornment-password">Поиск</InputLabel>
+        <InputLabel size="small" htmlFor="search">Поиск</InputLabel>
         <OutlinedInput
-          id="outlined-adornment-password"
+          id="search"
           size="small"
           value={value}
           style={{background: "#fff"}}
@@ -29,7 +29,6 @@ export const SearchField: FC<ISearchFieldProps> = ({
               <Search />
             </InputAdornment>
           }
-          label="Password"
         />
       </FormControl>
     </>

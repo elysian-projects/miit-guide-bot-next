@@ -2,7 +2,7 @@ import { Reorder } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { FC, useRef } from "react";
 import { ActionBarStyled } from "./ActionBar.styles";
-import { SearchField } from "./SearchField";
+import { SearchField } from "./components/SearchField";
 
 interface IActionBarProps {
   reorderCallback?: () => void,

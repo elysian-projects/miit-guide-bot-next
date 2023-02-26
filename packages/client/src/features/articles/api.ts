@@ -33,7 +33,7 @@ export const getOneArticle = async (search: Partial<SearchOptions<ContentNode>>)
   }
 };
 
-type ServerResponse = {
+export type ServerResponse = {
   ok: boolean,
   message: string
 };
@@ -79,7 +79,6 @@ export const updateArticle = async (updatedData: ContentNode<FlatContent>): Prom
       message: e.response.data.message
     };
   }
-
 };
 
 export const deleteArticle = async (id: number | string): Promise<boolean> => {
