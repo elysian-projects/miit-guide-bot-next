@@ -84,6 +84,10 @@ export const updateArticle = async (updatedData: ContentNode<FlatContent>): Prom
 export const deleteArticle = async (id: number | string): Promise<boolean> => {
   const {getUserToken} = useAuth();
 
-  const response = await deleteData("articles", id, {token: getUserToken()});
-  return response.status === 200;
+  try {
+    const response = await deleteData("articles", id, {token: getUserToken()});
+    return response.status === 200;
+  } catch(error) {
+    return false;
+  }
 };

@@ -80,6 +80,10 @@ export const updateTab = async (updatedData: TabNode): Promise<ServerResponse> =
 export const deleteTab = async (id: number | string): Promise<boolean> => {
   const {getUserToken} = useAuth();
 
-  const response = await deleteData("tabs", id, {token: getUserToken()});
-  return response.status === 200;
+  try {
+    const response = await deleteData("tabs", id, {token: getUserToken()});
+    return response.status === 200;
+  } catch(error) {
+    return false;
+  }
 };
