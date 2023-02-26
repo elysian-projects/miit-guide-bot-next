@@ -211,6 +211,8 @@ export const deleteArticle: Handler = async (req, res) => {
   const id = Number(bodyId ?? queryId);
 
   const articleRepo = DBSource.getRepository(Article);
+  const tabRepo = DBSource.getRepository(Tab);
+
   const foundArticle = await articleRepo.findOneBy({id});
 
   if(!foundArticle) {
@@ -219,6 +221,17 @@ export const deleteArticle: Handler = async (req, res) => {
       ok: false,
       message: "Статьи не найдены!"
     }));
+  }
+
+  // If the last article inside the tab gets deleted the tab will also be deleted
+  const amountOfArticlesOnTheSameTab = await articleRepo.countBy({tabId: foundArticle.tabId});
+
+  if(amountOfArticlesOnTheSameTab === 1) {
+    const parentTab = await tabRepo.findOneBy({id: foundArticle.tabId});
+
+    if(parentTab) {
+      await tabRepo.delete(parentTab);
+    }
   }
 
   await articleRepo.delete(foundArticle);
