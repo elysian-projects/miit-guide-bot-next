@@ -1,4 +1,5 @@
 import { DBSource } from "@/database/data-source";
+import { Article } from "@/entity/articles";
 import { Tab } from "@/entity/tabs";
 import { useOrderBy } from "@/utils/orderBy";
 import { createResponse } from "@/utils/response";
@@ -163,9 +164,8 @@ export const deleteTab: Handler = async (req, res) => {
   const id = Number(bodyId ?? queryId);
 
   const tabRepo = DBSource.getRepository(Tab);
-  const foundTab = await tabRepo.findOneBy({
-    id
-  });
+  const articleRepo = DBSource.getRepository(Article);
+  const foundTab = await tabRepo.findOneBy({id});
 
   if(!foundTab) {
     res.status(404).json(createResponse({
@@ -175,6 +175,13 @@ export const deleteTab: Handler = async (req, res) => {
     }));
 
     return;
+  }
+
+  // All articles must also be deleted when the tab is deleted
+  const articlesOfTheGivenTab = await articleRepo.findBy({tabId: foundTab.id});
+
+  for(const article of articlesOfTheGivenTab) {
+    await articleRepo.delete(article);
   }
 
   await tabRepo.delete(foundTab);
