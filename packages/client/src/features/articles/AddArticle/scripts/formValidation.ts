@@ -29,14 +29,14 @@ export const validateArticleForm = (form: ContentNode<FlatContent>): FormValidat
   return createSuccessResponse("Данные успешно сохранены!");
 };
 
-const createErrorResponse = (message: string): FormValidationResponse => {
+export const createErrorResponse = (message: string): FormValidationResponse => {
   return {
     ok: false,
     message
   };
 };
 
-const createSuccessResponse = (message: string): FormValidationResponse => {
+export const createSuccessResponse = (message: string): FormValidationResponse => {
   return {
     ok: true,
     message

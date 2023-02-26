@@ -1,4 +1,4 @@
-import { deleteData, getData, IResponse, TabNode, updateData } from "common/src";
+import { createData, deleteData, getData, IResponse, TabNode, updateData } from "common/src";
 import { SearchOptions } from "common/src/api/types";
 import { useAuth } from "../../hooks/useAuth";
 import { ServerResponse } from "../articles";
@@ -30,6 +30,24 @@ export const getOneTab = async (search: Partial<SearchOptions<TabNode>>): Promis
       status: error.response.data.status,
       message: error.response.data.message,
       ok: false,
+    };
+  }
+};
+
+export const createTab = async (tabData: Omit<TabNode, "id" | "value">): Promise<ServerResponse> => {
+  const {getUserToken} = useAuth();
+
+  try {
+    const response = await createData("tabs", {...tabData, token: getUserToken()});
+
+    return {
+      ok: response.ok,
+      message: response.message
+    };
+  } catch (e: any) {
+    return {
+      ok: false,
+      message: e.response.data.message
     };
   }
 };
