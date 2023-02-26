@@ -1,8 +1,7 @@
 import { Navigate, Route } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { AddTabPage } from "../pages/content/tabs/AddTabPage";
-import { AllTabsPage } from "../pages/content/tabs/AllTabsPage";
-import { EditTabPage } from "../pages/content/tabs/EditTabPage";
+import { AllTabsPage, DeleteTabPage, EditTabPage } from "../pages/content/tabs";
+import { AddTabPage } from "../pages/content/tabs/";
 
 const baseUrl = "/content/tabs";
 
@@ -18,6 +17,7 @@ export const tabsRoutes = (() => {
           <Route path={baseUrl} element={<AllTabsPage />} />
           <Route path={baseUrl + "/add"} element={<AddTabPage />} />
           <Route path={baseUrl + "/edit"} element={<EditTabPage />} />
+          <Route path={baseUrl + "/delete"} element={<DeleteTabPage />} />
         </>
       )}
     </>

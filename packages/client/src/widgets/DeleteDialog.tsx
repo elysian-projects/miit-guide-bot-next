@@ -1,20 +1,27 @@
-import { Button, Dialog as MUIDialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { FC } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from "@mui/material";
+import { FC, ReactNode } from "react";
 
 interface IDialogProps {
   open: boolean,
-  articleLabel: string,
+  text: ReactNode,
   handleClose: () => void,
   handleDelete: () => void
 }
 
-export const Dialog: FC<IDialogProps> = ({
+export const DeleteDialog: FC<IDialogProps> = ({
   open,
-  articleLabel,
+  text,
   handleClose,
   handleDelete,
 }) => (
-  <MUIDialog
+  <Dialog
     open={open}
     keepMounted
     onClose={handleClose}
@@ -23,13 +30,12 @@ export const Dialog: FC<IDialogProps> = ({
     <DialogTitle>Подтвердите действие</DialogTitle>
     <DialogContent>
       <DialogContentText id="alert-dialog-slide">
-        Вы уверены, что хотите удалить статью <b>"{articleLabel}"</b>?
-        После удаления восстановить статью будет невозможно!
+        {text}
       </DialogContentText>
     </DialogContent>
     <DialogActions>
       <Button color="info" onClick={handleClose}>Отмена</Button>
       <Button color="error" onClick={handleDelete}>Удалить</Button>
     </DialogActions>
-  </MUIDialog>
+  </Dialog>
 );

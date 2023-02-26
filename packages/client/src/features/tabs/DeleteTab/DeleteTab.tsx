@@ -1,23 +1,23 @@
 import { Alert } from "@mui/material";
-import { ContentNode, FlatContent } from "common/src";
+import { TabNode } from "common/src";
 import { FC, useEffect, useState } from "react";
+import { Loader } from "../../../components/Loader";
 import { useHttp } from "../../../hooks/useHttp";
 import { useRedirect } from "../../../hooks/useRedirect";
 import { useSearchQuery } from "../../../hooks/useSearchQuery";
 import { DeleteDialog } from "../../../widgets/DeleteDialog";
-import { deleteArticle, getOneArticle } from "../api";
-import { Loader } from "./components/Loader";
+import { deleteTab, getOneTab } from "../api";
 
-export const DeleteArticle: FC = () => {
+export const DeleteTab: FC = () => {
   const [open, setOpen] = useState<boolean>(true);
   const {getQueryProp} = useSearchQuery();
   const [id] = useState<string | null>(getQueryProp("id"));
-  const {error, isFetching, response, status} = useHttp<ContentNode<FlatContent>>("articles", async () => getOneArticle({id: id ?? ""}));
+  const {error, isFetching, response, status} = useHttp<TabNode>("tab", async () => getOneTab({id: id ?? ""}));
   const {redirect} = useRedirect();
 
   const closePage = () => {
     setOpen(false);
-    redirect("/content/articles");
+    redirect("/content/tabs");
   };
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export const DeleteArticle: FC = () => {
   }, [closePage, error, id, status]);
 
   const handleDelete = async () => {
-    await deleteArticle(id || "");
+    await deleteTab(id || "");
     closePage();
   };
 
@@ -36,9 +36,11 @@ export const DeleteArticle: FC = () => {
       <DeleteDialog
         open={open}
         text={<>
-          Вы уверены, что хотите удалить статью <i><b>{response?.data.label}</b></i>?
-          <b>После удаления отменить это действие будет невозможно!</b>
-        </>}
+          Вы уверены, что хотите удалить вкладку <i><b>{response?.data.label}</b></i>?
+          Удаление вкладки также повлечёт за собой удаление <b>всех статей</b>, прикреплённых
+          к ней! <b>После удаления отменить это действие будет невозможно!</b>
+        </>
+        }
         handleClose={closePage}
         handleDelete={handleDelete}
       />

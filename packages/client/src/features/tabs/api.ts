@@ -77,7 +77,9 @@ export const updateTab = async (updatedData: TabNode): Promise<ServerResponse> =
   }
 };
 
-export const deleteTab = async (id: string | number): Promise<boolean> => {
-  const response = await deleteData("tabs", id);
+export const deleteTab = async (id: number | string): Promise<boolean> => {
+  const {getUserToken} = useAuth();
+
+  const response = await deleteData("tabs", id, {token: getUserToken()});
   return response.status === 200;
 };
