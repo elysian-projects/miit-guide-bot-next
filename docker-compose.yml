@@ -1,33 +1,5 @@
 version: '3.8'
 services:
-  # Packages
-  app:
-    container_name: app
-    build: ./packages/app
-    depends_on:
-      - server
-    configs:
-      - source: base_tsconfig
-        target: /tsconfig.options.json
-    env_file:
-      - .env
-    restart: unless-stopped
-
-  server:
-    container_name: server
-    build: ./packages/server
-    configs:
-      - source: base_tsconfig
-        target: /tsconfig.options.json
-    env_file:
-      - .env
-    ports:
-      - $SERVER_PORT:$SERVER_PORT
-    expose:
-      - $SERVER_PORT
-    restart: unless-stopped
-
-  # Database
   postgresql:
     container_name: database
     image: "postgres"
@@ -35,19 +7,10 @@ services:
       POSTGRES_USER: $PGUSER
       POSTGRES_DB: $PGDATABASE
       POSTGRES_PASSWORD: $PGPASSWORD
-    ports:
-      - $PGPORT:$PGPORT
+    network_mode: "host"
     volumes:
       - postgres:/data/postgres
     restart: unless-stopped
-
-networks:
-  postgres:
-    driver: bridge
-
-configs:
-  base_tsconfig:
-    file: ./tsconfig.options.json
 
 volumes:
   postgres:

@@ -1,21 +1,24 @@
 import { DBSource } from "@/database/data-source";
+import { Article } from "@/entity/articles";
 import { Tab } from "@/entity/tabs";
 import { useOrderBy } from "@/utils/orderBy";
 import { createResponse } from "@/utils/response";
+import { getValidSelectArray } from "@/utils/selectValidation";
 import { serializeTabLabel } from "@/utils/serializer";
 import { isValidId, isValidTabBody } from "@/utils/validations";
 import { Handler } from "express";
 
 export const getTabs: Handler = async (req, res) => {
-  const {orderBy, ...query} = req.query;
+  const {select, orderBy, ...query} = req.query;
 
+  const selectList = getValidSelectArray(select, new Tab());
   const order = useOrderBy(orderBy, new Tab());
 
   if(orderBy && !order) {
     res.json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid query parameters passed!"
+      message: "Невалидные данные!"
     }));
 
     return;
@@ -23,6 +26,7 @@ export const getTabs: Handler = async (req, res) => {
 
   const tabs = await DBSource.getRepository(Tab).find({
     where: query,
+    select: selectList,
     order: order ?? {}
   });
 
@@ -30,7 +34,7 @@ export const getTabs: Handler = async (req, res) => {
     res.status(404).json(createResponse({
       status: 404,
       ok: false,
-      message: "No tabs found"
+      message: "Вкладка не найдена!"
     }));
 
     return;
@@ -50,7 +54,7 @@ export const insertTab: Handler = async (req, res) => {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid data!"
+      message: "Невалидные данные!"
     }));
 
     return;
@@ -67,7 +71,7 @@ export const insertTab: Handler = async (req, res) => {
     res.status(409).json(createResponse({
       status: 409,
       ok: false,
-      message: "A tab with given name already exists!"
+      message: "Вкладка с таким названием уже существует!"
     }));
 
     return;
@@ -95,7 +99,7 @@ export const updateTab: Handler = async (req, res) => {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid id!"
+      message: "Неверный ID!"
     }));
 
     return;
@@ -105,7 +109,7 @@ export const updateTab: Handler = async (req, res) => {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Invalid data!"
+      message: "Невалидные данные!"
     }));
 
     return;
@@ -121,7 +125,7 @@ export const updateTab: Handler = async (req, res) => {
     res.status(404).json(createResponse({
       status: 404,
       ok: false,
-      message: "No tab found!"
+      message: "Вкладка не найдена!"
     }));
 
     return;
@@ -151,7 +155,7 @@ export const deleteTab: Handler = async (req, res) => {
     res.status(400).json(createResponse({
       status: 400,
       ok: false,
-      message: "Tab id was not provided!"
+      message: "ID вкладки отсутствует!"
     }));
 
     return;
@@ -160,18 +164,24 @@ export const deleteTab: Handler = async (req, res) => {
   const id = Number(bodyId ?? queryId);
 
   const tabRepo = DBSource.getRepository(Tab);
-  const foundTab = await tabRepo.findOneBy({
-    id
-  });
+  const articleRepo = DBSource.getRepository(Article);
+  const foundTab = await tabRepo.findOneBy({id});
 
   if(!foundTab) {
     res.status(404).json(createResponse({
       status: 404,
       ok: false,
-      message: "No tab found!"
+      message: "Вкладка не найдена!"
     }));
 
     return;
+  }
+
+  // All articles must also be deleted when the tab is deleted
+  const articlesOfTheGivenTab = await articleRepo.findBy({tabId: foundTab.id});
+
+  for(const article of articlesOfTheGivenTab) {
+    await articleRepo.delete(article);
   }
 
   await tabRepo.delete(foundTab);

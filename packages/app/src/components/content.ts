@@ -1,11 +1,10 @@
-import { ArticleType } from "@/types/content";
-import { FlatContent, UserDataContent } from "@/types/user";
+import { ArticleType, ContentNode, FlatContent } from "common/dist";
 
 export class Content {
-  private content!: UserDataContent<FlatContent>[];
+  private content!: ContentNode<FlatContent>[];
   private contentAmount = 0;
 
-  public constructor(content: UserDataContent[]) {
+  public constructor(content: ContentNode[]) {
     this.setContent(content);
   }
 
@@ -17,15 +16,15 @@ export class Content {
     return this.contentAmount;
   };
 
-  public getContent = (step: number): UserDataContent<FlatContent> => {
-    if(step < 0 || step > this.contentAmount - 1) {
+  public getContent = (step: number): ContentNode<FlatContent> => {
+    if(!this.isValidStep(step)) {
       throw new Error("Invalid step value!");
     }
 
     return this.content[step];
   };
 
-  public setContent = (content: UserDataContent[]): void => {
+  public setContent = (content: ContentNode[]): void => {
     if(!this.validContent(content)) {
       throw new Error("Content of different type was given!");
     }
@@ -34,16 +33,35 @@ export class Content {
     this.contentAmount = this.content.length;
   };
 
-  private getFlatContentProjection = (content: UserDataContent[]): UserDataContent<FlatContent>[] => {
+  public isLastArticleNode = (currentStep: number): boolean => {
+    if(!this.isValidStep(currentStep)) {
+      throw new Error("Invalid step value!");
+    }
+
+    if(currentStep === this.content.length - 1) {
+      return true;
+    }
+
+    const currentNode = this.content[currentStep];
+    const nextNode = this.content[currentStep + 1];
+
+    return currentNode.label !== nextNode.label;
+  };
+
+  private isValidStep = (step: number): boolean => {
+    return (step >= 0 && step <= this.content.length - 1);
+  };
+
+  private getFlatContentProjection = (content: ContentNode[]): ContentNode<FlatContent>[] => {
     return content.flatMap(item => item.content.map(currentContent => ({...item, content: currentContent})));
   };
 
-  private validContent = (content: UserDataContent[]): boolean => {
+  private validContent = (content: ContentNode[]): boolean => {
     return getArticleType(content) !== "invalid";
   };
 }
 
-export const getArticleType = (content: UserDataContent[]): ArticleType | "invalid" => {
+export const getArticleType = (content: ContentNode[]): ArticleType | "invalid" => {
   const types = content.map(item => item.type);
 
   return types.every(value => value === "article")

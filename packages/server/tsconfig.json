@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig.options.json",
   "compilerOptions": {
+    "outDir": "./dist",
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
-    "outDir": "./dist",
+    "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],

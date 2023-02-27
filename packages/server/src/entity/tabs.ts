@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity("tabs")
 export class Tab {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Column("varchar")
   label: string;

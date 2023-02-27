@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "datetime",
     "DBNAME",
     "miit",
     "PGCONNECTION",
@@ -8,6 +9,20 @@
     "PGPASSWORD",
     "PGPORT",
     "PGUSER",
-    "typeorm"
+    "Signin",
+    "typeorm",
+    "Unauth",
+    "webp"
+  ],
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "GuideBot",
+      "database": "miit",
+      "username": "docker"
+    }
   ]
 }

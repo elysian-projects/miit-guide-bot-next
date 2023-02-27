@@ -1,70 +1,76 @@
-import { store } from "@/bootstrap";
-import { createReplyMarkup, removeInlineReplyMarkup } from "@/components/reply-markup";
+import { IControlFlow } from "@/components/control-flow/types";
+import { createReplyMarkup } from "@/components/reply-markup";
 import { keyboardControls } from "@/constants/controls";
 import { EXCURSION_REPLY } from "@/constants/messages";
 import { onStart } from "@/controllers/commands.controller";
-import { ArticleType } from "@/types/content";
-import { Image } from "@/types/lib";
-import { IResponse } from "@/types/server";
-import { UserDataContent } from "@/types/user";
-import { getChatId } from "@/utils/common";
+import { User } from "@/entities/user";
+import { AvailableKeyboardTypes } from "@/types/lib";
 import { getApiURL } from "@/utils/server";
-import { sendMessage } from "@/views/general.view";
 import axios, { AxiosError } from "axios";
+import { ContentNode, IResponse } from "common/dist";
 import { Context } from "grammy";
-import { articleModel } from "./article.model";
+import { getChatControlFlow } from "./article.model";
 
-export const controlButtonModel = async (ctx: Context, clickData: string): Promise<void> => {
-  const chatId = getChatId(ctx);
-
+export const handleControlButtonClick = (ctx: Context, clickData: string, user: User): {shouldRemoveKeyboard: boolean, onFinish: () => void} => {
   switch (clickData) {
     case keyboardControls.NEXT.label:
     case keyboardControls.NEXT.value:
-      store.getUser(chatId).nextStep();
-      break;
+      return {
+        shouldRemoveKeyboard: false,
+        onFinish: () => user.nextStep()
+      };
     case keyboardControls.PREV.label:
     case keyboardControls.PREV.value:
-      store.getUser(chatId).prevStep();
-      break;
+      return {
+        shouldRemoveKeyboard: false,
+        onFinish: () => user.prevStep()
+      };
     case keyboardControls.HUB.label:
     case keyboardControls.HUB.value:
-      removeInlineReplyMarkup(ctx);
-      onStart(ctx);
-      break;
+      return {
+        shouldRemoveKeyboard: true,
+        onFinish: () => onStart(ctx)
+      };
   }
+
+  return {
+    shouldRemoveKeyboard: false,
+    onFinish: () => 0,
+  };
 };
 
-export const excursionButtonModel = async (ctx: Context): Promise<void> => {
-  removeInlineReplyMarkup(ctx);
-
-  const {data} = await axios.get<IResponse<Image>>(`${getApiURL()}/tabs?type=location`);
+export const handleExcursionButtonClick = async (): Promise<{message: string, replyMarkup: AvailableKeyboardTypes}> => {
+  const {data} = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/tabs?type=location`);
   const replyMarkup = createReplyMarkup("inline", data.data ?? []);
 
-  await sendMessage(ctx, {
+  return {
     message: EXCURSION_REPLY,
-    reply_markup: replyMarkup
-  });
+    replyMarkup
+  };
 };
 
-export const articleButtonModel = async (ctx: Context, clickData: string): Promise<void> => {
+export const handleArticleButtonClick = async (clickData: string): Promise<{controlFlow: IControlFlow, data: ContentNode[]}> => {
   // In this model we have to check if the given click data satisfies the article button choice as there
   // was no way to validate it on the previous level (controller) without breaking the MVC model
 
-  const dataAsArticle = await fetchData(clickData, "article") as UserDataContent[];
-  const dataAsLocation = await fetchData(clickData, "location") as UserDataContent[];
+  const data = await fetchData(clickData) as ContentNode[];
 
-  if(dataAsLocation.length !== 0 || dataAsArticle.length !== 0) {
-    const data = [...dataAsArticle, ...dataAsLocation];
-    await articleModel(ctx, data);
-    return;
+  if(data.length !== 0) {
+    const controlFlow = getChatControlFlow(data);
+
+    return {
+      data,
+      controlFlow
+    };
   }
 
   throw new AxiosError("No data found!");
 };
 
-const fetchData = async (clickData: string, articleType: ArticleType): Promise<object[]> => {
+const fetchData = async (clickData: string): Promise<object[]> => {
   try {
-    const { data: response } = await axios.get<IResponse>(`${getApiURL()}/articles?tabValue=${clickData}&type=${articleType}`);
+    // TODO: replace with `getData` call
+    const { data: response } = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/articles?tabValue=${clickData}&orderBy=id.asc`);
     return (response.ok && response.data)
       ? response.data
       : [];

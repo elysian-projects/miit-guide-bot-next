@@ -9,15 +9,18 @@ Telegram бот, который проводит экскурсию по тер�
 ## Запуск
 
 - установить `docker` на компьютер
-- создать в корне файл `.env` и скопировать в него:
+- создать в корне файл `.env`, скопировать в него следующие данные:
 
   ```
   # Telegram
   TOKEN=<your_token>
 
   # Server
+  HTTPS=false
   SERVER_PORT=5000
-  SERVER_HOST=192.168.0.95
+  SERVER_HOST=<your_local_host>
+  SECRET_KEY=<your_secret_key>
+  SALT=15
 
   # Database
   PGHOST=localhost
@@ -25,14 +28,15 @@ Telegram бот, который проводит экскурсию по тер�
   PGDATABASE=miit
   PGPASSWORD=admin
   PGPORT=5432
-  DATABASE_URL="jdbc:postgresql:/${PGDATABASE}"
+  DATABASE_URL="postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
 
+  # Flags
+  PRODUCTION=false
   ```
 - заполнить файл `.env` значениями (для режима разработки оставить значения `#Database` по умолчанию)
 - выполнить команды
 
   ```
-  npm install
-  docker compose up
-  npm run migrate
+  npm run install:all
+  npm run start
   ```

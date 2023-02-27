@@ -2,11 +2,13 @@ import { store } from "@/bootstrap";
 import { createReplyMarkup } from "@/components/reply-markup";
 import { keyboardControls } from "@/constants/controls";
 import { Image, KeyboardType, MessageProps, ReplyMarkupType } from "@/types/lib";
-import { ChatId, FlatContent, StepInformation, UserDataContent } from "@/types/user";
+import { ChatId, StepInformation } from "@/types/user";
 import { formatMessage } from "@/utils/formatters";
+import { ContentNode, FlatContent } from "common/dist";
 
 /**
  * Throws an error if user is not added
+ * // TODO: remove error throwing, add user instead
  */
 export const checkUserExists = (chatId: ChatId): void => {
   if (!store.userExists(chatId)) {
@@ -19,20 +21,22 @@ export function useMessageController<T extends KeyboardType>(replyMarkupType: T,
   props: MessageProps<ReplyMarkupType[T]>,
   isFirstStep: boolean,
   isLastStep: boolean,
-  content: UserDataContent<FlatContent>
+  content: ContentNode<FlatContent>
 } {
   const user = store.getUser(chatId);
 
   const options: StepInformation = {
     currentStep: user.getCurrentStep(),
-    maxSteps: user.getAmountOfContent()
+    maxSteps: user.getAmountOfContent(),
+    isLastArticleNode: user.isLastArticleNode()
   };
 
   const content = user.getCurrentContent();
+  const props = getMessageProps(replyMarkupType, options);
 
   return {
-    message: formatMessage(content, options),
-    props: getMessageProps(replyMarkupType, options),
+    message: formatMessage(content, {...options, parseMode: props.parse_mode}),
+    props,
     content,
     isFirstStep: user.isFirstStep(),
     isLastStep: user.isLastStep(),

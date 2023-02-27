@@ -5,8 +5,8 @@ export class Article {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("varchar")
-  tabValue: string;
+  @Column("int")
+  tabId: number;
 
   @Column("varchar")
   label: string;

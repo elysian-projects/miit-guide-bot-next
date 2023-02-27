@@ -1,12 +1,13 @@
 import bodyParser from "body-parser";
+import cors from "cors";
 import express, { Router } from "express";
 import { join } from "path";
 import { DBSource } from "./database/data-source";
 import * as articleService from "./services/articles.service";
+import * as authService from "./services/auth.service";
 import * as baseService from "./services/base.service";
 import { invalidSyntaxError } from "./services/error.service";
 import * as tabService from "./services/tabs.service";
-import * as userService from "./services/users.service";
 
 // Initialize database connection and make migrations
 DBSource
@@ -24,25 +25,28 @@ const router = Router();
 // Router handlers
 router.get("/", baseService.index);
 
-// User routes
-router.get("/api/users", userService.getUser);
+// Auth routes
+router.post("/api/auth/login", authService.loginUser);
+router.post("/api/auth/logout", authService.logoutUser);
+router.post("/api/auth/signup", authService.signUpUser);
 
 // Tab routes
-router.post("/api/tabs", tabService.insertTab);
+router.post("/api/tabs", authService.checkUserTokenExpiration, tabService.insertTab);
 router.get("/api/tabs", tabService.getTabs);
-router.put("/api/tabs", tabService.updateTab);
-router.delete("/api/tabs", tabService.deleteTab);
+router.put("/api/tabs", authService.checkUserTokenExpiration, tabService.updateTab);
+router.delete("/api/tabs", authService.checkUserTokenExpiration, tabService.deleteTab);
 
 // Article routes
-router.post("/api/articles", articleService.insertArticle);
+router.post("/api/articles", authService.checkUserTokenExpiration, articleService.insertArticle);
 router.get("/api/articles", articleService.getArticles);
-router.put("/api/articles", articleService.updateArticle);
-router.delete("/api/articles", articleService.deleteArticle);
+router.put("/api/articles", authService.checkUserTokenExpiration, articleService.updateArticle);
+router.delete("/api/articles", authService.checkUserTokenExpiration, articleService.deleteArticle);
 
 // The rest queries must be considered as non-correct routes
 router.get("*", baseService.notFound);
 
 // Middlewares
+server.use(cors({origin: "http://localhost:3000"}));
 server.use(bodyParser.json());
 server.use(invalidSyntaxError);
 server.use("/assets", express.static(join(__dirname, "../assets")));
