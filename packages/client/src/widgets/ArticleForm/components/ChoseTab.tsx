@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { ArticleType, TabNode } from "common/src";
+import { TabNode } from "common/src";
 import { FC, useEffect, useState } from "react";
 import { getAllTabs } from "../../../features/tabs/api";
 import { useHttp } from "../../../hooks/useHttp";
@@ -13,24 +13,15 @@ const defaultTab: TabNode = {
 
 interface IChooseTabProps {
   tabIdValue: number,
-  onUpdate: (updatedTab: TabNode) => void,
-  type: ArticleType,
+  onUpdate: (updatedTab: TabNode) => void
 }
 
 export const ChooseTab: FC<IChooseTabProps> = ({
   onUpdate,
-  type,
   tabIdValue
 }) => {
   const [tabsList, setTabsList] = useState<TabNode[]>([]);
-
-  const {response, refetch, isFetching} = useHttp<TabNode[]>("getAppropriateTabs", () => getAllTabs({
-    type
-  }));
-
-  useEffect(() => {
-    refetch();
-  }, [type]);
+  const {response, isFetching} = useHttp<TabNode[]>("getAllTabs", () => getAllTabs());
 
   useEffect(() => {
     if(response?.ok && response.data) {
@@ -49,20 +40,26 @@ export const ChooseTab: FC<IChooseTabProps> = ({
   };
 
   return (
-    <Autocomplete
-      id="tabsList"
-      options={tabsList}
-      getOptionLabel={tab => tab.label}
-      loading={isFetching}
-      value={getChosenTab()}
-      inputValue={getChosenTab().label}
-      onChange={(_, newValue: TabNode | null) => handleTabChange(newValue?.label)}
-      renderInput={props => (
-        <TextField
-          {...props}
-          placeholder="Выберите вкладку*"
-        />
-      )}
-    />
+    <>
+      <Autocomplete
+        id="tabsList"
+        options={tabsList}
+        getOptionLabel={tab => tab.label}
+        loading={isFetching}
+        value={getChosenTab()}
+        inputValue={getChosenTab().label}
+        onChange={(_, newValue: TabNode | null) => handleTabChange(newValue?.label)}
+        renderInput={props => (
+          <TextField
+            {...props}
+            placeholder="Выберите вкладку*"
+          />
+        )}
+      />
+      <TextField
+        value={"Тип: " + (getChosenTab().type === "article" ? "Статья" : "Локация")}
+        disabled
+      />
+    </>
   );
 };

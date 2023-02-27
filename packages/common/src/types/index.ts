@@ -13,9 +13,7 @@ export interface ContentNode<T extends RichContent | FlatContent = RichContent> 
   value: string,
   /** Rich content that includes main information on the node */
   content: T,
-  /** Type of the record */
-  type: ArticleType
-
+  addedOn?: Date,
   picture: string,
   links?: string[]
 }

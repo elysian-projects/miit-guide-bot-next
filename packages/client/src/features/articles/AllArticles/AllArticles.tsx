@@ -1,5 +1,5 @@
 import { Link as LinkIcon } from "@mui/icons-material";
-import { Alert, Card, CardContent } from "@mui/material";
+import { Alert, Card, CardContent, Typography } from "@mui/material";
 import { ContentNode } from "common/src";
 import { FC, useEffect, useState } from "react";
 import { CardWrapper } from "../../../components/card";
@@ -7,6 +7,7 @@ import { CardActionBar } from "../../../components/card/CardActions";
 import { CardMediaCustom } from "../../../components/card/CardMediaCustom";
 import { CardTitle } from "../../../components/card/CardTitle";
 import { useHttp } from "../../../hooks/useHttp";
+import { formatDate } from "../../../utils/formatDate";
 import { ActionBar } from "../../../widgets/ActionBar/ActionBar";
 import { filterSearch } from "../../../widgets/ActionBar/scripts";
 import { getAllArticles } from "../api";
@@ -61,6 +62,11 @@ export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}
                   variant="body1"
                   noWrap={true}
                 />
+                {item.addedOn && (
+                  <Typography variant="body2" component="div">
+                    Добавлено: {formatDate(item.addedOn)}
+                  </Typography>
+                )}
               </CardContent>
               <CardActionBar
                 additionalLinks={[{value: `/content/tabs/edit?id=${item.tabId}`, icon: <LinkIcon />, tip: "К вкладке"}]}

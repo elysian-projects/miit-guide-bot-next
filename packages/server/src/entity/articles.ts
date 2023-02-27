@@ -17,8 +17,8 @@ export class Article {
   @Column({type: "text", array: true})
   content: string;
 
-  @Column("varchar")
-  type: string;
+  @Column({type: "timestamp", default: new Date()})
+  addedOn: Date;
 
   @Column("varchar")
   picture: string;

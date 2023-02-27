@@ -72,7 +72,7 @@ export const insertArticle: Handler = async (req, res) => {
     }));
   }
 
-  const {tabId, label, content, type, picture, links} = body;
+  const {tabId, label, content, picture, links} = body;
   const articleValue = serializeLabel(label);
 
   const existingTab = await DBSource.getRepository(Tab).countBy({id: tabId});
@@ -124,7 +124,7 @@ export const insertArticle: Handler = async (req, res) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   article.content = normalizeContent(content);
-  article.type = String(type);
+  article.addedOn = new Date();
   article.picture = String(picture);
 
   if(links) {
@@ -142,7 +142,7 @@ export const insertArticle: Handler = async (req, res) => {
 export const updateArticle: Handler = async (req, res) => {
   const body = req.body;
 
-  const {id, tabId, label, content, type, picture, links} = body;
+  const {id, tabId, label, content, picture, links} = body;
 
   if(!isValidId(id)) {
     return res.status(400).json(createResponse({
@@ -152,7 +152,7 @@ export const updateArticle: Handler = async (req, res) => {
     }));
   }
 
-  if(!hasNonEmpty(tabId, label, content, type, picture, links) || (links && !Array.isArray(links))) {
+  if(!hasNonEmpty(tabId, label, content, picture, links) || (links && !Array.isArray(links))) {
     return res.status(400).json(createResponse({
       status: 400,
       ok: false,
@@ -184,7 +184,6 @@ export const updateArticle: Handler = async (req, res) => {
   // @ts-ignore
   content && (foundArticle.content = normalizeContent(content));
   articleValue && (foundArticle.value = articleValue);
-  type && (foundArticle.type = type);
   picture && (foundArticle.picture = picture);
   links && (foundArticle.links = links);
 

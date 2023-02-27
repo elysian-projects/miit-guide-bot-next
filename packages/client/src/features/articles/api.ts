@@ -4,7 +4,6 @@ import { useAuth } from "../../hooks/useAuth";
 
 export const getAllArticles = async (where?: Partial<ContentNode>): Promise<IResponse<ContentNode[]>> => {
   return (await getData("articles", {
-    select: ["id", "tabId", "label", "type", "picture", "links"],
     where,
     orderBy: "id.asc"
   })) as IResponse<ContentNode[]> || [];
