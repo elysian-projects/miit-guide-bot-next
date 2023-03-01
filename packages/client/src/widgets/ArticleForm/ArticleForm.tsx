@@ -64,7 +64,7 @@ export const ArticleForm: FC<IArticleForm> = ({
       />
 
       <ChooseTab
-        tabIdValue={formData.tabId}
+        tabId={formData.tabId}
         onUpdate={updatedTab => setFormData({...formData, tabId: updatedTab.id})}
       />
 
