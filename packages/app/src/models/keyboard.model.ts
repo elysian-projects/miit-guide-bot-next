@@ -56,7 +56,7 @@ export const handleArticleButtonClick = async (clickData: string): Promise<{cont
   const data = await fetchData(clickData) as ContentNode[];
 
   if(data.length !== 0) {
-    const controlFlow = getChatControlFlow(data);
+    const controlFlow = getChatControlFlow();
 
     return {
       data,
