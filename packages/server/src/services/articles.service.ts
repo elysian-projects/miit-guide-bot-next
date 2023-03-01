@@ -3,6 +3,7 @@ import { Article } from "@/entity/articles";
 import { Tab } from "@/entity/tabs";
 import { normalizeContent } from "@/utils/formatters";
 import { useOrderBy } from "@/utils/orderBy";
+import { getPaginationProps } from "@/utils/pagination";
 import { createResponse } from "@/utils/response";
 import { getValidSelectArray } from "@/utils/selectValidation";
 import { serializeTabLabel as serializeLabel } from "@/utils/serializer";
@@ -13,8 +14,9 @@ import { Handler } from "express";
 // sorting: ?orderBy=id.asc
 // selecting: ?select[]=id&select[]=label
 export const getArticles: Handler = async (req, res) => {
-  const {select, tabValue, orderBy, ...query} = req.query;
+  const {select, tabValue, orderBy, page, take, ...query} = req.query;
 
+  const paginationProps = getPaginationProps(page, take);
   const selectList = getValidSelectArray(select, new Article());
   const order = useOrderBy(orderBy, new Article());
 
@@ -33,10 +35,13 @@ export const getArticles: Handler = async (req, res) => {
   }
 
   try {
-    const articles = await DBSource.getRepository(Article).find({
+    const articlesRepo = DBSource.getRepository(Article);
+
+    const articles = await articlesRepo.find({
       select: selectList,
       where: query,
-      order: order ?? {}
+      order: order ?? {},
+      ...paginationProps
     });
 
     if(articles.length === 0) {
@@ -47,11 +52,20 @@ export const getArticles: Handler = async (req, res) => {
       }));
     }
 
-    return res.status(200).json(createResponse({
+    const response = createResponse({
       status: 200,
       ok: true,
       data: articles
-    }));
+    });
+
+    if(paginationProps.skip && paginationProps.take) {
+      const articlesCount = await articlesRepo.count();
+
+      response.pages = Math.ceil(articlesCount / paginationProps.take);
+      response.itemsPerPage = paginationProps.take;
+    }
+
+    return res.status(200).json(response);
   } catch(error) {
     return res.status(400).json(createResponse({
       status: 400,

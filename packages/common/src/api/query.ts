@@ -6,7 +6,7 @@ import { getOptionsString, getSelectString, getServerURL } from "./utils";
 type ApiData = "articles" | "tabs";
 
 export async function getData<T extends ApiData>(type: T, options?: Partial<SearchOptions<object>>): Promise<IResponse<object[]>> {
-  const {select, where, ...searchProps} = options ?? {};
+  const {select, where, page, take, ...searchProps} = options ?? {};
 
   let query = getServerURL().concat("/api/").concat(type).concat("?");
 
@@ -20,6 +20,14 @@ export async function getData<T extends ApiData>(type: T, options?: Partial<Sear
 
   if(select) {
     query = query.concat(getSelectString(select));
+  }
+
+  if(page) {
+    query = query.concat(`&page=${page}`);
+  }
+
+  if(page && take) {
+    query = query.concat(`&take=${take}`);
   }
 
   const {data: response} = await axios<IResponse<object[]>>({

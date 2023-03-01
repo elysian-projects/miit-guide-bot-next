@@ -2,15 +2,12 @@ import { ContentNode, createData, deleteData, FlatContent, getData, IResponse, u
 import { SearchOptions } from "common/src/api/types";
 import { useAuth } from "../../hooks/useAuth";
 
-interface GetArticlesQueryOptions {
-  where?: Partial<ContentNode>,
-  orderBy?: string
-}
-
-export const getAllArticles = async (options?: GetArticlesQueryOptions): Promise<IResponse<ContentNode[]>> => {
+export const getAllArticles = async (options?: Partial<SearchOptions<ContentNode>>): Promise<IResponse<ContentNode[]>> => {
   return (await getData("articles", {
     where: options?.where,
     orderBy: options?.orderBy || "id.asc",
+    page: options?.page,
+    take: options?.take
   })) as IResponse<ContentNode[]> || [];
 };
 
