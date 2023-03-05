@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { useHttp } from "../../../hooks/useHttp";
 import { useRedirect } from "../../../hooks/useRedirect";
 import { useSearchQuery } from "../../../hooks/useSearchQuery";
+import { parseQueryNumber } from "../../../utils/parser";
 import { DeleteDialog } from "../../../widgets/DeleteDialog";
 import { deleteArticle, getOneArticle } from "../api";
 import { Loader } from "./components/Loader";
@@ -11,8 +12,8 @@ import { Loader } from "./components/Loader";
 export const DeleteArticle: FC = () => {
   const [open, setOpen] = useState<boolean>(true);
   const {getQueryProp} = useSearchQuery();
-  const [id] = useState<string | null>(getQueryProp("id"));
-  const {error, isFetching, response, status} = useHttp<ContentNode<FlatContent>>("articles", async () => getOneArticle({id: id ?? ""}));
+  const [id] = useState<number | null>(parseQueryNumber(getQueryProp("id") || ""));
+  const {error, isFetching, response, status} = useHttp<ContentNode<FlatContent>>("articles", async () => getOneArticle({where: {id: id || -1}}));
   const {redirect} = useRedirect();
 
   const closePage = () => {

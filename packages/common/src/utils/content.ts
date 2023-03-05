@@ -1,4 +1,12 @@
-import { FlatContent, RichContent } from "../types";
+import { ContentNode, FlatContent, RichContent } from "../types";
+
+export const flattenAllContent = (nodes: ContentNode<RichContent> | ContentNode<RichContent>[]): ContentNode<FlatContent>[] => {
+  const content = Array.isArray(nodes)
+    ? nodes
+    : [nodes];
+
+  return content.map(contentNode => ({...contentNode, content: flattenContent(contentNode.content)}));
+};
 
 export const flattenContent = (content: RichContent | FlatContent | undefined): FlatContent => {
   if(!content) {

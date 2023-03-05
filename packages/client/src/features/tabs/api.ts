@@ -1,7 +1,11 @@
 import { createData, deleteData, getData, IResponse, TabNode, updateData } from "common/src";
 import { SearchOptions } from "common/src/api/types";
 import { useAuth } from "../../hooks/useAuth";
-import { ServerResponse } from "../articles";
+
+type ServerResponse = {
+  ok: boolean,
+  message: string
+}
 
 export const getAllTabs = async (where?: Partial<TabNode>): Promise<IResponse<TabNode[]>> => {
   return (await getData("tabs", {

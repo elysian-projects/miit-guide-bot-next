@@ -1,6 +1,6 @@
 import { Link as LinkIcon } from "@mui/icons-material";
 import { Alert, Card, CardContent, Typography } from "@mui/material";
-import { ContentNode } from "common/src";
+import { ContentNode, FlatContent } from "common/src";
 import { FC, useEffect, useState } from "react";
 import { CardWrapper } from "../../../components/card";
 import { CardActionBar } from "../../../components/card/CardActions";
@@ -17,8 +17,8 @@ interface IAllArticlesProps {
 }
 
 export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}) => {
-  const {response, status, error} = useHttp<ContentNode[]>("articlesPage", () => getAllArticles());
-  const [data, setData] = useState<ContentNode[] | null>(response?.data || null);
+  const {response, status, error} = useHttp<ContentNode<FlatContent>[]>("articlesPage", () => getAllArticles());
+  const [data, setData] = useState<ContentNode<FlatContent>[] | null>(response?.data || null);
 
   useEffect(() => {
     setData(response?.data || null);

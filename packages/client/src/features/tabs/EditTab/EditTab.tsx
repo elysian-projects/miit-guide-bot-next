@@ -1,9 +1,10 @@
-import { TabNode } from "common/src";
+import { IResponse, TabNode } from "common/src";
 import { FC, useEffect, useState } from "react";
 import { Loader } from "../../../components/Loader";
 import { useHttp } from "../../../hooks/useHttp";
 import { useRedirect } from "../../../hooks/useRedirect";
 import { useSearchQuery } from "../../../hooks/useSearchQuery";
+import { parseQueryNumber } from "../../../utils/parser";
 import { ConfirmEditDialog } from "../../../widgets/ConfirmEditAlert";
 import { ResponseAlert } from "../../../widgets/ResponseAlert";
 import { TabForm } from "../../../widgets/TabForm";
@@ -12,10 +13,10 @@ import { getOneTab, updateTab } from "../api";
 export const EditTab: FC = () => {
   const {redirect} = useRedirect();
   const {getQueryProp} = useSearchQuery();
-  const [id] = useState<string | null>(getQueryProp("id"));
-  const {error, response, status} = useHttp<TabNode>("tabs", async () => getOneTab({id: id ?? ""}));
+  const [id] = useState<number | null>(parseQueryNumber(getQueryProp("id") || ""));
+  const {error, response, status} = useHttp<TabNode>("tabs", async () => getOneTab({where: {id: id || -1}}));
   const [formData, setFormData] = useState<TabNode | null>(response?.data || null);
-  const [submitResult, setSubmitResult] = useState<{ok: boolean, message: string} | null>(null);
+  const [submitResult, setSubmitResult] = useState<IResponse | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export const EditTab: FC = () => {
 
   const applyChanges = async (shouldEdit: boolean): Promise<void> => {
     if(formData && shouldEdit) {
-      setSubmitResult(await updateTab(formData));
+      setSubmitResult(await updateTab(formData) as IResponse);
     }
     setEditDialogOpen(false);
   };

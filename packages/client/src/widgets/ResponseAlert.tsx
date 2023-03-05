@@ -1,10 +1,11 @@
 import { Alert } from "@mui/material";
+import { IResponse } from "common/src";
 import { FC, useEffect } from "react";
 
 interface IResponseAlertProps {
   open: boolean,
   handleClose: () => void,
-  submitResult: {message: string, ok: boolean} | null
+  submitResult: IResponse | null
 }
 
 export const ResponseAlert: FC<IResponseAlertProps> = ({open, handleClose, submitResult}) => {

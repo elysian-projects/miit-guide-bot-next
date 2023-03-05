@@ -5,6 +5,5 @@ export {
   type FormValidationResponse
 } from "./AddArticle/scripts/formValidation";
 export { AllArticles } from "./AllArticles/AllArticles";
-export { type ServerResponse } from "./api";
 export { DeleteArticle } from "./DeleteArticle/DeleteArticles";
 export { EditArticleForm } from "./EditArticle/EditArticleForm";
