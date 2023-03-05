@@ -31,7 +31,7 @@ export const LoginForm: FC = () => {
   const handleLogin: FormEventHandler = async (event) => {
     event.preventDefault();
 
-    const response = await new ServerQuery().insert<{token: string}>("auth/login", formState);
+    const response = await ServerQuery.getInstance().insert<{token: string}>("auth/login", formState);
 
     if(response.ok && response.data?.token) {
       startSession(response.data.token, formState.login);

@@ -26,7 +26,7 @@ export const AddTabForm: FC = () => {
     const response = await createTab({label: formState.label, type: formState.type});
 
     if(!response.ok) {
-      setError(response.message);
+      setError(response.message || "");
       return;
     }
 

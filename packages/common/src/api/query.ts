@@ -6,6 +6,18 @@ import { ApiData, Data, HTTPMethods, SearchOptions } from "./types";
 import { getOptionsString, getSelectString, getServerURL } from "./utils";
 
 export class ServerQuery {
+  private static instance: ServerQuery;
+
+  private constructor() {/**/}
+
+  public static getInstance(): ServerQuery {
+    if(!ServerQuery.instance) {
+      ServerQuery.instance = new ServerQuery();
+    }
+
+    return ServerQuery.instance;
+  }
+
   public getAll = async <T extends ContentType>(type: ApiData, options: SearchOptions<T>): Promise<IResponse<T[]>> => {
     const query = new QueryBuilder().assembleQueryURI(type, options).query;
 
@@ -71,11 +83,7 @@ export class ServerQuery {
       headers: getDefaultHeaders()
     })
     .then(({data: response}) => {
-      return {
-        ok: response.ok,
-        status: response.status,
-        message: response.message
-      };
+      return response;
     })
     .catch(error => {
       logError(error);
@@ -94,11 +102,7 @@ export class ServerQuery {
       headers: getDefaultHeaders()
     })
     .then(({data: response}) => {
-      return {
-        ok: response.ok,
-        status: response.status,
-        message: response.message
-      };
+      return response;
     })
     .catch(error => {
       logError(error);
