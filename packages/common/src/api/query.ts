@@ -132,15 +132,15 @@ class QueryBuilder {
     return this._query;
   }
 
-  public assembleQueryURI = (type: ApiData, options?: SearchOptions): this => {
+  public assembleQueryURI = (apiType: ApiData, options?: SearchOptions): this => {
     const {select, where, page, take, orderBy} = options ?? {};
 
-    this.concatString(type);
-    this.concatObject(where || {});
-    this.concatObject(select || {});
-    this.concatObject(page ? {page} : {});
-    this.concatObject(page && take ? {take} : {});
-    this.concatObject(orderBy ? {orderBy} : {});
+    (apiType) && this.concatString(apiType);
+    (where && !emptyObject(where)) && this.concatObject(where);
+    (select && !emptyObject(select)) && this.concatObject(select);
+    (page) && this.concatObject({page});
+    (page && take) && this.concatObject({take});
+    (orderBy) && this.concatObject({orderBy});
 
     return this;
   };
