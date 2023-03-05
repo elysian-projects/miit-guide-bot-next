@@ -1,4 +1,4 @@
-import { ContentNode, deleteData, FlatContent, flattenAllContent, IResponse, ServerQuery } from "common/src";
+import { ContentNode, FlatContent, flattenAllContent, IResponse, ServerQuery } from "common/src";
 import { SearchOptions } from "common/src/api/types";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -34,36 +34,9 @@ export const createArticle = async (articleData: ContentNode<FlatContent>): Prom
 export const updateArticle = async (updatedData: ContentNode<FlatContent>): Promise<IResponse> => {
   const {getUserToken} = useAuth();
   return await new ServerQuery().update("articles", {...updatedData, token: getUserToken()});
-
-  // try {
-  //   const response = await updateData("articles", {...updatedData, token: getUserToken()});
-
-  //   if(response) {
-  //     return {
-  //       ok: response,
-  //       message: "Статья успешно обновлена!"
-  //     };
-  //   }
-
-  //   return {
-  //     ok: response,
-  //     message: "Не удалось обновить статью!"
-  //   };
-  // } catch (e: any) {
-  //   return {
-  //     ok: false,
-  //     message: e.response.data.message
-  //   };
-  // }
 };
 
-export const deleteArticle = async (id: number | string): Promise<boolean> => {
+export const deleteArticle = async (id: number | string): Promise<IResponse> => {
   const {getUserToken} = useAuth();
-
-  try {
-    const response = await deleteData("articles", id, {token: getUserToken()});
-    return response.status === 200;
-  } catch(error) {
-    return false;
-  }
+  return await new ServerQuery().delete("articles", {id, token: getUserToken()});
 };
