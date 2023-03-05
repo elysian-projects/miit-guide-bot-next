@@ -135,8 +135,6 @@ export const insertArticle: Handler = async (req, res) => {
   article.tabId = Number(tabId);
   article.label = String(label);
   article.value = articleValue;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   article.content = normalizeContent(content);
   article.addedOn = new Date();
   article.picture = String(picture);
@@ -194,8 +192,6 @@ export const updateArticle: Handler = async (req, res) => {
 
   tabId && (foundArticle.tabId = Number(tabId));
   label && (foundArticle.label = label);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   content && (foundArticle.content = normalizeContent(content));
   articleValue && (foundArticle.value = articleValue);
   picture && (foundArticle.picture = picture);
@@ -240,14 +236,10 @@ export const deleteArticle: Handler = async (req, res) => {
   const amountOfArticlesOnTheSameTab = await articleRepo.countBy({tabId: foundArticle.tabId});
 
   if(amountOfArticlesOnTheSameTab === 1) {
-    const parentTab = await tabRepo.findOneBy({id: foundArticle.tabId});
-
-    if(parentTab) {
-      await tabRepo.delete(parentTab);
-    }
+    await tabRepo.delete({id: foundArticle.tabId});
   }
 
-  await articleRepo.delete(foundArticle);
+  await articleRepo.delete({id: foundArticle.id});
 
   return res.json(createResponse({
     status: 200,

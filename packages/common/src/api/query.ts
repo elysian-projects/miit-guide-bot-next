@@ -136,7 +136,7 @@ class QueryBuilder {
     this.concatObject(select || {});
     this.concatObject(page ? {page} : {});
     this.concatObject(page && take ? {take} : {});
-    this.concatObject({orderBy: orderBy});
+    this.concatObject(orderBy ? {orderBy} : {});
 
     return this;
   };

@@ -13,7 +13,7 @@ export const flattenContent = (content: RichContent | FlatContent | undefined): 
     return "";
   }
 
-  if(typeof content !== "object" && Array.isArray(content)) {
+  if(Array.isArray(content)) {
     return content.join(" ");
   }
 

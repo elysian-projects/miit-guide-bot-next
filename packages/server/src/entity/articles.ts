@@ -1,7 +1,8 @@
+import { ContentNode } from "@/../../common/dist";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("articles")
-export class Article {
+export class Article implements ContentNode {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -15,7 +16,7 @@ export class Article {
   value: string;
 
   @Column({type: "text", array: true})
-  content: string;
+  content: string[];
 
   @Column({type: "timestamp", default: new Date()})
   addedOn: Date;
@@ -24,5 +25,5 @@ export class Article {
   picture: string;
 
   @Column({type: "varchar", array: true, default: []})
-  links?: string;
+  links?: string[];
 }

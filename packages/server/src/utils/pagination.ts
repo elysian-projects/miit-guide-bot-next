@@ -1,4 +1,4 @@
-import { isNumeric } from "common/src";
+import { isNumeric } from "common/dist";
 
 type IPaginationProps = {
   skip: number | undefined,
