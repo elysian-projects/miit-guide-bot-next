@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { EditTab } from "../../../features/tabs/EditTab/EditTab";
+import { EditTabIndex } from "../../../features/tabs/EditTab";
 import { PageTitleBlock } from "../../../widgets/Page/PageTitleBlock";
 
 export const EditTabPage: FC = () => {
@@ -10,7 +10,7 @@ export const EditTabPage: FC = () => {
         linkTitle="Назад"
         href="/content/tabs"
       />
-      <EditTab />
+      <EditTabIndex />
     </>
   );
 };
