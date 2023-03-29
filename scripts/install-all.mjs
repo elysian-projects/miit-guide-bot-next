@@ -1,20 +1,12 @@
-/* eslint-disable no-undef */
-// @ts-check
-
 import { exec } from "child_process";
-import fs from "fs";
+import console from "console";
 import path from "path";
-
-// Directories from the base directory to install packages
-const baseDirs = ["packages"];
+import process from "process";
+import { baseDirs, getAllSubdirectories } from "./directory.mjs";
 
 function main() {
-  const nodePackagePaths = baseDirs.flatMap(baseDir => findSubDirectory(baseDir));
+  const nodePackagePaths = baseDirs.flatMap(baseDir => getAllSubdirectories(baseDir));
   nodePackagePaths.forEach(packagePath => execInstall(path.resolve(process.cwd(), packagePath)));
-}
-
-function findSubDirectory(baseDir) {
-  return fs.readdirSync(baseDir).map(currPath => `${baseDir}/${currPath}`);
 }
 
 function execInstall(directory) {

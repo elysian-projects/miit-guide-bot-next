@@ -6,7 +6,6 @@ export const defaultFormState: ContentNode<FlatContent> = {
   content: "",
   picture: "",
   tabId: -1,
-  type: "article",
   links: [],
   value: ""
 };

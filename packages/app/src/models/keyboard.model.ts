@@ -4,10 +4,9 @@ import { keyboardControls } from "@/constants/controls";
 import { EXCURSION_REPLY } from "@/constants/messages";
 import { onStart } from "@/controllers/commands.controller";
 import { User } from "@/entities/user";
-import { AvailableKeyboardTypes } from "@/types/lib";
-import { getApiURL } from "@/utils/server";
-import axios, { AxiosError } from "axios";
-import { ContentNode, IResponse } from "common/dist";
+import { AvailableKeyboardTypes, Image } from "@/types/lib";
+import { AxiosError } from "axios";
+import { ContentNode, getData } from "common/dist";
 import { Context } from "grammy";
 import { getChatControlFlow } from "./article.model";
 
@@ -40,8 +39,13 @@ export const handleControlButtonClick = (ctx: Context, clickData: string, user: 
 };
 
 export const handleExcursionButtonClick = async (): Promise<{message: string, replyMarkup: AvailableKeyboardTypes}> => {
-  const {data} = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/tabs?type=location`);
-  const replyMarkup = createReplyMarkup("inline", data.data ?? []);
+  const response = await getData("tabs", {where: {type: "location"}});
+
+  const data = (response.ok && response.data)
+    ? response.data as Image[]
+    : [];
+
+  const replyMarkup = createReplyMarkup("inline", data);
 
   return {
     message: EXCURSION_REPLY,
@@ -56,7 +60,7 @@ export const handleArticleButtonClick = async (clickData: string): Promise<{cont
   const data = await fetchData(clickData) as ContentNode[];
 
   if(data.length !== 0) {
-    const controlFlow = getChatControlFlow(data);
+    const controlFlow = getChatControlFlow();
 
     return {
       data,
@@ -69,8 +73,8 @@ export const handleArticleButtonClick = async (clickData: string): Promise<{cont
 
 const fetchData = async (clickData: string): Promise<object[]> => {
   try {
-    // TODO: replace with `getData` call
-    const { data: response } = await axios.get<IResponse<ContentNode[]>>(`${getApiURL()}/articles?tabValue=${clickData}&orderBy=id.asc`);
+    const response = await getData("articles", {where: {tabValue: clickData}, orderBy: "id.asc"});
+
     return (response.ok && response.data)
       ? response.data
       : [];

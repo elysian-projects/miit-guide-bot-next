@@ -1,4 +1,4 @@
-import { ArticleType, ContentNode, FlatContent } from "common/dist";
+import { ContentNode, FlatContent } from "common/dist";
 
 export class Content {
   private content!: ContentNode<FlatContent>[];
@@ -25,10 +25,6 @@ export class Content {
   };
 
   public setContent = (content: ContentNode[]): void => {
-    if(!this.validContent(content)) {
-      throw new Error("Content of different type was given!");
-    }
-
     this.content = this.getFlatContentProjection(content);
     this.contentAmount = this.content.length;
   };
@@ -55,18 +51,4 @@ export class Content {
   private getFlatContentProjection = (content: ContentNode[]): ContentNode<FlatContent>[] => {
     return content.flatMap(item => item.content.map(currentContent => ({...item, content: currentContent})));
   };
-
-  private validContent = (content: ContentNode[]): boolean => {
-    return getArticleType(content) !== "invalid";
-  };
 }
-
-export const getArticleType = (content: ContentNode[]): ArticleType | "invalid" => {
-  const types = content.map(item => item.type);
-
-  return types.every(value => value === "article")
-    ? "article"
-    : types.every(value => value === "location")
-    ? "location"
-    : "invalid";
-};

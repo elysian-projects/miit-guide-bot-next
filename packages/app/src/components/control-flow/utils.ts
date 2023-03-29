@@ -59,6 +59,10 @@ export function computeControlsKeyboard<T extends KeyboardType>(type: T, options
     ? controls.push(keyboardControls.PREV)
     : controls.push(keyboardControls.HUB);
 
+  if(currentStep !== 0) {
+    controls.push(keyboardControls.HUB);
+  }
+
   // Last button: `Next step`, if there is a next step, overwise - `Back to hub`
   if(currentStep !== (maxSteps - 1)) {
     controls.push(keyboardControls.NEXT);

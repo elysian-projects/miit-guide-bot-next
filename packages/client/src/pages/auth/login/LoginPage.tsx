@@ -1,10 +1,11 @@
 import { FC } from "react";
-import { LoginForm } from "./LoginForm";
+import { LoginForm } from "../../../widgets/LoginForm/LoginForm";
+import { LoginPageWrapper } from "./LoginPage.styles";
 
 export const LoginPage: FC = () => {
   return (
-    <div style={{height: "50vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+    <LoginPageWrapper>
       <LoginForm />
-    </div>
+    </LoginPageWrapper>
   );
 };

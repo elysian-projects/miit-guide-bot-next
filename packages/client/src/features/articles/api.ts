@@ -1,93 +1,57 @@
-import { ContentNode, createData, deleteData, FlatContent, getData, IResponse, updateData } from "common/src";
+import { ContentNode, FlatContent, flattenAllContent, IResponse, ServerQuery } from "common/src";
 import { SearchOptions } from "common/src/api/types";
 import { useAuth } from "../../hooks/useAuth";
 
-export const getAllArticles = async (where?: Partial<ContentNode>): Promise<IResponse<ContentNode[]>> => {
-  return (await getData("articles", {
-    select: ["id", "tabId", "label", "type", "picture", "links"],
-    where,
-    orderBy: "id.asc"
-  })) as IResponse<ContentNode[]> || [];
+export const getAllArticles = async (options?: SearchOptions<ContentNode>): Promise<IResponse<ContentNode<FlatContent>[]>> => {
+  const response = await ServerQuery.getInstance().getAll("articles", {
+    ...options,
+    orderBy: options?.orderBy || "id.desc"
+  });
+
+  return {
+    ...response,
+    data: flattenAllContent(response.data || [])
+  };
 };
 
-export const getOneArticle = async (search: Partial<SearchOptions<ContentNode>>): Promise<IResponse<ContentNode<FlatContent>>> => {
-  try {
-    const response = await getData("articles", {...search}) as IResponse<ContentNode<FlatContent>[]>;
+export const getOneArticle = async (options: SearchOptions<ContentNode>): Promise<IResponse<ContentNode<FlatContent>>> => {
+  const response = await ServerQuery.getInstance().getOne<ContentNode>("articles", {
+    ...options,
+    orderBy: options?.orderBy || "id.desc"
+  });
 
-    const data = (response.data && Array.isArray(response.data))
-      ? response.data[0]
-      : response.data;
-
-    return {
-      ...response,
-      data
-    };
-  } catch (error: any) {
-    console.log("Error:", error.response.data.message);
-
-    return {
-      status: error.response.data.status,
-      message: error.response.data.message,
-      ok: false,
-    };
-  }
+  return {
+    ...response,
+    data: flattenAllContent(response.data || [])[0] || {}
+  };
 };
 
-export type ServerResponse = {
-  ok: boolean,
-  message: string
-};
-
-export const createArticle = async (articleData: ContentNode<FlatContent>): Promise<ServerResponse> => {
+export const createArticle = async (articleData: ContentNode<FlatContent>): Promise<IResponse> => {
   const {getUserToken} = useAuth();
+  const response = await ServerQuery.getInstance().insert("articles", {...articleData, token: getUserToken()});
 
-  try {
-    const response = await createData("articles", {...articleData, token: getUserToken()});
-
-    return {
-      ok: response.ok,
-      message: response.message
-    };
-  } catch (e: any) {
-    return {
-      ok: false,
-      message: e.response.data.message
-    };
-  }
+  return {
+    ...response,
+    message: response.message || "Статья успешно создана!"
+  };
 };
 
-export const updateArticle = async (updatedData: ContentNode<FlatContent>): Promise<ServerResponse> => {
+export const updateArticle = async (updatedData: ContentNode<FlatContent>): Promise<IResponse> => {
   const {getUserToken} = useAuth();
+  const response = await ServerQuery.getInstance().update("articles", {...updatedData, token: getUserToken()});
 
-  try {
-    const response = await updateData("articles", {...updatedData, token: getUserToken()});
-
-    if(response) {
-      return {
-        ok: response,
-        message: "Статья успешно обновлена!"
-      };
-    }
-
-    return {
-      ok: response,
-      message: "Не удалось обновить статью!"
-    };
-  } catch (e: any) {
-    return {
-      ok: false,
-      message: e.response.data.message
-    };
-  }
+  return {
+    ...response,
+    message: response.message || "Статья успешно обновлена!"
+  };
 };
 
-export const deleteArticle = async (id: number | string): Promise<boolean> => {
+export const deleteArticle = async (id: number | string): Promise<IResponse> => {
   const {getUserToken} = useAuth();
+  const response = await ServerQuery.getInstance().delete("articles", {id, token: getUserToken()});
 
-  try {
-    const response = await deleteData("articles", id, {token: getUserToken()});
-    return response.status === 200;
-  } catch(error) {
-    return false;
-  }
+  return {
+    ...response,
+    message: response.message || "Статья успешно удалена!"
+  };
 };

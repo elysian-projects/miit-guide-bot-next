@@ -4,8 +4,8 @@ import { ContentNode, FlatContent } from "common/src";
 import { FC, FormEventHandler, useEffect, useState } from "react";
 import { Form } from "../../components/form";
 import { TextEditor } from "../../components/textEditor/TextEditor";
+import { formatDate } from "../../utils/formatDate";
 import { AddLinks } from "./components/AddLinks";
-import { ArticleTypeSelect } from "./components/ArticleTypeSelect";
 import { ChooseTab } from "./components/ChoseTab";
 import { PhotoLink } from "./components/PhotoLink";
 import { defaultFormState } from "./constants";
@@ -43,7 +43,7 @@ export const ArticleForm: FC<IArticleForm> = ({
         required
         fullWidth
         id="title"
-        placeholder={"Название " + (formData.type === "article" ? "статьи" : "локации") + "*"}
+        placeholder={"Название статьи*"}
         onChange={event => setFormData({...formData, label: event.target.value})}
         name="title"
         value={formData.label}
@@ -51,10 +51,12 @@ export const ArticleForm: FC<IArticleForm> = ({
         autoFocus
       />
 
-      <ArticleTypeSelect
-        value={formData.type}
-        onUpdate={type => setFormData({...formData, type})}
-      />
+      {formData.addedOn && (
+        <TextField
+          value={`Добавлено: ${formatDate(formData.addedOn)}`}
+          disabled
+        />
+      )}
 
       <PhotoLink
         value={formData.picture}
@@ -62,9 +64,8 @@ export const ArticleForm: FC<IArticleForm> = ({
       />
 
       <ChooseTab
-        tabIdValue={formData.tabId}
+        tabId={formData.tabId}
         onUpdate={updatedTab => setFormData({...formData, tabId: updatedTab.id})}
-        type={formData.type}
       />
 
       <TextEditor

@@ -1,7 +1,8 @@
+import { ArticleType, TabNode } from "@/../../common/dist";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("tabs")
-export class Tab {
+export class Tab implements TabNode {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,5 +13,5 @@ export class Tab {
   value: string;
 
   @Column("varchar")
-  type: string;
+  type: ArticleType;
 }

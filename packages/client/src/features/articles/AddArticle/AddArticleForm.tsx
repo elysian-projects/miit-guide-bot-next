@@ -25,7 +25,7 @@ export const AddArticleForm: FC = () => {
     const response = await createArticle(formState);
 
     if(!response.ok) {
-      setError(response.message);
+      setError(response.message || "");
       return;
     }
 

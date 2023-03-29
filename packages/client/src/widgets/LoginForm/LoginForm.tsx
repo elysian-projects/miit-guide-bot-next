@@ -1,9 +1,9 @@
 import { LockOutlined } from "@mui/icons-material";
 import { Alert, Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
+import { ServerQuery } from "common/src";
 import { FC, FormEventHandler, useEffect, useState } from "react";
-import { loginUser } from "../../../api/auth";
-import { useAuth } from "../../../hooks/useAuth";
-import { useRedirect } from "../../../hooks/useRedirect";
+import { useAuth } from "../../hooks/useAuth";
+import { useRedirect } from "../../hooks/useRedirect";
 import { ForgotPasswordDialog } from "./ForgotPasswordDialog";
 
 type FormState = {
@@ -31,19 +31,14 @@ export const LoginForm: FC = () => {
   const handleLogin: FormEventHandler = async (event) => {
     event.preventDefault();
 
-    await loginUser(formState.login, formState.password)
-    .then(response => {
-      if((response?.data as any).data?.token) {
-        startSession((response?.data as any).data?.token, formState.login);
-        redirect("/", {refresh: true});
-        return;
-      }
+    const response = await ServerQuery.getInstance().insert<{token: string}>("auth/login", formState);
 
-      setError("Неизвестная ошибка!");
-    })
-    .catch(err => {
-      setError(err?.response.data.message);
-    });
+    if(response.ok && response.data?.token) {
+      startSession(response.data.token, formState.login);
+      redirect("/", {refresh: true});
+    } else {
+      setError(response.message || "Неизвестная ошибка!");
+    }
   };
 
   return (

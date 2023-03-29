@@ -5,9 +5,9 @@ export const isValidTabBody = <T extends {type: string, label: string}>(body: T)
 };
 
 export const isValidArticleBody = <T extends Partial<Article>>(body: T): boolean => {
-  const {tabId, label, content, type, picture, links} = body;
+  const {tabId, label, content, picture, links} = body;
 
-  return (!tabId || !label || !content || !type || !picture || (Boolean(links) && !Array.isArray(links))) === false;
+  return (!tabId || !label || !content || !picture || (Boolean(links) && !Array.isArray(links))) === false;
 };
 
 export const isValidId = (id: unknown): id is number => {

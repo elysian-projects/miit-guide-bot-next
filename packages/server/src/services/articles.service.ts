@@ -3,6 +3,7 @@ import { Article } from "@/entity/articles";
 import { Tab } from "@/entity/tabs";
 import { normalizeContent } from "@/utils/formatters";
 import { useOrderBy } from "@/utils/orderBy";
+import { getPaginationProps } from "@/utils/pagination";
 import { createResponse } from "@/utils/response";
 import { getValidSelectArray } from "@/utils/selectValidation";
 import { serializeTabLabel as serializeLabel } from "@/utils/serializer";
@@ -13,8 +14,9 @@ import { Handler } from "express";
 // sorting: ?orderBy=id.asc
 // selecting: ?select[]=id&select[]=label
 export const getArticles: Handler = async (req, res) => {
-  const {select, tabValue, orderBy, ...query} = req.query;
+  const {select, tabValue, orderBy, page, take, ...query} = req.query;
 
+  const paginationProps = getPaginationProps(page, take);
   const selectList = getValidSelectArray(select, new Article());
   const order = useOrderBy(orderBy, new Article());
 
@@ -33,10 +35,13 @@ export const getArticles: Handler = async (req, res) => {
   }
 
   try {
-    const articles = await DBSource.getRepository(Article).find({
+    const articlesRepo = DBSource.getRepository(Article);
+
+    const articles = await articlesRepo.find({
       select: selectList,
       where: query,
-      order: order ?? {}
+      order: order ?? {},
+      ...paginationProps
     });
 
     if(articles.length === 0) {
@@ -47,11 +52,20 @@ export const getArticles: Handler = async (req, res) => {
       }));
     }
 
-    return res.status(200).json(createResponse({
+    const response = createResponse({
       status: 200,
       ok: true,
       data: articles
-    }));
+    });
+
+    // if(paginationProps.skip && paginationProps.take) {
+      // const articlesCount = await articlesRepo.count();
+
+      // response.pages = Math.ceil(articlesCount / paginationProps.take);
+      // response.itemsPerPage = paginationProps.take;
+    // }
+
+    return res.status(200).json(response);
   } catch(error) {
     return res.status(400).json(createResponse({
       status: 400,
@@ -72,7 +86,7 @@ export const insertArticle: Handler = async (req, res) => {
     }));
   }
 
-  const {tabId, label, content, type, picture, links} = body;
+  const {tabId, label, content, picture, links} = body;
   const articleValue = serializeLabel(label);
 
   const existingTab = await DBSource.getRepository(Tab).countBy({id: tabId});
@@ -121,10 +135,8 @@ export const insertArticle: Handler = async (req, res) => {
   article.tabId = Number(tabId);
   article.label = String(label);
   article.value = articleValue;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   article.content = normalizeContent(content);
-  article.type = String(type);
+  article.addedOn = new Date();
   article.picture = String(picture);
 
   if(links) {
@@ -142,7 +154,7 @@ export const insertArticle: Handler = async (req, res) => {
 export const updateArticle: Handler = async (req, res) => {
   const body = req.body;
 
-  const {id, tabId, label, content, type, picture, links} = body;
+  const {id, tabId, label, content, picture, links} = body;
 
   if(!isValidId(id)) {
     return res.status(400).json(createResponse({
@@ -152,7 +164,7 @@ export const updateArticle: Handler = async (req, res) => {
     }));
   }
 
-  if(!hasNonEmpty(tabId, label, content, type, picture, links) || (links && !Array.isArray(links))) {
+  if(!hasNonEmpty(tabId, label, content, picture, links) || (links && !Array.isArray(links))) {
     return res.status(400).json(createResponse({
       status: 400,
       ok: false,
@@ -180,11 +192,8 @@ export const updateArticle: Handler = async (req, res) => {
 
   tabId && (foundArticle.tabId = Number(tabId));
   label && (foundArticle.label = label);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   content && (foundArticle.content = normalizeContent(content));
   articleValue && (foundArticle.value = articleValue);
-  type && (foundArticle.type = type);
   picture && (foundArticle.picture = picture);
   links && (foundArticle.links = links);
 
@@ -227,14 +236,10 @@ export const deleteArticle: Handler = async (req, res) => {
   const amountOfArticlesOnTheSameTab = await articleRepo.countBy({tabId: foundArticle.tabId});
 
   if(amountOfArticlesOnTheSameTab === 1) {
-    const parentTab = await tabRepo.findOneBy({id: foundArticle.tabId});
-
-    if(parentTab) {
-      await tabRepo.delete(parentTab);
-    }
+    await tabRepo.delete({id: foundArticle.tabId});
   }
 
-  await articleRepo.delete(foundArticle);
+  await articleRepo.delete({id: foundArticle.id});
 
   return res.json(createResponse({
     status: 200,

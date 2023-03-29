@@ -13,9 +13,7 @@ export interface ContentNode<T extends RichContent | FlatContent = RichContent> 
   value: string,
   /** Rich content that includes main information on the node */
   content: T,
-  /** Type of the record */
-  type: ArticleType
-
+  addedOn?: Date,
   picture: string,
   links?: string[]
 }
@@ -32,7 +30,19 @@ export interface IResponse<T extends object = object> {
   ok: boolean;
   message?: string;
   data?: T;
+  pagination?: {
+    pages?: number,
+    itemsPerPage?: number
+  }
 }
+
+export type INonGetQueryResponse = {
+  ok: boolean,
+  status: number,
+  message?: string
+}
+
+export type ContentType = ContentNode | TabNode;
 
 /** Given type is maybe promise or a value */
 export type MaybePromise<T> = T | Promise<T>;

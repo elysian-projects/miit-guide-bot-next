@@ -1,9 +1,10 @@
-import { ContentNode, FlatContent, flattenContent } from "common/src";
+import { ContentNode, FlatContent, flattenContent, IResponse } from "common/src";
 import { FC, useEffect, useState } from "react";
 import { Loader } from "../../../components/Loader";
 import { useHttp } from "../../../hooks/useHttp";
 import { useRedirect } from "../../../hooks/useRedirect";
 import { useSearchQuery } from "../../../hooks/useSearchQuery";
+import { parseQueryNumber } from "../../../utils/parser";
 import { ArticleForm } from "../../../widgets/ArticleForm/ArticleForm";
 import { ConfirmEditDialog } from "../../../widgets/ConfirmEditAlert";
 import { ResponseAlert } from "../../../widgets/ResponseAlert";
@@ -12,10 +13,10 @@ import { getOneArticle, updateArticle } from "../api";
 export const EditArticleForm: FC = () => {
   const {redirect} = useRedirect();
   const {getQueryProp} = useSearchQuery();
-  const [id] = useState<string | null>(getQueryProp("id"));
-  const {error, response, status} = useHttp<ContentNode<FlatContent>>("articles", async () => getOneArticle({id: id ?? ""}));
+  const [id] = useState<number | null>(parseQueryNumber(getQueryProp("id") || ""));
+  const {error, response, status} = useHttp<ContentNode<FlatContent>>("articles", async () => getOneArticle({where: {id: id || -1}}));
   const [formData, setFormData] = useState<ContentNode<FlatContent> | null>(response?.data || null);
-  const [submitResult, setSubmitResult] = useState<{ok: boolean, message: string} | null>(null);
+  const [submitResult, setSubmitResult] = useState<IResponse | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {

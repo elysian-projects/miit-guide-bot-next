@@ -10,10 +10,6 @@ export const validateArticleForm = (form: ContentNode<FlatContent>): FormValidat
     return createErrorResponse("Заполните название статьи!");
   }
 
-  if(form.type !== "article" && form.type !== "location") {
-    return createErrorResponse("Укажите тип статьи!");
-  }
-
   if(form.content.trim().length <= 10) {
     return createErrorResponse("Длина статьи не может быть менее 10 символов!");
   }

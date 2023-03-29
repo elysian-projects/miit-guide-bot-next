@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "docker compose up | npx lerna run start",
-    "install:all": "npm i && node ./scripts/install-all.mjs"
+    "install:all": "npm i && node ./scripts/install-all.mjs",
+    "build:all": "node ./scripts/build-all.mjs"
   },
   "repository": {
     "type": "git",

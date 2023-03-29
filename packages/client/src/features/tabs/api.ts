@@ -1,89 +1,47 @@
-import { createData, deleteData, getData, IResponse, TabNode, updateData } from "common/src";
+import { IResponse, ServerQuery, TabNode } from "common/src";
 import { SearchOptions } from "common/src/api/types";
 import { useAuth } from "../../hooks/useAuth";
-import { ServerResponse } from "../articles";
 
-export const getAllTabs = async (where?: Partial<TabNode>): Promise<IResponse<TabNode[]>> => {
-  return (await getData("tabs", {
-    select: ["id", "label", "type"],
-    where,
-    orderBy: "id.desc"
-  })) as IResponse<TabNode[]> || [];
+export const getAllTabs = async (options?: SearchOptions<TabNode>): Promise<IResponse<TabNode[]>> => {
+  return await ServerQuery.getInstance().getAll("tabs", {
+    ...options,
+    orderBy: options?.orderBy || "id.desc"
+  });
 };
 
-export const getOneTab = async (search: Partial<SearchOptions<TabNode>>): Promise<IResponse<TabNode>> => {
-  try {
-    const response = await getData("tabs", {...search}) as IResponse<TabNode[]>;
-
-    const data = (response.data && Array.isArray(response.data))
-      ? response.data[0]
-      : response.data;
-
-    return {
-      ...response,
-      data
-    };
-  } catch (error: any) {
-    console.log("Error:", error.response.data.message);
-
-    return {
-      status: error.response.data.status,
-      message: error.response.data.message,
-      ok: false,
-    };
-  }
+export const getOneTab = async (options?: SearchOptions<TabNode>): Promise<IResponse<TabNode>> => {
+  return await ServerQuery.getInstance().getOne<TabNode>("tabs", {
+    ...options,
+    orderBy: options?.orderBy || "id.desc"
+  });
 };
 
-export const createTab = async (tabData: Omit<TabNode, "id" | "value">): Promise<ServerResponse> => {
+export const createTab = async (tabData: Omit<TabNode, "id" | "value">): Promise<IResponse> => {
   const {getUserToken} = useAuth();
+  const response = await ServerQuery.getInstance().insert("tabs", {...tabData, token: getUserToken()});
 
-  try {
-    const response = await createData("tabs", {...tabData, token: getUserToken()});
-
-    return {
-      ok: response.ok,
-      message: response.message
-    };
-  } catch (e: any) {
-    return {
-      ok: false,
-      message: e.response.data.message
-    };
-  }
+  return {
+    ...response,
+    message: response.message || "Вкладка успешно создана!"
+  };
 };
 
-export const updateTab = async (updatedData: TabNode): Promise<ServerResponse> => {
+export const updateTab = async (updatedData: TabNode): Promise<IResponse> => {
   const {getUserToken} = useAuth();
+  const response = await ServerQuery.getInstance().update("tabs", {...updatedData, token: getUserToken()});
 
-  try {
-    const response = await updateData("tabs", {...updatedData, token: getUserToken()});
-
-    if(response) {
-      return {
-        ok: response,
-        message: "Вкладка успешно обновлена!"
-      };
-    }
-
-    return {
-      ok: response,
-      message: "Не удалось обновить вкладку!"
-    };
-  } catch (e: any) {
-    return {
-      ok: false,
-      message: e.response.data.message
-    };
-  }
+  return {
+    ...response,
+    message: response.message || "Вкладка успешно обновлена!"
+  };
 };
 
-export const deleteTab = async (id: number | string): Promise<boolean> => {
+export const deleteTab = async (id: number | string): Promise<IResponse> => {
   const {getUserToken} = useAuth();
+  const response = await ServerQuery.getInstance().delete("tabs", {id, token: getUserToken()});
 
-  try {
-    const response = await deleteData("tabs", id, {token: getUserToken()});
-    return response.status === 200;
-  } catch(error) {
-    return false;
-  }
+  return {
+    ...response,
+    message: response.message || "Вкладка успешно удалена!"
+  };
 };

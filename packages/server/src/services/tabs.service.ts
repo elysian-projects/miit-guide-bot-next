@@ -1,3 +1,4 @@
+import { ArticleType } from "@/../../common/dist";
 import { DBSource } from "@/database/data-source";
 import { Article } from "@/entity/articles";
 import { Tab } from "@/entity/tabs";
@@ -80,7 +81,7 @@ export const insertTab: Handler = async (req, res) => {
   const tab = new Tab();
   tab.label = String(label);
   tab.value = tabValue;
-  tab.type = String(type);
+  tab.type = String(type) as ArticleType;
 
   await DBSource.getRepository(Tab).save(tab);
 
@@ -178,12 +179,7 @@ export const deleteTab: Handler = async (req, res) => {
   }
 
   // All articles must also be deleted when the tab is deleted
-  const articlesOfTheGivenTab = await articleRepo.findBy({tabId: foundTab.id});
-
-  for(const article of articlesOfTheGivenTab) {
-    await articleRepo.delete(article);
-  }
-
+  await articleRepo.delete({tabId: foundTab.id});
   await tabRepo.delete(foundTab);
 
   res.json(createResponse({

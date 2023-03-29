@@ -1,14 +1,6 @@
-import { getArticleType } from "@/components/content";
 import { Pagination } from "@/components/control-flow";
 import { IControlFlow } from "@/components/control-flow/types";
-import { ContentNode } from "common/dist";
 
-export const getChatControlFlow = (data: ContentNode[]): IControlFlow => {
-  const type = getArticleType(data);
-
-  if(type === "invalid") {
-    throw new Error("Given content is of different article type!");
-  }
-
+export const getChatControlFlow = (): IControlFlow => {
   return new Pagination();
 };

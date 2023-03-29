@@ -27,15 +27,8 @@ export function createReplyMarkup<T extends KeyboardType>(type: T, buttons: Imag
 }
 
 export const removeInlineReplyMarkup = (ctx: Context) => {
-  const replyMarkup = ctx.msg?.reply_markup;
-
-  // We don't want the application to stop just because of the keyboard removal
-  if(!replyMarkup) {
-    return;
-  }
-
   ctx.editMessageReplyMarkup({reply_markup: new InlineKeyboard()}).catch(() => {
-    console.log("Could not remove inline reply!");
+    console.log("The inline keyboard was not removed");
   });
 };
 
