@@ -13,6 +13,15 @@ export const SidebarFrame = styled.nav`
   color: white;
   height: 100vh;
 
+  /**
+   * These params are required as the sidebar is somehow effected when
+   * there is the component 'Box' with prop 'component="form"' from '@mui/material'
+   * in the layout, and if there's no constant values for these properties
+   * the sidebar starts to shrink and grow between pages
+   */
+  line-height: 1.2;
+  letter-spacing: normal;
+
   /* Somehow this is the only way to make it adjust with the right width */
   width: ${SIDEBAR_WIDTH};
   min-width: ${SIDEBAR_WIDTH};
