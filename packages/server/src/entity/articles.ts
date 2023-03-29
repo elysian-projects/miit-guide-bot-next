@@ -24,6 +24,9 @@ export class Article implements ContentNode {
   @Column("varchar")
   picture: string;
 
+  @Column({type: "integer"})
+  order: number;
+
   @Column({type: "varchar", array: true, default: []})
   links?: string[];
 }

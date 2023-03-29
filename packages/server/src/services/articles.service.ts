@@ -246,3 +246,39 @@ export const deleteArticle: Handler = async (req, res) => {
     ok: true
   }));
 };
+
+/**
+ * Note: this endpoint MUST NOT be included to the production bundle, it helps to
+ * normalize the `order` property of the articles, so it can't be used as a route
+ */
+export const fillOrderField: Handler = async (_, res) => {
+  const articlesRepo = DBSource.getRepository(Article);
+  const tabsRepo = DBSource.getRepository(Tab);
+
+  try {
+    const allTabs = await tabsRepo.find();
+
+    for(const tab of allTabs) {
+      const allArticle = await articlesRepo.findBy({tabId: tab.id});
+
+      for(let i = 0; i < allArticle.length; i++) {
+        const article = allArticle[i];
+        article.order = i;
+        articlesRepo.save(article);
+      }
+    }
+
+    return res.json(createResponse({
+      ok: true,
+      status: 200,
+      message: "Successfully updated the order field!"
+    }));
+
+  } catch(error) {
+    return res.status(500).json(createResponse({
+      ok: false,
+      status: 500,
+      message: "Count not execute order normalize command!"
+    }));
+  }
+};

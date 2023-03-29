@@ -73,7 +73,7 @@ export const handleArticleButtonClick = async (clickData: string): Promise<{cont
 
 const fetchData = async (clickData: string): Promise<object[]> => {
   try {
-    const response = await getData("articles", {where: {tabValue: clickData}, orderBy: "id.asc"});
+    const response = await getData("articles", {where: {tabValue: clickData}, orderBy: "order.asc"});
 
     return (response.ok && response.data)
       ? response.data
