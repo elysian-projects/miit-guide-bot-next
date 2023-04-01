@@ -205,6 +205,52 @@ export const updateArticle: Handler = async (req, res) => {
   }));
 };
 
+export const updateOrder: Handler = async (req, res) => {
+  const {tabId, articlesOrder}: {tabId?: number, articlesOrder?: number[]} = req.body;
+
+  if(!tabId || !articlesOrder) {
+    return res.status(400).json(createResponse({
+      ok: false,
+      status: 400,
+      message: "Data was not provided: to commit a reorder, you must provide a `tabId: number` and `articleOrder: number[]`"
+    }));
+  }
+
+  const tabRepo = DBSource.getRepository(Tab);
+  const articleRepo = DBSource.getRepository(Article);
+
+  const foundTab = await tabRepo.findOneBy({id: tabId});
+
+  if(!foundTab) {
+    return res.status(404).json(createResponse({
+      ok: false,
+      status: 404,
+      message: `The tab with id ${tabId} does not exist!`
+    }));
+  }
+
+  for(let i = 0; i < articlesOrder.length; i++) {
+    const articleIndex = articlesOrder[i];
+
+    const article = await articleRepo.findOneBy({id: articleIndex});
+
+    // This algorithm should not fail even if the article with the given id
+    // does not exist, since this could happen in the middle of the array,
+    // so fail might result in invalid `order` values (same in multiple articles)
+    if(!article) {
+      continue;
+    }
+
+    article.order = i;
+    articleRepo.save(article);
+  }
+
+  return res.json(createResponse({
+    ok: true,
+    status: 200
+  }));
+};
+
 export const deleteArticle: Handler = async (req, res) => {
   const {id: bodyId} = req.body;
   const {id: queryId} = req.query;

@@ -21,4 +21,4 @@ export enum HTTPMethods {
   DELETE = "delete"
 }
 
-export type ApiData = "articles" | "tabs" | "auth/login" | "auth/logout" | "auth/signup";
+export type ApiData = "articles" | "articles/reorder" | "tabs" | "auth/login" | "auth/logout" | "auth/signup";
