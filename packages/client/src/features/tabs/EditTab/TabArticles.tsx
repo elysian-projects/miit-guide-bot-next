@@ -23,6 +23,7 @@ export const TabArticles: FC<ITabArticlesProps> = ({tabId}) => {
   const retries = useRef(0);
   const {response, refetch} = useHttp<ContentNode<FlatContent>[]>("articles", async () => getAllArticles({where: {tabId}, orderBy: "order.asc"}));
 
+  // TODO: move the retry logic to the `useHttp` hook
   useEffect(() => {
     if(!response?.ok || response.data?.length === 0) {
       if(retries.current < MAX_RETRIES) {
@@ -83,14 +84,10 @@ export const TabArticles: FC<ITabArticlesProps> = ({tabId}) => {
             ))}
           </Droppable>
         </List>
-        {changedOrder && (
-          <>
-            <Separator />
-            <Button color="primary" variant="contained">
-              Сохранить
-            </Button>
-          </>
-        )}
+        <Separator />
+        <Button color="primary" variant="contained" disabled={!changedOrder.current}>
+          Сохранить
+        </Button>
       </DragDropContext>
     )}
   </>;
