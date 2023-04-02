@@ -30,7 +30,7 @@ export const checkUserTokenExpiration: Handler = async (req, res, next) => {
     }));
   }
 
-  if(signedUser.expires > new Date()) {
+  if(signedUser.expires < new Date()) {
     tokenRepo.delete(signedUser);
 
     return res.status(401).json(createResponse({
