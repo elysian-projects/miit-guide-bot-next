@@ -1,8 +1,11 @@
 import { FC, useEffect } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { useRedirect } from "../../../hooks/useRedirect";
+import { useSearchQuery } from "../../../hooks/useSearchQuery";
 
 export const LogoutPage: FC = () => {
+  const {getQueryProp} = useSearchQuery();
+  const redirectAfter = getQueryProp("redirect");
   const {isAuthenticated, stopSession} = useAuth();
   const {redirect} = useRedirect();
 
@@ -11,7 +14,7 @@ export const LogoutPage: FC = () => {
       stopSession();
     }
 
-    redirect("/", {refresh: true});
+    redirect(redirectAfter || "/", {refresh: true});
   }, [isAuthenticated, redirect, stopSession]);
 
   return (

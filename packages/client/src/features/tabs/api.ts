@@ -36,6 +36,16 @@ export const updateTab = async (updatedData: TabNode): Promise<IResponse> => {
   };
 };
 
+export const reorderArticles = async (tabId: number, articlesOrder: number[]): Promise<IResponse> => {
+  const {getUserToken} = useAuth();
+  const response = await ServerQuery.getInstance().update("articles/reorder", {tabId, articlesOrder, token: getUserToken()});
+
+  return {
+    ...response,
+    message: response.ok ? "Данные успешно обновлены!" : "Ошибка при обновлении данных!"
+  };
+};
+
 export const deleteTab = async (id: number | string): Promise<IResponse> => {
   const {getUserToken} = useAuth();
   const response = await ServerQuery.getInstance().delete("tabs", {id, token: getUserToken()});

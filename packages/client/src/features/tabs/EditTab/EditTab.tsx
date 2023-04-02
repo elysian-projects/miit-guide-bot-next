@@ -3,17 +3,17 @@ import { FC, useEffect, useState } from "react";
 import { Loader } from "../../../components/Loader";
 import { useHttp } from "../../../hooks/useHttp";
 import { useRedirect } from "../../../hooks/useRedirect";
-import { useSearchQuery } from "../../../hooks/useSearchQuery";
-import { parseQueryNumber } from "../../../utils/parser";
 import { ConfirmEditDialog } from "../../../widgets/ConfirmEditAlert";
 import { ResponseAlert } from "../../../widgets/ResponseAlert";
 import { TabForm } from "../../../widgets/TabForm";
 import { getOneTab, updateTab } from "../api";
 
-export const EditTab: FC = () => {
+interface ITabEditTabProps {
+  id: number
+}
+
+export const EditTab: FC<ITabEditTabProps> = ({id}) => {
   const {redirect} = useRedirect();
-  const {getQueryProp} = useSearchQuery();
-  const [id] = useState<number | null>(parseQueryNumber(getQueryProp("id") || ""));
   const {error, response, status} = useHttp<TabNode>("tabs", async () => getOneTab({where: {id: id || -1}}));
   const [formData, setFormData] = useState<TabNode | null>(response?.data || null);
   const [submitResult, setSubmitResult] = useState<IResponse | null>(null);

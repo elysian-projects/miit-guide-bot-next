@@ -40,6 +40,7 @@ router.delete("/api/tabs", authService.checkUserTokenExpiration, tabService.dele
 router.post("/api/articles", authService.checkUserTokenExpiration, articleService.insertArticle);
 router.get("/api/articles", articleService.getArticles);
 router.put("/api/articles", authService.checkUserTokenExpiration, articleService.updateArticle);
+router.put("/api/articles/reorder", authService.checkUserTokenExpiration, articleService.updateOrder);
 router.delete("/api/articles", authService.checkUserTokenExpiration, articleService.deleteArticle);
 
 // The rest queries must be considered as non-correct routes

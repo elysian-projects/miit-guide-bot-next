@@ -30,7 +30,7 @@ export const checkUserTokenExpiration: Handler = async (req, res, next) => {
     }));
   }
 
-  if(signedUser.expires > new Date()) {
+  if(signedUser.expires < new Date()) {
     tokenRepo.delete(signedUser);
 
     return res.status(401).json(createResponse({
@@ -77,12 +77,20 @@ export const loginUser: Handler = async (req, res) => {
     }));
   }
 
-  const authToken = generateAuthToken(existingUser);
+  const existingToken = await tokenRepo.findOneBy({userId: existingUser.id});
+
+  if(existingToken) {
+    tokenRepo.delete(existingToken);
+  }
+
+  const expirationDate = generateExpirationDate();
+
+  const authToken = generateAuthToken({...existingUser, expires: expirationDate});
   const tokenRecord = new Token();
 
   tokenRecord.userId = existingUser.id;
   tokenRecord.value = authToken;
-  tokenRecord.expires = generateExpirationDate();
+  tokenRecord.expires = expirationDate;
 
   await tokenRepo.save(tokenRecord);
 
