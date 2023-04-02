@@ -89,7 +89,10 @@ export const insertArticle: Handler = async (req, res) => {
   const {tabId, label, content, picture, links} = body;
   const articleValue = serializeLabel(label);
 
-  const existingTab = await DBSource.getRepository(Tab).countBy({id: tabId});
+  const articleRepo = DBSource.getRepository(Article);
+  const tabRepo = DBSource.getRepository(Tab);
+
+  const existingTab = await tabRepo.countBy({id: tabId});
 
   if(existingTab === 0) {
     return res.status(400).json(createResponse({
@@ -99,7 +102,7 @@ export const insertArticle: Handler = async (req, res) => {
     }));
   }
 
-  const existingArticle = await DBSource.getRepository(Article).findOneBy({label});
+  const existingArticle = await articleRepo.findOneBy({label});
 
   if(existingArticle && existingArticle.label === label) {
     return res.status(409).json(createResponse({
@@ -131,11 +134,15 @@ export const insertArticle: Handler = async (req, res) => {
     }));
   }
 
+  // Calculating order index of the new articles by the number of articles in the tab
+  const lastArticleOrder = await articleRepo.countBy({tabId});
+
   const article = new Article();
   article.tabId = Number(tabId);
   article.label = String(label);
   article.value = articleValue;
   article.content = normalizeContent(content);
+  article.order = lastArticleOrder;
   article.addedOn = new Date();
   article.picture = String(picture);
 
@@ -143,7 +150,7 @@ export const insertArticle: Handler = async (req, res) => {
     article.links = links;
   }
 
-  await DBSource.getRepository(Article).save(article);
+  await articleRepo.save(article);
 
   return res.status(201).json(createResponse({
     status: 201,
@@ -154,6 +161,8 @@ export const insertArticle: Handler = async (req, res) => {
 export const updateArticle: Handler = async (req, res) => {
   const body = req.body;
 
+  // Note: this endpoint should not allow to change the order property,
+  // since it does not include the control over order indexes uniqueness
   const {id, tabId, label, content, picture, links} = body;
 
   if(!isValidId(id)) {
