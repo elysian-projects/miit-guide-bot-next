@@ -54,7 +54,7 @@ export const TabArticles: FC<ITabArticlesProps> = ({tabId}) => {
       return;
     }
 
-    setMessage({ok: response.ok, message: response.message || ""});
+    setMessage({ok: response.ok, message: response.message || (response.ok ? "Данные успешно обновлены!" : "Неизвестная ошибка!")});
   };
 
   useEffect(() => {
