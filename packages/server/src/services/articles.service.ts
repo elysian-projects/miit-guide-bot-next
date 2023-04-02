@@ -296,6 +296,16 @@ export const deleteArticle: Handler = async (req, res) => {
 
   await articleRepo.delete({id: foundArticle.id});
 
+  // Normalize order for the rest of the articles
+  const restArticles = await articleRepo.findBy({tabId: foundArticle.tabId});
+
+  for(let i = 0; i < restArticles.length; i++) {
+    const currentArticle = restArticles[i];
+
+    currentArticle.order = i;
+    articleRepo.save(currentArticle);
+  }
+
   return res.json(createResponse({
     status: 200,
     ok: true
