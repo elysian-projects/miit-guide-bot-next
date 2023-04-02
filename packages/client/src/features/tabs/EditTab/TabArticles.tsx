@@ -20,7 +20,7 @@ interface ITabArticlesProps {
 export const TabArticles: FC<ITabArticlesProps> = ({tabId}) => {
   const {redirect} = useRedirect();
   const [data, setData] = useState<ContentNode<FlatContent>[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<{message: string, ok: boolean} | null>(null);
   const changedOrder = useRef<boolean>(false);
 
   const retries = useRef(0);
@@ -35,7 +35,7 @@ export const TabArticles: FC<ITabArticlesProps> = ({tabId}) => {
         return;
       }
 
-      setError("Статьи не найдены");
+      setMessage({message: "Статьи не найдены", ok: false});
     } else {
       setData(response.data ? response.data : []);
     }
@@ -53,12 +53,24 @@ export const TabArticles: FC<ITabArticlesProps> = ({tabId}) => {
       redirect("/auth/logout?redirect=/auth/login");
       return;
     }
+
+    setMessage({ok: response.ok, message: response.message || ""});
   };
 
+  useEffect(() => {
+    if(!message?.ok) {
+      return;
+    }
+
+    setTimeout(() => {
+      setMessage(null);
+    }, 3000);
+  }, [message]);
+
   return <>
-    {error && (
-      <Alert severity="error">
-        {error}
+    {message && (
+      <Alert severity={message.ok ? "success" : "error"}>
+        {message.message}
       </Alert>
     )}
     <DragDropContext onDragEnd={handleReorder}>
