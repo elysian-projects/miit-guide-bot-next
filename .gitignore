@@ -1,4 +1,7 @@
 node_modules
-.vscode
+dist
+coverage
 .idea
 .env
+*.tsbuildinfo
+build
