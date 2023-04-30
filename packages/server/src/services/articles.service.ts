@@ -34,6 +34,8 @@ export const getArticles: Handler = async (req, res) => {
     query.tabId = String(tabWithValue.id);
   }
 
+  console.log(paginationProps);
+
   try {
     const articlesRepo = DBSource.getRepository(Article);
 
@@ -58,12 +60,16 @@ export const getArticles: Handler = async (req, res) => {
       data: articles
     });
 
-    // if(paginationProps.skip && paginationProps.take) {
-      // const articlesCount = await articlesRepo.count();
+    if(paginationProps.skip != null && paginationProps.take != null) {
+      const articlesCount = await articlesRepo.count();
 
-      // response.pages = Math.ceil(articlesCount / paginationProps.take);
-      // response.itemsPerPage = paginationProps.take;
-    // }
+      response.pagination = {
+        pages: Math.ceil(articlesCount / paginationProps.take),
+        itemsPerPage: paginationProps.take
+      };
+
+      console.log(response);
+    }
 
     return res.status(200).json(response);
   } catch(error) {

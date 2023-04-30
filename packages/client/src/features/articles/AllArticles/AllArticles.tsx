@@ -2,23 +2,36 @@ import { Link as LinkIcon } from "@mui/icons-material";
 import { Alert, Card, CardContent, Typography } from "@mui/material";
 import { ContentNode, FlatContent } from "common/src";
 import { FC, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { CardWrapper } from "../../../components/card";
 import { CardActionBar } from "../../../components/card/CardActions";
 import { CardMediaCustom } from "../../../components/card/CardMediaCustom";
 import { CardTitle } from "../../../components/card/CardTitle";
+import { PaginationBar } from "../../../components/pagination/PaginationBar";
 import { useHttp } from "../../../hooks/useHttp";
+import { usePagination } from "../../../hooks/usePagination";
 import { formatDate } from "../../../utils/formatDate";
 import { ActionBar } from "../../../widgets/ActionBar/ActionBar";
 import { filterSearch } from "../../../widgets/ActionBar/scripts";
 import { getAllArticles } from "../api";
+
+const BASE_URL = "/content/articles";
 
 interface IAllArticlesProps {
   getArticlesAmount?: (amount: number) => void
 }
 
 export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}) => {
-  const {response, status, error} = useHttp<ContentNode<FlatContent>[]>("articlesPage", () => getAllArticles());
+  const location = useLocation();
+  const pagination = usePagination(BASE_URL);
+
+  const {response, status, error, refetch} = useHttp<ContentNode<FlatContent>[]>("articlesPage", () => getAllArticles({page: pagination.page}));
   const [data, setData] = useState<ContentNode<FlatContent>[] | null>(response?.data || null);
+
+  useEffect(() => {
+    refetch();
+    window.scrollTo({top: 0});
+  }, [location]);
 
   useEffect(() => {
     setData(response?.data || null);
@@ -76,6 +89,16 @@ export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}
             </Card>
           ))}
         </CardWrapper>
+
+        {data.length == 0 && (
+          <div style={{display: "flex", justifyContent: "center"}}>
+            <Typography variant="h6">Ничего не найдено</Typography>
+          </div>
+        )}
+
+        {response?.pagination?.pages && (
+          <PaginationBar baseUrl={BASE_URL} count={response.pagination.pages || 1} />
+        )}
       </>
     )}
   </>;

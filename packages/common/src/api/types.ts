@@ -4,8 +4,8 @@ export type SearchOptions<T extends object = object> = {
   where?: Partial<T>,
   select?: string[],
   orderBy?: string,
-  page?: string | null,
-  take?: string | null,
+  page?: number | null,
+  take?: number | null,
 }
 
 export type Data = {
