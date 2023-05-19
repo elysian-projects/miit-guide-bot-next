@@ -34,8 +34,6 @@ export const getArticles: Handler = async (req, res) => {
     query.tabId = String(tabWithValue.id);
   }
 
-  console.log(paginationProps);
-
   try {
     const articlesRepo = DBSource.getRepository(Article);
 
@@ -67,8 +65,6 @@ export const getArticles: Handler = async (req, res) => {
         pages: Math.ceil(articlesCount / paginationProps.take),
         itemsPerPage: paginationProps.take
       };
-
-      console.log(response);
     }
 
     return res.status(200).json(response);

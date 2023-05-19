@@ -12,8 +12,7 @@ import { useHttp } from "../../../hooks/useHttp";
 import { usePagination } from "../../../hooks/usePagination";
 import { formatDate } from "../../../utils/formatDate";
 import { ActionBar } from "../../../widgets/ActionBar/ActionBar";
-import { filterSearch } from "../../../widgets/ActionBar/scripts";
-import { getAllArticles } from "../api";
+import { findArticleWithPropLike, getAllArticles } from "../api";
 
 const BASE_URL = "/content/articles";
 
@@ -25,13 +24,26 @@ export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}
   const location = useLocation();
   const pagination = usePagination(BASE_URL);
 
-  const {response, status, error, refetch} = useHttp<ContentNode<FlatContent>[]>("articlesPage", () => getAllArticles({page: pagination.page}));
+  const [message, setMessage] = useState<string | null>(null);
+  const [searchValue, setSearchValue] = useState<string | null>(null);
+  const {response, status, error, refetch} = useHttp<ContentNode<FlatContent>[]>("articlesPage", () => {
+    if(searchValue) {
+      return findArticleWithPropLike({
+        page: pagination.page,
+        search: {key: "label", value: searchValue, registry: "articles"}
+      });
+    }
+
+    return getAllArticles({
+      page: pagination.page
+    });
+  });
   const [data, setData] = useState<ContentNode<FlatContent>[] | null>(response?.data || null);
 
   useEffect(() => {
     refetch();
     window.scrollTo({top: 0});
-  }, [location]);
+  }, [location, searchValue]);
 
   useEffect(() => {
     setData(response?.data || null);
@@ -39,17 +51,18 @@ export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}
   }, [response?.data]);
 
   const handleSearch = (value: string) => {
-    if(data) {
-      if(value.length === 0) {
-        setData(response?.data || null);
-        return;
-      }
-
-      setData(filterSearch(response?.data || [], article => article.label.toLowerCase().includes(value.toLowerCase().trim())));
+    if(value && value.length < 5) {
+      setMessage("Длина запроса должна быть не менее 5 символов!");
+      return;
     }
+
+    setSearchValue(value);
   };
 
   return <>
+    {message && (
+      <Alert severity="info" onClose={() => setMessage(null)}>{message}</Alert>
+    )}
     {status === "loading" && (
       <Alert severity="info">Загрузка данных...</Alert>
     )}
@@ -71,7 +84,7 @@ export const AllArticles: FC<IAllArticlesProps> = ({getArticlesAmount = () => 0}
               />
               <CardContent>
                 <CardTitle
-                  value={item.label}
+                  value={item.label + " " + item.id}
                   variant="body1"
                   noWrap={true}
                 />

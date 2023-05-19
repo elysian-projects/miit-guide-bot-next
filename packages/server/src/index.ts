@@ -7,6 +7,7 @@ import * as articleService from "./services/articles.service";
 import * as authService from "./services/auth.service";
 import * as baseService from "./services/base.service";
 import { invalidSyntaxError } from "./services/error.service";
+import * as searchService from "./services/search.service";
 import * as tabService from "./services/tabs.service";
 
 // Initialize database connection and make migrations
@@ -42,6 +43,9 @@ router.get("/api/articles", articleService.getArticles);
 router.put("/api/articles", authService.checkUserTokenExpiration, articleService.updateArticle);
 router.put("/api/articles/reorder", authService.checkUserTokenExpiration, articleService.updateOrder);
 router.delete("/api/articles", authService.checkUserTokenExpiration, articleService.deleteArticle);
+
+// Search routes
+router.get("/api/search", searchService.search);
 
 // The rest queries must be considered as non-correct routes
 router.get("*", baseService.notFound);
