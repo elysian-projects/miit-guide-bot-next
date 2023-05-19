@@ -14,6 +14,22 @@ export const getAllArticles = async (options?: SearchOptions<ContentNode>): Prom
   };
 };
 
+export const findArticleWithPropLike = async (options?: SearchOptions<ContentNode>): Promise<IResponse<ContentNode<FlatContent>[]>> => {
+  if(!options?.search) {
+    return getAllArticles(options);
+  }
+
+  const response = await ServerQuery.getInstance().getAll("search", {
+    ...options,
+    orderBy: options?.orderBy || "id.desc"
+  });
+
+  return {
+    ...response,
+    data: flattenAllContent(response.data || [])
+  };
+};
+
 export const getOneArticle = async (options: SearchOptions<ContentNode>): Promise<IResponse<ContentNode<FlatContent>>> => {
   const response = await ServerQuery.getInstance().getOne<ContentNode>("articles", {
     ...options,

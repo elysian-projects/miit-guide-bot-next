@@ -8,9 +8,8 @@ import { useHttp } from "../../../hooks/useHttp";
 import { ActionBar } from "../../../widgets/ActionBar/ActionBar";
 import { filterSearch } from "../../../widgets/ActionBar/scripts";
 import { getAllTabs } from "../api";
-
 interface IAllTabsProps {
-  getTabsAmount: (amount: number) => void
+  getTabsAmount: (amount: number) => void,
 }
 
 export const AllTabs: FC<IAllTabsProps> = ({getTabsAmount}) => {
@@ -46,7 +45,7 @@ export const AllTabs: FC<IAllTabsProps> = ({getTabsAmount}) => {
           reorderCallback={() => setData([...data].reverse())}
           searchCallback={handleSearch}
         />
-        <CardWrapper>
+        <CardWrapper view={"line"}>
           {data.map(item => (
             <Card key={item.id}>
               <CardContent>

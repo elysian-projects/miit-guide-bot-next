@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useRedirect } from "./useRedirect";
 import { useSearchQuery } from "./useSearchQuery";
 
+const DEFAULT_TAKE = 12;
+
 export const usePagination = (baseUrl: string) => {
   const {getQueryProp} = useSearchQuery();
   const {redirect} = useRedirect();
@@ -15,8 +17,13 @@ export const usePagination = (baseUrl: string) => {
     }
   }, [page]);
 
+  const changePage = (page: number) => {
+    redirect(`${baseUrl}?page=${page}`);
+  };
+
   return {
-    page,
-    take
+    page: page ? parseInt(page) : 1,
+    take: take ? parseInt(take) : DEFAULT_TAKE,
+    changePage
   };
 };
