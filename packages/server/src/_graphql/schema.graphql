@@ -1,0 +1,32 @@
+scalar Date
+
+enum ArticleNode {
+  article,
+  location
+}
+
+type Article {
+  id: ID!
+  tabId: Int!
+  label: String!
+  value: String!
+  content: String!
+  addedOn: Date!
+  picture: String!
+  links: [String]
+}
+
+type Tab {
+  id: ID!
+  label: String!
+  value: String!
+  type: ArticleNode!
+}
+
+type Query {
+  getAllArticles: [Article]
+}
+
+type Mutation {
+  deleteArticle($id: ID)
+}

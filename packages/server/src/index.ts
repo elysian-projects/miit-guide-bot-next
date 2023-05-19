@@ -1,14 +1,23 @@
 import bodyParser from "body-parser";
 import cors from "cors";
 import express, { Router } from "express";
+import { graphqlHTTP } from "express-graphql";
 import { join } from "path";
+import { loadSchema } from "./_graphql/schema";
 import { DBSource } from "./database/data-source";
+import { deleteArticle, getAllArticles } from "./resolvers/articles";
 import * as articleService from "./services/articles.service";
 import * as authService from "./services/auth.service";
 import * as baseService from "./services/base.service";
 import { invalidSyntaxError } from "./services/error.service";
 import * as searchService from "./services/search.service";
 import * as tabService from "./services/tabs.service";
+
+// GraphQL resolvers
+const root = {
+  getAllArticles,
+  deleteArticle
+};
 
 // Initialize database connection and make migrations
 DBSource
@@ -46,6 +55,12 @@ router.delete("/api/articles", authService.checkUserTokenExpiration, articleServ
 
 // Search routes
 router.get("/api/search", searchService.search);
+
+router.all("/graphql", graphqlHTTP({
+  schema: loadSchema(),
+  rootValue: root,
+  graphiql: true
+}));
 
 // The rest queries must be considered as non-correct routes
 router.get("*", baseService.notFound);
