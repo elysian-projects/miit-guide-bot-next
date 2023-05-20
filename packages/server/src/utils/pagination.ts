@@ -1,8 +1,8 @@
 import { isNumeric } from "common/dist";
 
 type IPaginationProps = {
-  skip: number | undefined,
-  take: number | undefined
+  skip: number,
+  take: number
 };
 
 const DEFAULT_TAKE = 12;
@@ -17,8 +17,8 @@ export const getPaginationProps = (page: unknown, take: unknown): IPaginationPro
   }
 
   return {
-    skip: undefined,
-    take: undefined
+    skip: 0,
+    take: DEFAULT_TAKE
   };
 };
 
