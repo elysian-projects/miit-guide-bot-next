@@ -1,6 +1,6 @@
 import { SearchOptions } from "@/../../common/dist/api/types";
+import { INTERNAL_SERVER_ERROR_MESSAGE } from "@/_graphql/internal/constants";
 import { Article } from "@/entity/articles";
-import { INTERNAL_SERVER_ERROR_MESSAGE } from "@/graphql/internal/constants";
 import { ApiResponse } from "@/types/api";
 import { getPaginationProps } from "@/utils/pagination";
 import { GraphQLError } from "graphql";
