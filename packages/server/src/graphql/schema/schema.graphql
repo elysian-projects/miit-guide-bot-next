@@ -60,8 +60,9 @@ type TabsManyResponse {
 }
 
 type Query {
-  getAllArticles(page: Int, take: Int, order: Order, where: ArticleInput, tabValue: String): ArticleManyResponse
-  getOneArticle(id: ID, tabValue: String): Article
+  findAllArticles(page: Int, take: Int, order: Order, where: ArticleInput, tabValue: String): ArticleManyResponse
+  findOneArticle(id: ID): Article
+  findArticleByTabValue(tabValue: String): Article
   searchArticles(value: String): [Article]
 }
 

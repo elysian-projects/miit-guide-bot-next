@@ -3,9 +3,9 @@ import cors from "cors";
 import express, { Router } from "express";
 import { graphqlHTTP } from "express-graphql";
 import { join } from "path";
-import { loadSchema } from "./_graphql/schema";
 import { DBSource } from "./database/data-source";
-import { deleteArticle, getAllArticles, getOneArticle } from "./resolvers/articles";
+import { deleteArticle, findAllArticles, findArticleByTabValue, findOneArticle } from "./graphql/resolvers/articles";
+import { loadSchema } from "./graphql/schema/load_schema";
 import * as articleService from "./services/articles.service";
 import * as authService from "./services/auth.service";
 import * as baseService from "./services/base.service";
@@ -15,8 +15,9 @@ import * as tabService from "./services/tabs.service";
 
 // GraphQL resolvers
 const root = {
-  getAllArticles,
-  getOneArticle,
+  findAllArticles,
+  findOneArticle,
+  findArticleByTabValue,
   deleteArticle
 };
 
