@@ -2,8 +2,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express, { Router } from "express";
 import { graphqlHTTP } from "express-graphql";
-import path, { join } from "path";
-import { deleteArticle, findAllArticles, findArticleByTabValue, findOneArticle } from "./_graphql/resolvers/articles";
+import { join } from "path";
+import { deleteArticle } from "./_graphql/mutations/articles";
+import { findAllArticles, findArticleByTabValue, findOneArticle } from "./_graphql/resolvers/articles";
 import { loadSchema } from "./_graphql/schema/load_schema";
 import { DBSource } from "./database/data-source";
 import * as articleService from "./services/articles.service";
@@ -13,15 +14,12 @@ import { invalidSyntaxError } from "./services/error.service";
 import * as searchService from "./services/search.service";
 import * as tabService from "./services/tabs.service";
 
-// GraphQL resolvers
 const root = {
   findAllArticles,
   findOneArticle,
   findArticleByTabValue,
   deleteArticle
 };
-
-console.log(path.resolve(process.cwd(), "src/graphql/schemas/schema.graphql"));
 
 // Initialize database connection and make migrations
 DBSource
