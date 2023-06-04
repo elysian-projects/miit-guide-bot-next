@@ -19,6 +19,8 @@ export const findOneArticle = async ({id}: {id: number}): Promise<Article> => {
 
     return response;
   } catch(error) {
+    console.log(error);
+
     if(error instanceof GraphQLError) {
       throw error;
     }

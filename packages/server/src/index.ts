@@ -4,7 +4,8 @@ import express, { Router } from "express";
 import { graphqlHTTP } from "express-graphql";
 import { join } from "path";
 import { deleteArticle } from "./_graphql/mutations/articles";
-import { findAllArticles, findArticleByTabValue, findOneArticle } from "./_graphql/resolvers/articles";
+import { findAllArticles, findArticlesByTabValue, findOneArticle } from "./_graphql/resolvers/articles";
+import { findAllTabs } from "./_graphql/resolvers/tabs";
 import { loadSchema } from "./_graphql/schema/load_schema";
 import { DBSource } from "./database/data-source";
 import * as articleService from "./services/articles.service";
@@ -17,7 +18,8 @@ import * as tabService from "./services/tabs.service";
 const root = {
   findAllArticles,
   findOneArticle,
-  findArticleByTabValue,
+  findArticlesByTabValue,
+  findAllTabs,
   deleteArticle
 };
 

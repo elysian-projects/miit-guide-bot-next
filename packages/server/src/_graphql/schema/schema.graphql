@@ -34,6 +34,13 @@ input ArticleInput {
   links: [String]
 }
 
+input TabInput {
+  id: ID
+  label: String
+  value: String
+  type: ArticleNode
+}
+
 type Pagination {
   pages: Int!
   itemsPerPage: Int!
@@ -60,10 +67,13 @@ type TabsManyResponse {
 }
 
 type Query {
-  findAllArticles(page: Int, take: Int, order: Order, where: ArticleInput, tabValue: String): ArticleManyResponse
+  findAllArticles(page: Int, take: Int, order: Order, where: ArticleInput): ArticleManyResponse
   findOneArticle(id: ID): Article
-  findArticleByTabValue(tabValue: String): Article
+  findArticlesByTabValue(tabValue: String): [Article]
   searchArticles(value: String): [Article]
+
+  findAllTabs(page: Int, take: Int, order: Order, where: TabInput): TabsManyResponse
+  findOneTab(id: ID): Tab
 }
 
 type Mutation {

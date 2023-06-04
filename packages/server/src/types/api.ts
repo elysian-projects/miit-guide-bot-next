@@ -1,7 +1,5 @@
-import { Article } from "@/entity/articles";
-
-export type ApiResponse = {
-  data: Article | Article[],
+export type ApiResponse<T> = {
+  data: T | T[],
   pagination: {
     pages: number,
     itemsPerPage: number
