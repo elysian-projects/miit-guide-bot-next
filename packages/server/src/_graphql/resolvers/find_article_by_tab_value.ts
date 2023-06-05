@@ -1,6 +1,6 @@
 import { computeResponseError } from "@/_graphql/internal/compute_response_error";
 import { Article } from "@/entity/articles";
-import { getArticlesRepo, getTabsRepo } from "../../internal/utils";
+import { getArticlesRepo, getTabsRepo } from "../internal/utils";
 
 export const findArticlesByTabValue = async ({tabValue}: {tabValue: string}): Promise<Article[]> => {
   try {

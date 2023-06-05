@@ -1,7 +1,7 @@
 import { INTERNAL_SERVER_ERROR_MESSAGE } from "@/_graphql/internal/constants";
 import { Article } from "@/entity/articles";
 import { GraphQLError } from "graphql";
-import { getArticlesRepo } from "../../internal/utils";
+import { getArticlesRepo } from "../internal/utils";
 
 export const findOneArticle = async ({id}: {id: number}): Promise<Article> => {
   const articlesRepo = getArticlesRepo();

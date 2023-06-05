@@ -4,7 +4,7 @@ import { Article } from "@/entity/articles";
 import { ApiResponse } from "@/types/api";
 import { getPaginationProps } from "@/utils/pagination";
 import { GraphQLError } from "graphql";
-import { getArticlesRepo } from "../../internal/utils";
+import { getArticlesRepo } from "../internal/utils";
 
 export const findAllArticles = async ({order, page, take}: SearchOptions<Article>): Promise<ApiResponse<Article>> => {
   const articlesRepo = getArticlesRepo();
