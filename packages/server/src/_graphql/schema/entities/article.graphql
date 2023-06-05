@@ -1,0 +1,33 @@
+scalar Date
+
+enum ArticleNode {
+  article,
+  location
+}
+
+type Article {
+  id: ID!
+  tabId: Int!
+  label: String!
+  value: String!
+  content: [String]!
+  addedOn: Date!
+  picture: String!
+  links: [String]
+}
+
+input ArticleInput {
+  id: ID
+  tabId: Int
+  label: String
+  value: String
+  content: String
+  addedOn: Date
+  picture: String
+  links: [String]
+}
+
+type ArticleManyResponse {
+  data: [Article]
+  pagination: Pagination
+}

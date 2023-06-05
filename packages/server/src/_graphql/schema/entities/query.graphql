@@ -1,0 +1,13 @@
+type Query {
+  findAllArticles(page: Int, take: Int, order: Order, where: ArticleInput): ArticleManyResponse
+  findOneArticle(id: ID): Article
+  findArticlesByTabValue(tabValue: String): [Article]
+  searchArticles(value: String): [Article]
+
+  findAllTabs(page: Int, take: Int, order: Order, where: TabInput): TabsManyResponse
+  findOneTab(id: ID): Tab
+}
+
+type Mutation {
+  deleteArticle(id: ID): Article
+}

@@ -1,0 +1,14 @@
+type Pagination {
+  pages: Int!
+  itemsPerPage: Int!
+}
+
+enum OrderValues {
+  ASC
+  DESC
+}
+
+input Order {
+  prop: String!
+  order: OrderValues!
+}
