@@ -10,6 +10,7 @@ export type SearchOptions<T extends object = object> = {
   where?: Partial<T>,
   select?: string[],
   orderBy?: string,
+  order?: {prop: string, order: string}
   page?: number | null,
   take?: number | null,
   search?: ApiSearchNode | null

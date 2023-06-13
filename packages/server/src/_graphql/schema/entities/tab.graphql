@@ -1,0 +1,18 @@
+type Tab {
+  id: ID!
+  label: String!
+  value: String!
+  type: ArticleNode!
+}
+
+input TabInput {
+  id: ID
+  label: String
+  value: String
+  type: ArticleNode
+}
+
+type TabsManyResponse {
+  data: [Tab]
+  pagination: Pagination
+}
