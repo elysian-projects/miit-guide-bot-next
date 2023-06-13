@@ -1,20 +1,25 @@
 import { SearchOptions } from "@/../../common/dist/api/types";
-import { INTERNAL_SERVER_ERROR_MESSAGE } from "@/_graphql/internal/constants";
 import { Article } from "@/entity/articles";
 import { ApiResponse } from "@/types/api";
 import { getPaginationProps } from "@/utils/pagination";
-import { GraphQLError } from "graphql";
+import { FindOptionsWhere } from "typeorm";
+import { computeResponseError } from "../internal/compute_response_error";
 import { getArticlesRepo } from "../internal/utils";
 
-export const findAllArticles = async ({order, page, take}: SearchOptions<Article>): Promise<ApiResponse<Article>> => {
+export const findAllArticles = async ({where, order, page, take}: SearchOptions<Article>): Promise<ApiResponse<Article>> => {
   const articlesRepo = getArticlesRepo();
   const paginationProps = getPaginationProps(page, take);
 
   try {
     const articles = await articlesRepo.find({
       order: {[order?.prop as keyof Article]: order?.order},
+      where: where as FindOptionsWhere<Article>,
       ...paginationProps
     });
+
+    if(articles.length === 0) {
+      throw new Error("Статьи не найдены!");
+    }
 
     const articlesCount = await articlesRepo.count();
 
@@ -26,7 +31,6 @@ export const findAllArticles = async ({order, page, take}: SearchOptions<Article
       }
     };
   } catch(error) {
-    console.log(error);
-    throw new GraphQLError(INTERNAL_SERVER_ERROR_MESSAGE);
+    throw computeResponseError(error);
   }
 };

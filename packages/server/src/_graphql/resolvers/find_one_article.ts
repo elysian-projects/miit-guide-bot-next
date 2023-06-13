@@ -1,30 +1,18 @@
-import { INTERNAL_SERVER_ERROR_MESSAGE } from "@/_graphql/internal/constants";
 import { Article } from "@/entity/articles";
 import { GraphQLError } from "graphql";
+import { computeResponseError } from "../internal/compute_response_error";
 import { getArticlesRepo } from "../internal/utils";
 
 export const findOneArticle = async ({id}: {id: number}): Promise<Article> => {
-  const articlesRepo = getArticlesRepo();
-
-  if(!id) {
-    throw new GraphQLError("Входные данные невалидны: нужно предоставить `id` статьи!");
-  }
-
   try {
-    const response = await articlesRepo.findOneBy({id});
+    const article = await getArticlesRepo().findOneBy({id});
 
-    if(!response) {
+    if(!article) {
       throw new GraphQLError("Статья не найдена!");
     }
 
-    return response;
+    return article;
   } catch(error) {
-    console.log(error);
-
-    if(error instanceof GraphQLError) {
-      throw error;
-    }
-
-    throw new GraphQLError(INTERNAL_SERVER_ERROR_MESSAGE);
+    throw computeResponseError(error);
   }
 };
