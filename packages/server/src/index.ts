@@ -3,9 +3,8 @@ import cors from "cors";
 import express, { Router } from "express";
 import { graphqlHTTP } from "express-graphql";
 import { join } from "path";
-import { deleteArticle } from "./_graphql/mutations/articles";
-import { findAllArticles, findArticlesByTabValue, findOneArticle } from "./_graphql/resolvers/articles";
-import { findAllTabs } from "./_graphql/resolvers/tabs";
+import { deleteArticle } from "./_graphql/mutations";
+import { findAllArticles, findAllTabs, findArticlesByTabValue, findOneArticle, findOneTab } from "./_graphql/resolvers";
 import { loadSchema } from "./_graphql/schema/load_schema";
 import { DBSource } from "./database/data-source";
 import * as articleService from "./services/articles.service";
@@ -18,6 +17,7 @@ import * as tabService from "./services/tabs.service";
 const root = {
   findAllArticles,
   findOneArticle,
+  findOneTab,
   findArticlesByTabValue,
   findAllTabs,
   deleteArticle
